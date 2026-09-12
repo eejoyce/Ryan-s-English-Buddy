@@ -1,0 +1,2337 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Ryan English 搭子 · 小朋友的英语学习伙伴</title>
+<link rel="preconnect" href="https://cdn.jsdelivr.net">
+<link href="https://cdn.jsdelivr.net/npm/baloo-2@1.0.4/fonts/baloo2.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/baloo-2/1.0.4/fonts/baloo2.css" rel="stylesheet">
+<link rel="stylesheet" href="https://miaoda.feishu.cn/fonts/css2?family=Noto+Sans+SC:wght@400;500;700;900&display=swap">
+<style>
+:root{
+  --green:#2E9E5B; --green-d:#1F7A44; --green-2:#58C98A; --green-bg:#E6F5EC;
+  --sun:#FFC145; --sun-d:#E6A32E; --sun-bg:#FFF6E0;
+  --coral:#FF7A59; --coral-d:#E85C3A; --coral-bg:#FFEDE8;
+  --blue:#3F8FDD; --blue-bg:#E8F2FC;
+  --ink:#1D3527; --ink-2:#5B7568; --line:#D9E9DF;
+  --card:#FFFFFF; --page:#F1F8F3;
+  --r-sm:14px; --r-md:20px; --r-lg:26px;
+  --sh-card:0 6px 18px rgba(31,122,68,.09);
+  --sh-btn:0 5px 0 rgba(0,0,0,.16);
+}
+*{margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent}
+html{font-size:17px; scroll-behavior:smooth}
+body{
+  font-family:"Noto Sans SC","PingFang SC","Microsoft YaHei",system-ui,sans-serif;
+  background:var(--page); color:var(--ink);
+  line-height:1.55; min-height:100vh; -webkit-font-smoothing:antialiased;
+}
+.en{font-family:"Baloo 2","Comic Sans MS","Segoe Print","Noto Sans SC",sans-serif}
+svg{display:block}
+button{font-family:inherit; border:none; background:none; cursor:pointer; color:inherit}
+input,select,textarea{font-family:inherit; font-size:1rem; color:var(--ink)}
+img{max-width:100%}
+.hidden{display:none!important}
+
+/* ============ 顶部栏 ============ */
+.topbar{
+  position:sticky; top:0; z-index:40;
+  display:flex; align-items:center; gap:10px;
+  padding:10px 16px; background:#fff; border-bottom:2px solid var(--green-bg);
+}
+.logo{display:flex; align-items:center; gap:8px; cursor:pointer; flex:none}
+.logo-mark{
+  width:38px; height:38px; border-radius:12px; flex:none;
+  background:linear-gradient(135deg,#2E9E5B,#58C98A); color:#fff;
+  display:flex; align-items:center; justify-content:center;
+  box-shadow:0 3px 8px rgba(46,158,91,.35);
+}
+.logo-mark svg{width:22px; height:22px}
+.logo-t{font-size:1.15rem; font-weight:900; color:var(--green-d); line-height:1.1}
+.logo-t small{display:block; font-size:.62rem; font-weight:700; color:var(--ink-2); letter-spacing:.5px}
+.top-right{margin-left:auto; display:flex; align-items:center; gap:8px}
+.top-chip{
+  display:flex; align-items:center; gap:6px; background:var(--sun-bg);
+  border-radius:999px; padding:6px 12px; font-weight:900; font-size:.95rem; color:#8A5B00;
+}
+.top-chip svg{width:18px; height:18px; color:var(--sun-d)}
+.icon-btn{
+  width:40px; height:40px; border-radius:12px; background:var(--green-bg); color:var(--green-d);
+  display:flex; align-items:center; justify-content:center; transition:transform .1s;
+}
+.icon-btn:active{transform:scale(.92)}
+.icon-btn svg{width:20px; height:20px}
+
+/* ============ 主内容 ============ */
+main{max-width:1000px; margin:0 auto; padding:10px 18px 130px}
+.card{
+  background:var(--card); border-radius:var(--r-lg); padding:22px 22px;
+  box-shadow:var(--sh-card); border:1px solid var(--line);
+}
+.card+.card{margin-top:16px}
+.card-title{display:flex; align-items:center; gap:8px; font-size:1.2rem; font-weight:900; color:var(--ink); margin-bottom:14px}
+.card-title svg{width:24px; height:24px; color:var(--green)}
+.view-head{margin:6px 4px 16px}
+.view-title{font-size:2rem; font-weight:900; color:var(--green-d); line-height:1.2}
+.view-sub{font-size:1rem; color:var(--ink-2); margin-top:4px}
+
+/* ============ Hero 首页 ============ */
+.hero{
+  border-radius:28px; padding:30px 28px; position:relative; overflow:hidden; color:#fff;
+  background:linear-gradient(135deg,#1F7A44 0%, #2E9E5B 55%, #4FC98A 100%);
+  box-shadow:0 12px 28px rgba(31,122,68,.32);
+}
+.hero::after{
+  content:""; position:absolute; right:-70px; top:-70px; width:230px; height:230px;
+  background:rgba(255,255,255,.10); border-radius:50%;
+}
+.hero .badge{
+  display:inline-flex; align-items:center; gap:6px; background:rgba(255,255,255,.18);
+  border:1px solid rgba(255,255,255,.28); border-radius:999px;
+  padding:6px 14px; font-size:.95rem; font-weight:700;
+}
+.hero .badge svg{width:16px; height:16px}
+.hero h1{font-size:2.5rem; font-weight:900; line-height:1.2; margin:14px 0 8px}
+.hero p{font-size:1.05rem; opacity:.95; max-width:560px}
+.hero .steps{
+  display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin-top:22px; position:relative; z-index:1;
+}
+.hero .step{
+  background:rgba(255,255,255,.16); border:1px solid rgba(255,255,255,.24);
+  border-radius:18px; padding:14px 10px; text-align:center;
+}
+.hero .step .n{
+  width:32px; height:32px; border-radius:11px; background:#fff; color:var(--green-d);
+  font-weight:900; display:flex; align-items:center; justify-content:center; margin:0 auto 8px; font-size:1rem;
+}
+.hero .step .t{font-size:.95rem; font-weight:900}
+.hero .step .d{font-size:.82rem; opacity:.92; margin-top:2px}
+
+/* ============ 统计 ============ */
+.stat-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin-top:16px}
+.stat-card{
+  background:var(--card); border-radius:var(--r-lg); padding:18px 14px;
+  box-shadow:var(--sh-card); text-align:center; border:1px solid var(--line);
+}
+.stat-card .num{font-size:2rem; font-weight:900; line-height:1.1; color:var(--green-d)}
+.stat-card .lab{font-size:.9rem; color:var(--ink-2); font-weight:700; margin-top:2px}
+.stat-card .ic{width:30px; height:30px; margin:0 auto 8px; display:flex; align-items:center; justify-content:center}
+.stat-card .ic svg{width:28px; height:28px}
+
+/* ============ 快捷入口 ============ */
+.quick-grid{display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:16px}
+.quick{
+  border-radius:22px; padding:20px; text-align:left; color:#fff;
+  box-shadow:var(--sh-btn); transform:translateY(-2px); position:relative; overflow:hidden;
+  transition:transform .12s;
+}
+.quick:active{transform:translateY(2px); box-shadow:none}
+.quick .q-t{font-size:1.2rem; font-weight:900; display:flex; align-items:center; gap:8px}
+.quick .q-t svg{width:24px; height:24px}
+.quick .q-d{font-size:.95rem; opacity:.94; margin-top:4px}
+.quick .q-ic{position:absolute; right:12px; bottom:8px; width:64px; height:64px; opacity:.22}
+.quick .q-ic svg{width:100%; height:100%}
+.q-green{background:linear-gradient(135deg,#2E9E5B,#58C98A)}
+.q-dark{background:linear-gradient(135deg,#1F7A44,#2E9E5B)}
+.q-sun{background:linear-gradient(135deg,#FFC145,#FF9A3D)}
+.q-coral{background:linear-gradient(135deg,#FF7A59,#FF9A70)}
+.q-blue{background:linear-gradient(135deg,#3F8FDD,#6FB5F0)}
+
+/* ============ 工作流 ============ */
+.workflow{margin-top:16px}
+.flow-item{display:flex; gap:16px; padding:18px 0; border-bottom:1px dashed var(--line)}
+.flow-item:last-child{border-bottom:none}
+.flow-item .f-n{
+  flex:none; width:42px; height:42px; border-radius:14px;
+  background:var(--green-bg); color:var(--green-d); font-weight:900; font-size:1.1rem;
+  display:flex; align-items:center; justify-content:center;
+}
+.flow-item .f-t{font-size:1.08rem; font-weight:900}
+.flow-item .f-d{font-size:.95rem; color:var(--ink-2); margin-top:3px}
+
+/* ============ 单元列表 ============ */
+.unit-list{display:flex; flex-direction:column; gap:12px}
+.unit-card{
+  display:flex; align-items:center; gap:14px; background:var(--card);
+  border:1px solid var(--line); border-radius:20px; padding:16px 18px;
+  box-shadow:var(--sh-card); cursor:pointer; transition:transform .1s;
+}
+.unit-card:active{transform:scale(.985)}
+.unit-stripe{flex:none; width:10px; align-self:stretch; border-radius:6px}
+.unit-badge{
+  flex:none; width:46px; height:46px; border-radius:15px; color:#fff; font-weight:900; font-size:1.15rem;
+  display:flex; align-items:center; justify-content:center;
+}
+.unit-info{flex:1; min-width:0}
+.unit-t{font-size:1.1rem; font-weight:900; white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+.unit-s{font-size:.9rem; color:var(--ink-2); margin-top:2px}
+.unit-arrow{flex:none; color:var(--ink-2)}
+.unit-arrow svg{width:22px; height:22px}
+
+/* ============ 按钮 ============ */
+.btn{
+  display:inline-flex; align-items:center; justify-content:center; gap:8px;
+  font-size:1.05rem; font-weight:900; min-height:54px; padding:12px 26px;
+  border-radius:16px; box-shadow:var(--sh-btn); transform:translateY(-2px);
+  transition:transform .1s, box-shadow .1s; text-decoration:none;
+}
+.btn:active{transform:translateY(2px); box-shadow:none}
+.btn svg{width:24px; height:24px}
+.btn.block{display:flex; width:100%}
+.btn.sm{min-height:44px; padding:8px 18px; font-size:.95rem; border-radius:13px}
+.btn.green{background:linear-gradient(135deg,#2E9E5B,#3FB873); color:#fff}
+.btn.coral{background:linear-gradient(135deg,#FF7A59,#FF8F6B); color:#fff}
+.btn.sun{background:linear-gradient(135deg,#FFC145,#FFB020); color:#6B4A00}
+.btn.blue{background:linear-gradient(135deg,#3F8FDD,#5FA9EC); color:#fff}
+.btn.ghost{background:#fff; color:var(--green-d); border:2px solid var(--green); box-shadow:none; transform:none}
+.btn.ghost:active{transform:scale(.98)}
+.btn[disabled]{opacity:.5; pointer-events:none}
+
+/* ============ 徽章/标签 ============ */
+.chip-row{display:flex; flex-wrap:wrap; gap:10px}
+.chip{
+  display:inline-flex; align-items:center; gap:6px; min-height:46px; padding:8px 16px;
+  border-radius:14px; background:#F3F8F5; border:2px solid var(--line);
+  font-size:1rem; font-weight:700; transition:all .12s;
+}
+.chip.on{background:var(--green-bg); border-color:var(--green); color:var(--green-d)}
+.chip .ck{width:20px; height:20px; border-radius:50%; display:flex; align-items:center; justify-content:center; color:#fff}
+.chip.on .ck{background:var(--green)}
+.chip:not(.on) .ck{background:#CBDDD2}
+.chip .ck svg{width:14px; height:14px}
+.sec-lab{display:flex; align-items:center; gap:8px; font-size:1.05rem; font-weight:900; margin:18px 0 10px}
+.sec-lab:first-child{margin-top:0}
+.sec-lab svg{width:24px; height:24px; color:var(--green)}
+.tip{font-size:.78rem; font-weight:700; color:var(--ink-2); background:#EEF5F0; padding:2px 10px; border-radius:999px}
+
+/* 难度卡 */
+.diff-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:12px}
+.diff-card{
+  border-radius:18px; padding:18px 14px; text-align:center; cursor:pointer;
+  background:var(--card); border:3px solid var(--line); transition:all .15s;
+}
+.diff-card:hover{border-color:var(--green)}
+.diff-card.on{border-color:var(--green); background:var(--green-bg)}
+.diff-card .d-n{font-size:1.5rem; font-weight:900; color:var(--green)}
+.diff-card .d-l{font-size:1.05rem; font-weight:900; margin-top:2px}
+.diff-card .d-s{font-size:.9rem; color:var(--ink-2); margin-top:4px}
+
+/* 考核方式卡 */
+.opt-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:12px}
+.opt-card{
+  display:flex; align-items:center; gap:12px; border-radius:18px; padding:16px;
+  background:var(--card); border:3px solid var(--line); cursor:pointer; transition:all .15s;
+}
+.opt-card:hover{border-color:var(--green)}
+.opt-card.on{border-color:var(--green); background:var(--green-bg)}
+.opt-card .o-ic{flex:none; width:46px; height:46px; border-radius:14px; display:flex; align-items:center; justify-content:center; color:#fff}
+.opt-card .o-ic svg{width:26px; height:26px}
+.opt-card .o-l{font-size:1.1rem; font-weight:900}
+.opt-card .o-s{font-size:.88rem; color:var(--ink-2)}
+.type-row{display:flex; gap:12px; flex-wrap:wrap}
+
+/* 规则提示 */
+.rule-note{
+  display:flex; gap:10px; align-items:flex-start;
+  background:var(--sun-bg); border-radius:18px; padding:16px;
+  font-size:1rem; color:#7A5410; margin-top:16px; border:1px solid #F3DCA0;
+}
+.rule-note svg{flex:none; margin-top:2px; width:22px; height:22px}
+
+/* ============ 课程详情 ============ */
+.dlg-title{display:flex; align-items:center; gap:8px; font-size:1.15rem; font-weight:900; margin:18px 0 10px; color:var(--green-d)}
+.dlg-title svg{width:24px; height:24px}
+.dlg-line{
+  display:grid; grid-template-columns:56px 1fr; gap:10px; align-items:start;
+  padding:12px 14px; border-radius:16px; background:#F7FBF8; border:1px solid var(--line); margin-bottom:8px;
+}
+.dlg-line .who{
+  font-weight:900; font-size:.85rem; color:var(--green-d); background:var(--green-bg);
+  border-radius:10px; padding:4px 8px; text-align:center;
+}
+.dlg-line .en-t{font-size:1.15rem; font-weight:700}
+.dlg-line .zh-t{font-size:.95rem; color:var(--ink-2); margin-top:2px}
+.dlg-acts{display:flex; gap:8px; margin-top:8px}
+.mini-btn{
+  width:42px; height:42px; border-radius:12px; display:flex; align-items:center; justify-content:center;
+  background:var(--green-bg); color:var(--green-d); transition:transform .1s;
+}
+.mini-btn:active{transform:scale(.9)}
+.mini-btn svg{width:22px; height:22px}
+.mini-btn.coral{background:var(--coral-bg); color:var(--coral-d)}
+
+/* 单词行 */
+.w-row{
+  display:flex; align-items:center; gap:12px; padding:12px 8px;
+  border-bottom:1px dashed var(--line); flex-wrap:wrap;
+}
+.w-row:last-child{border-bottom:none}
+.w-en{font-size:1.35rem; font-weight:900}
+.w-ipa{font-size:1.15rem; color:var(--ink-2); font-family:inherit}
+.w-zh{font-size:1rem; color:var(--ink-2); margin-left:auto}
+.w-acts{display:flex; gap:6px}
+
+/* ============ 音标母音红色 ============ */
+.ipa-v{color:#E0352F; font-weight:900}
+
+/* ============ 空状态 ============ */
+.empty{text-align:center; padding:46px 20px}
+.empty .e-ic{width:90px; height:90px; margin:0 auto 16px; display:flex; align-items:center; justify-content:center; color:var(--green); opacity:.35}
+.empty .e-ic svg{width:100%; height:100%}
+.empty .e-t{font-size:1.2rem; font-weight:900}
+.empty .e-d{font-size:.95rem; color:var(--ink-2); margin:6px 0 18px}
+
+/* ============ 底部导航 ============ */
+.tabbar{
+  position:fixed; left:0; right:0; bottom:0; z-index:50;
+  display:flex; background:#fff; border-top:2px solid var(--green-bg);
+  padding:8px 8px calc(8px + env(safe-area-inset-bottom));
+  box-shadow:0 -4px 18px rgba(31,122,68,.08);
+}
+.tabbar.hidden{display:none}
+.tab{
+  flex:1; display:flex; flex-direction:column; align-items:center; gap:2px;
+  padding:8px 4px; border-radius:14px; color:#8AA69A; font-size:.82rem; font-weight:700;
+}
+.tab svg{width:26px; height:26px}
+.tab.on{color:var(--green-d); background:var(--green-bg)}
+.tab .tab-pill{position:relative}
+.wb-badge{
+  position:absolute; top:-6px; right:-10px; min-width:20px; height:20px; padding:0 5px;
+  border-radius:999px; background:var(--coral); color:#fff; font-size:.72rem; font-weight:900;
+  display:flex; align-items:center; justify-content:center;
+}
+.wb-badge.hidden{display:none}
+
+/* ============ 考试进行 ============ */
+.quiz-shell{
+  position:fixed; inset:0; z-index:60; background:var(--page); overflow-y:auto;
+  padding:14px 16px 120px;
+}
+.quiz-head{display:flex; align-items:center; gap:10px; margin-bottom:14px}
+.quiz-head .q-stars{display:flex; gap:4px; margin-left:auto}
+.quiz-head .q-stars svg{width:30px; height:30px; color:#D8E4DD}
+.quiz-head .q-stars svg.lit{color:var(--sun)}
+.q-tags{display:flex; gap:8px; margin-bottom:14px; flex-wrap:wrap}
+.q-tag{font-size:.85rem; font-weight:900; padding:5px 12px; border-radius:999px}
+.q-tag.sun{background:var(--sun-bg); color:#8A5B00}
+.q-tag.green{background:var(--green-bg); color:var(--green-d)}
+.q-tag.coral{background:var(--coral-bg); color:var(--coral-d)}
+.q-card{background:#fff; border-radius:26px; padding:28px 24px; box-shadow:var(--sh-card); border:1px solid var(--line)}
+.big-en{font-size:2.9rem; font-weight:900; text-align:center; line-height:1.15; word-break:break-word}
+.big-zh{font-size:2.2rem; font-weight:900; text-align:center; line-height:1.3}
+.ipa{font-size:1.5rem; text-align:center; color:var(--ink-2); margin-top:6px}
+.hint{text-align:center; font-size:1rem; color:var(--ink-2); margin-top:10px}
+.opt-list{display:flex; flex-direction:column; gap:12px; margin-top:22px}
+.opt-btn{
+  display:flex; align-items:center; gap:14px; width:100%; text-align:left;
+  background:#F7FBF8; border:2px solid var(--line); border-radius:18px;
+  padding:16px 18px; font-size:1.2rem; font-weight:800; transition:all .12s;
+}
+.opt-btn:active{transform:scale(.99)}
+.opt-btn .k{
+  flex:none; width:36px; height:36px; border-radius:11px; background:#E4EEE8;
+  display:flex; align-items:center; justify-content:center; font-size:1rem; font-weight:900; color:var(--green-d);
+}
+.opt-btn.ok{border-color:var(--green); background:var(--green-bg)}
+.opt-btn.bad{border-color:var(--coral); background:var(--coral-bg)}
+.opt-btn.dim{opacity:.55}
+.opt-btn.ok .k{background:var(--green); color:#fff}
+.opt-btn.bad .k{background:var(--coral); color:#fff}
+.type-box{margin-top:22px}
+.type-input{
+  width:100%; min-height:64px; border-radius:18px; border:3px solid var(--line);
+  padding:12px 18px; font-size:1.4rem; font-weight:800; text-align:center; outline:none;
+  background:#FBFDFC; transition:border-color .12s;
+}
+.type-input:focus{border-color:var(--green)}
+.type-input.correct{border-color:var(--green); background:var(--green-bg)}
+.type-input.wrong{border-color:var(--coral); background:var(--coral-bg)}
+.fill-box{margin-top:18px; text-align:center}
+.fill-en{font-size:1.9rem; font-weight:900; letter-spacing:.06em; line-height:1.4}
+.fill-en .gap{color:var(--green-d); background:var(--green-bg); border-radius:10px; padding:0 8px}
+.blank-card{
+  background:#F7FBF8; border:2px dashed var(--green); border-radius:18px;
+  padding:14px 18px; margin-top:14px; font-size:1.35rem; font-weight:800; text-align:center;
+}
+.mic-btn{
+  width:120px; height:120px; border-radius:50%; margin:22px auto 8px;
+  background:linear-gradient(135deg,#FF7A59,#FF9A70); color:#fff;
+  display:flex; align-items:center; justify-content:center;
+  box-shadow:0 6px 0 var(--coral-d), 0 10px 22px rgba(255,122,89,.35);
+  transition:transform .12s;
+}
+.mic-btn:active{transform:scale(.94)}
+.mic-btn svg{width:56px; height:56px}
+.mic-btn.listening{animation:pulse 1.2s infinite}
+.mic-btn.green{background:linear-gradient(135deg,#2E9E5B,#58C98A); box-shadow:0 6px 0 var(--green-d), 0 10px 22px rgba(46,158,91,.35)}
+@keyframes pulse{
+  0%{box-shadow:0 6px 0 var(--coral-d), 0 0 0 0 rgba(255,122,89,.45)}
+  70%{box-shadow:0 6px 0 var(--coral-d), 0 0 0 30px rgba(255,122,89,0)}
+  100%{box-shadow:0 6px 0 var(--coral-d), 0 0 0 0 rgba(255,122,89,0)}
+}
+.mic-status{text-align:center; font-size:1rem; color:var(--ink-2); min-height:1.6em}
+.speak-hint{text-align:center; font-size:1.6rem; font-weight:900; color:var(--green-d); margin-top:8px}
+.speak-target{font-size:1.8rem; font-weight:900; text-align:center; line-height:1.3}
+.score-box{
+  margin-top:20px; border-radius:20px; padding:20px; text-align:center;
+  background:var(--sun-bg); border:2px solid #F3DCA0;
+}
+.score-box .score-num{font-size:2.6rem; font-weight:900; color:#8A5B00}
+.score-box .score-t{font-size:1.15rem; font-weight:900; margin-top:2px}
+.stars-row{display:flex; justify-content:center; gap:6px; margin-top:10px}
+.stars-row svg{width:40px; height:40px; color:#E8D9B0}
+.stars-row svg.lit{color:var(--sun)}
+.fb-banner{
+  display:flex; align-items:center; gap:10px; border-radius:18px; padding:16px 18px;
+  font-size:1.05rem; font-weight:800; margin-top:16px;
+}
+.fb-banner .fb-ic{flex:none; width:46px; height:46px; border-radius:14px; display:flex; align-items:center; justify-content:center; color:#fff}
+.fb-banner .fb-ic svg{width:26px; height:26px}
+.fb-banner.ok{background:var(--green-bg); color:var(--green-d); border:2px solid var(--green)}
+.fb-banner.bad{background:var(--coral-bg); color:var(--coral-d); border:2px solid var(--coral)}
+.fb-banner.ok .fb-ic{background:var(--green)}
+.fb-banner.bad .fb-ic{background:var(--coral)}
+.result-score{font-size:4.4rem; font-weight:900; text-align:center; color:var(--green-d); line-height:1.1}
+.result-sub{text-align:center; font-size:1.15rem; color:var(--ink-2); margin-bottom:18px}
+.result-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-bottom:20px}
+.result-cell{background:#F7FBF8; border-radius:16px; padding:14px; text-align:center; border:1px solid var(--line)}
+.result-cell .rc-n{font-size:1.7rem; font-weight:900; color:var(--green-d)}
+.result-cell .rc-l{font-size:.85rem; color:var(--ink-2); font-weight:700}
+.result-row{display:flex; align-items:center; gap:10px; padding:10px 0; border-bottom:1px dashed var(--line); font-size:1rem}
+.result-row:last-child{border-bottom:none}
+.result-row .ok-ic{flex:none; width:26px; height:26px; display:flex; align-items:center; justify-content:center}
+.result-row .ok-ic svg{width:22px; height:22px}
+
+/* ============ 错题本 ============ */
+.wb-groups{display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-bottom:18px}
+.wb-g .wb-n{font-size:1.9rem; font-weight:900}
+.wb-g .wb-l{font-size:.9rem; color:var(--ink-2); font-weight:700}
+.wb-g{padding:14px; border-radius:16px; text-align:center; border:2px solid var(--line)}
+.wb-g.coral{border-color:var(--coral); background:var(--coral-bg); color:var(--coral-d)}
+.wb-g.sun{border-color:var(--sun-d); background:var(--sun-bg); color:#8A5B00}
+.wb-g.green{border-color:var(--green); background:var(--green-bg); color:var(--green-d)}
+.wb-item{
+  display:flex; align-items:center; gap:12px; padding:14px 8px;
+  border-bottom:1px dashed var(--line); flex-wrap:wrap;
+}
+.wb-item:last-child{border-bottom:none}
+.wb-en{font-size:1.25rem; font-weight:900}
+.wb-ipa{font-size:1rem; color:var(--ink-2)}
+.wb-zh{font-size:.95rem; color:var(--ink-2); margin-left:auto}
+.wb-meta{font-size:.8rem; font-weight:700; color:var(--ink-2)}
+.upload-zone{
+  border:3px dashed var(--green); border-radius:22px; padding:34px 20px; text-align:center;
+  background:var(--green-bg); cursor:pointer; transition:all .15s;
+}
+.upload-zone:active{transform:scale(.99)}
+.upload-zone .uz-ic{width:74px; height:74px; margin:0 auto 12px; color:var(--green); display:flex; align-items:center; justify-content:center}
+.upload-zone .uz-ic svg{width:100%; height:100%}
+.upload-zone .uz-t{font-size:1.2rem; font-weight:900; color:var(--green-d)}
+.upload-zone .uz-d{font-size:.95rem; color:var(--ink-2); margin-top:4px}
+.ocr-img{max-height:240px; border-radius:16px; margin:14px auto; display:block; box-shadow:var(--sh-card)}
+.ocr-status{text-align:center; font-size:1rem; color:var(--ink-2); padding:12px}
+.ocr-words{display:flex; flex-wrap:wrap; gap:10px; margin:14px 0}
+.ocr-word{
+  display:inline-flex; align-items:center; gap:6px; border:2px solid var(--line); border-radius:14px;
+  padding:8px 14px; font-size:1.05rem; font-weight:800; cursor:pointer; background:#fff;
+}
+.ocr-word.on{border-color:var(--green); background:var(--green-bg); color:var(--green-d)}
+.ocr-word .ck{width:20px; height:20px; border-radius:50%; background:#CBDDD2; display:flex; align-items:center; justify-content:center; color:#fff}
+.ocr-word.on .ck{background:var(--green)}
+.ocr-word .ck svg{width:13px; height:13px}
+
+/* ============ 弹窗 & Toast ============ */
+.modal-mask{
+  position:fixed; inset:0; z-index:80; background:rgba(20,40,30,.5);
+  display:flex; align-items:center; justify-content:center; padding:20px;
+}
+.modal{
+  background:#fff; border-radius:24px; padding:26px 24px; max-width:520px; width:100%;
+  max-height:84vh; overflow-y:auto; box-shadow:0 20px 60px rgba(0,0,0,.25);
+}
+.modal h3{font-size:1.35rem; font-weight:900; margin-bottom:10px; color:var(--green-d)}
+.modal p{font-size:1rem; color:var(--ink-2); margin-bottom:14px}
+.m-row{display:flex; gap:12px; margin-top:18px}
+.m-row .btn{flex:1}
+.toast{
+  position:fixed; left:50%; bottom:110px; transform:translateX(-50%); z-index:99;
+  background:rgba(25,45,35,.92); color:#fff; border-radius:999px;
+  padding:12px 24px; font-size:1rem; font-weight:700; max-width:86vw; text-align:center;
+  animation:toastIn .2s ease;
+}
+@keyframes toastIn{from{opacity:0; transform:translateX(-50%) translateY(10px)} to{opacity:1; transform:translateX(-50%) translateY(0)}}
+
+/* ============ 响应式 ============ */
+@media (max-width:700px){
+  html{font-size:16.5px}
+  main{padding:8px 14px 124px}
+  .hero{padding:24px 20px}
+  .hero h1{font-size:2rem}
+  .hero .steps{grid-template-columns:repeat(2,1fr); gap:8px; margin-top:16px}
+  .hero .step{padding:12px 8px}
+  .hero .step .n{width:30px; height:30px; margin-bottom:6px}
+  .stat-grid{grid-template-columns:repeat(2,1fr)}
+  .quick-grid{grid-template-columns:1fr}
+  .diff-grid{grid-template-columns:1fr}
+  .opt-grid{grid-template-columns:1fr}
+  .type-row{flex-direction:column}
+  .type-row .btn{width:100%}
+  .dlg-line{grid-template-columns:48px 1fr}
+  .view-title{font-size:1.7rem}
+  .wb-groups{grid-template-columns:repeat(3,1fr)}
+  .result-grid{grid-template-columns:repeat(3,1fr)}
+  .w-en{font-size:1.25rem}
+  .big-en{font-size:2.2rem}
+  .big-zh{font-size:1.7rem}
+  .fill-en{font-size:1.6rem}
+}
+@media (prefers-reduced-motion:reduce){
+  *{animation:none!important; transition:none!important}
+}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="logo" onclick="go('#/home')" title="回到首页">
+    <div class="logo-mark">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.6l2.9 5.9 6.5.9-4.7 4.6 1.1 6.5L12 17.4l-5.8 3.1 1.1-6.5L2.6 9.4l6.5-.9z"/></svg>
+    </div>
+    <div class="logo-t">Ryan English 搭子<small>小朋友的英语学习伙伴</small></div>
+  </div>
+  <div class="top-right">
+    <div class="top-chip"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.6l2.9 5.9 6.5.9-4.7 4.6 1.1 6.5L12 17.4l-5.8 3.1 1.1-6.5L2.6 9.4l6.5-.9z"/></svg><span id="topStars">0</span></div>
+    <button class="icon-btn" id="btnReset" title="重置全部数据">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 11a8 8 0 1 0-2.3 6.3"/><path d="M20 4v7h-7"/></svg>
+    </button>
+  </div>
+</header>
+
+<main id="view"></main>
+
+<nav class="tabbar" id="tabbar">
+  <button class="tab" data-route="#/home"><div class="tab-pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg></div><span>首页</span></button>
+  <button class="tab" data-route="#/course"><div class="tab-pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V4a2 2 0 0 0-2-2H6.5A2.5 2.5 0 0 0 4 4.5z"/><path d="M4 19.5A2.5 2.5 0 0 0 6.5 22H20v-5"/></svg></div><span>课程</span></button>
+  <button class="tab" data-route="#/exam"><div class="tab-pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21V4"/><path d="M4 5h11l-2 4 2 4H4"/></svg></div><span>考试</span></button>
+  <button class="tab" data-route="#/wrong"><div class="tab-pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-4.6-9.5-9A5.5 5.5 0 0 1 12 6.5 5.5 5.5 0 0 1 21.5 12c-2.5 4.4-9.5 9-9.5 9z"/></svg><span class="wb-badge hidden" id="wbBadge">0</span></div><span>错题</span></button>
+</nav>
+
+<script>
+/* ================= 图标 ================= */
+const IC = {
+  star:'<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.6l2.9 5.9 6.5.9-4.7 4.6 1.1 6.5L12 17.4l-5.8 3.1 1.1-6.5L2.6 9.4l6.5-.9z"/></svg>',
+  mic:'<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg>',
+  key:'<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="18" height="11" rx="2"/><path d="M7 11h.01M11 11h.01M15 11h.01M19 11h.01M8 14h8"/></svg>',
+  pen:'<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3l4 4L8 20l-5 1 1-5z"/><path d="M14 6l4 4"/></svg>',
+  check:'<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5l5 5L20 6.5"/></svg>',
+  x:'<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>',
+  play:'<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13l11-6.5z"/></svg>',
+  trash:'<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M9 7V5h6v2M6 7l1 14h10l1-14M10 11v6M14 11v6"/></svg>',
+  close:'<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>',
+  sound:'<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9v6h4l5 4V5L8 9z"/><path d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12"/></svg>',
+  book:'<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V4a2 2 0 0 0-2-2H6.5A2.5 2.5 0 0 0 4 4.5z"/><path d="M4 19.5A2.5 2.5 0 0 0 6.5 22H20v-5"/></svg>',
+  flag:'<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21V4"/><path d="M4 5h11l-2 4 2 4H4"/></svg>',
+  home:'<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg>',
+  info:'<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg>',
+  upload:'<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V4M7 9l5-5 5 5"/><path d="M4 16v4h16v-4"/></svg>',
+  camera:'<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h3l2-3h6l2 3h3v12H4z"/><circle cx="12" cy="13" r="3.5"/></svg>',
+  refresh:'<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 11a8 8 0 1 0-2.3 6.3"/><path d="M20 4v7h-7"/></svg>',
+  pencil:'<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3l4 4L8 20l-5 1 1-5z"/></svg>',
+  bulb:'<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.5 10.9c.7.6 1.5 1.3 1.5 2.1h4c0-.8.8-1.5 1.5-2.1A6 6 0 0 0 12 3z"/></svg>',
+  trophy:'<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8M12 17v4M7 4h10v6a5 5 0 0 1-10 0z"/><path d="M7 5H4v2a3 3 0 0 0 3 3M17 5h3v2a3 3 0 0 1-3 3"/></svg>',
+  heart:'<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12 21s-7-4.6-9.5-9A5.5 5.5 0 0 1 12 6.5 5.5 5.5 0 0 1 21.5 12c-2.5 4.4-9.5 9-9.5 9z"/></svg>',
+  ear:'<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 3-1.5 4-3 6-1 1.3-1 3-1 3"/><path d="M9 9a3 3 0 0 1 6 0"/><circle cx="12" cy="20" r="1.2" fill="currentColor" stroke="none"/></svg>',
+  spark:'<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l1.8 6.2L20 10l-6.2 1.8L12 18l-1.8-6.2L4 10l6.2-1.8z"/><path d="M19 15l.9 3.1L23 19l-3.1.9L19 23l-.9-3.1L15 19l3.1-.9z" opacity=".7"/></svg>'
+};
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;" }[c]));
+const $ = s => document.querySelector(s);
+const $$ = (s, r) => Array.from((r || document).querySelectorAll(s));
+const normWord = s => String(s || "").toLowerCase().replace(/[’']/g, "'").replace(/[^a-z' ]/g, "").replace(/\s+/g, " ").trim();
+const normCompare = s => normWord(s).replace(/'/g, "");
+const shuffle = a => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+const uid = p => p + Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+
+/* ================= 音标词典（自动补音标） ================= */
+const IPA_DICT = {
+  hello:"/həˈləʊ/", hi:"/haɪ/", goodbye:"/ˌɡʊdˈbaɪ/", bye:"/baɪ/", morning:"/ˈmɔːnɪŋ/",
+  afternoon:"/ˌɑːftəˈnuːn/", evening:"/ˈiːvnɪŋ/", name:"/neɪm/", my:"/maɪ/", your:"/jɔː(r)/",
+  please:"/pliːz/", "thank you":"/ˈθæŋk juː/", thanks:"/θæŋks/", sorry:"/ˈsɒri/", good:"/ɡʊd/",
+  meet:"/miːt/", nice:"/naɪs/", too:"/tuː/", what:"/wɒt/", is:"/ɪz/", how:"/haʊ/", are:"/ɑː(r)/",
+  you:"/juː/", i:"/aɪ/", am:"/æm/", red:"/red/", blue:"/bluː/", green:"/ɡriːn/", yellow:"/ˈjeləʊ/",
+  orange:"/ˈɒrɪndʒ/", purple:"/ˈpɜːpl/", pink:"/pɪŋk/", black:"/blæk/", white:"/waɪt/",
+  brown:"/braʊn/", like:"/laɪk/", color:"/ˈkʌlə(r)/", colour:"/ˈkʌlə(r)/", it:"/ɪt/", do:"/duː/", yes:"/jes/", no:"/nəʊ/",
+  very:"/ˈveri/", pretty:"/ˈprɪti/", one:"/wʌn/", two:"/tuː/", three:"/θriː/", four:"/fɔː(r)/",
+  five:"/faɪv/", six:"/sɪks/", seven:"/ˈsevn/", eight:"/eɪt/", nine:"/naɪn/", ten:"/ten/",
+  count:"/kaʊnt/", number:"/ˈnʌmbə(r)/", many:"/ˈmeni/", old:"/əʊld/", cat:"/kæt/", dog:"/dɒɡ/",
+  book:"/bʊk/", pen:"/pen/", bag:"/bæɡ/", hat:"/hæt/", big:"/bɪɡ/", small:"/smɔːl/",
+  happy:"/ˈhæpi/", sad:"/sæd/", jump:"/dʒʌmp/", run:"/rʌn/", walk:"/wɔːk/", eat:"/iːt/",
+  drink:"/drɪŋk/", milk:"/mɪlk/", water:"/ˈwɔːtə(r)/", apple:"/ˈæpl/", banana:"/bəˈnɑːnə/",
+  cake:"/keɪk/", egg:"/eɡ/", fish:"/fɪʃ/", rice:"/raɪs/", boy:"/bɔɪ/", girl:"/ɡɜːl/",
+  mother:"/ˈmʌðə(r)/", father:"/ˈfɑːðə(r)/", sister:"/ˈsɪstə(r)/", brother:"/ˈbrʌðə(r)/",
+  family:"/ˈfæməli/", friend:"/frend/", school:"/skuːl/", teacher:"/ˈtiːtʃə(r)/",
+  student:"/ˈstjuːdnt/", home:"/həʊm/", play:"/pleɪ/", sing:"/sɪŋ/", dance:"/dɑːns/",
+  draw:"/drɔː/", read:"/riːd/", write:"/raɪt/", listen:"/ˈlɪsn/", look:"/lʊk/", see:"/siː/",
+  want:"/wɒnt/", have:"/hæv/", has:"/hæz/", can:"/kæn/", help:"/help/", thank:"/θæŋk/",
+  and:"/ænd/", the:"/ðə/", a:"/ə/", of:"/əv/", in:"/ɪn/", on:"/ɒn/", to:"/tuː/",
+  at:"/æt/", with:"/wɪð/", for:"/fɔː(r)/", from:"/frɒm/", up:"/ʌp/", down:"/daʊn/", go:"/ɡəʊ/",
+  come:"/kʌm/", sit:"/sɪt/", stand:"/stænd/", open:"/ˈəʊpən/", close:"/kləʊz/", new:"/njuː/",
+  sun:"/sʌn/", moon:"/muːn/", star:"/stɑː(r)/", sky:"/skaɪ/", tree:"/triː/", flower:"/ˈflaʊə(r)/",
+  bird:"/bɜːd/", pig:"/pɪɡ/", cow:"/kaʊ/", duck:"/dʌk/", lion:"/ˈlaɪən/", tiger:"/ˈtaɪɡə(r)/",
+  monkey:"/ˈmʌŋki/", panda:"/ˈpændə/", zoo:"/zuː/", park:"/pɑːk/", room:"/ruːm/", door:"/dɔː(r)/",
+  window:"/ˈwɪndəʊ/", chair:"/tʃeə(r)/", table:"/ˈteɪbl/", bed:"/bed/", toy:"/tɔɪ/", ball:"/bɔːl/",
+  kite:"/kaɪt/", car:"/kɑː(r)/", bus:"/bʌs/", bike:"/baɪk/", shoes:"/ʃuːz/", shirt:"/ʃɜːt/",
+  dress:"/dres/", socks:"/sɒks/", hand:"/hænd/", foot:"/fʊt/", head:"/hed/",
+  eye:"/aɪ/", ear:"/ɪə(r)/", nose:"/nəʊz/", mouth:"/maʊθ/", face:"/feɪs/", hair:"/heə(r)/",
+  arm:"/ɑːm/", leg:"/leɡ/", body:"/ˈbɒdi/", cold:"/kəʊld/", hot:"/hɒt/", warm:"/wɔːm/",
+  rain:"/reɪn/", snow:"/snəʊ/", wind:"/wɪnd/", cloud:"/klaʊd/", day:"/deɪ/", night:"/naɪt/",
+  week:"/wiːk/", today:"/təˈdeɪ/", tomorrow:"/təˈmɒrəʊ/", yesterday:"/ˈjestədeɪ/",
+  breakfast:"/ˈbrekfəst/", lunch:"/lʌntʃ/", dinner:"/ˈdɪnə(r)/", soup:"/suːp/", meat:"/miːt/",
+  chicken:"/ˈtʃɪkɪn/", bread:"/bred/", juice:"/dʒuːs/", tea:"/tiː/", coffee:"/ˈkɒfi/",
+  swim:"/swɪm/", fly:"/flaɪ/", sleep:"/sliːp/", wake:"/weɪk/", wash:"/wɒʃ/",
+  clean:"/kliːn/", dirty:"/ˈdɜːti/", fast:"/fɑːst/", slow:"/sləʊ/", tall:"/tɔːl/", short:"/ʃɔːt/",
+  long:"/lɒŋ/", fat:"/fæt/", thin:"/θɪn/", bad:"/bæd/", right:"/raɪt/", wrong:"/rɒŋ/",
+  welcome:"/ˈwelkəm/", be:"/biː/", "stand up":"/ˌstænd ˈʌp/", "sit down":"/ˌsɪt ˈdaʊn/",
+  point:"/pɔɪnt/", say:"/seɪ/", they:"/ðeɪ/", everyone:"/ˈevriwʌn/", she:"/ʃiː/", we:"/wiː/", twin:"/twɪn/",
+  he:"/hiː/", together:"/təˈɡeðə(r)/", ok:"/ˌəʊˈkeɪ/", song:"/sɒŋ/", dear:"/dɪə(r)/", know:"/nəʊ/",
+  our:"/ˈaʊə(r)/", everybody:"/ˈevribɒdi/", me:"/miː/", thing:"/θɪŋ/", pack:"/pæk/", pencil:"/ˈpensl/",
+  "pencil case":"/ˈpensl keɪs/", ruler:"/ˈruːlə(r)/", eraser:"/ɪˈreɪzə(r)/", schoolbag:"/ˈskuːlbæɡ/",
+  guess:"/ɡes/", find:"/faɪnd/", kid:"/kɪd/", there:"/ðeə(r)/", back:"/bæk/", colourful:"/ˈkʌləfl/",
+  world:"/wɜːld/", hooray:"/hʊˈreɪ/", umbrella:"/ʌmˈbrelə/", clothes:"/kləʊðz/", rainbow:"/ˈreɪnbəʊ/",
+  balloon:"/bəˈluːn/", first:"/fɜːst/", magical:"/ˈmædʒɪkl/", fun:"/fʌn/", picture:"/ˈpɪktʃə(r)/",
+  paint:"/peɪnt/", rope:"/rəʊp/", who:"/huː/", make:"/meɪk/", beautiful:"/ˈbjuːtɪfl/", only:"/ˈəʊnli/",
+  show:"/ʃəʊ/", baby:"/ˈbeɪbi/", cheep:"/tʃiːp/", hungry:"/ˈhʌŋɡri/", around:"/əˈraʊnd/", all:"/ɔːl/",
+  dad:"/dæd/", grandfather:"/ˈɡrænfɑːðə(r)/", grandmother:"/ˈɡrænmʌðə(r)/",
+  but:"/bʌt/", people:"/ˈpiːpl/", story:"/ˈstɔːri/", worry:"/ˈwʌri/", photo:"/ˈfəʊtəʊ/", daddy:"/ˈdædi/",
+  mummy:"/ˈmʌmi/", where:"/weə(r)/", sweet:"/swiːt/", game:"/ɡeɪm/", "living room":"/ˈlɪvɪŋ ruːm/",
+  bedroom:"/ˈbedruːm/", bathroom:"/ˈbɑːθruːm/", kitchen:"/ˈkɪtʃɪn/", "dining room":"/ˈdaɪnɪŋ ruːm/",
+  think:"/θɪŋk/", under:"/ˈʌndə(r)/", miaow:"/miˈaʊ/", their:"/ðeə(r)/", share:"/ʃeə(r)/", put:"/pʊt/",
+  cooking:"/ˈkʊkɪŋ/", lucky:"/ˈlʌki/", little:"/ˈlɪtl/", everywhere:"/ˈevriweə(r)/",
+  "here you are":"/hɪə juː ɑː(r)/", "come back":"/ˌkʌm ˈbæk/", "look at":"/ˈlʊk æt/",
+  "take care of":"/ˌteɪk ˈkeə əv/", "lost and found":"/ˌlɒst ənd ˈfaʊnd/", "come on":"/ˌkʌm ˈɒn/",
+  "all around":"/ˌɔːl əˈraʊnd/", "chinese knot":"/ˌtʃaɪˈniːz ˈnɒt/", eleven:"/ɪˈlevn/", twelve:"/twelv/",
+  "let's":"/lets/", hmm:"/hm/", its:"/ɪts/", cant:"/kɑːnt/", dont:"/dəʊnt/", youre:"/jɔː(r)/",
+  hes:"/hiːz/", shes:"/ʃiːz/", were:"/wɪə(r)/", im:"/aɪm/", whats:"/wɒts/", wheres:"/weəz/",
+  whos:"/huːz/", isnt:"/ˈɪznt/", thats:"/ðæts/", er:"/ɜː(r)/", oh:"/əʊ/", wow:"/waʊ/", ha:"/hɑː/",
+  mum:"/mʌm/", mummy:"/ˈmʌmi/", grandpa:"/ˈɡrænpɑː/", grandma:"/ˈɡrænmɑː/", cap:"/kæp/", box:"/bɒks/"
+};
+function autoIpa(en){
+  const k = normWord(en);
+  if (IPA_DICT[k]) return IPA_DICT[k];
+  const ws = k.split(" ").map(w => IPA_DICT[w]).filter(Boolean);
+  if (ws.length && ws.length === k.split(" ").length) return ws.join(" ");
+  return "";
+}
+function autoLineIpa(en){
+  const k = normWord(en);
+  if (IPA_DICT[k]) return IPA_DICT[k];
+  return k.split(" ").map(w => IPA_DICT[w]).filter(Boolean).join(" ");
+}
+/* 音标：母音（元音）标红 */
+const IPA_VOWEL_RE = /(?:eɪ|aɪ|aʊ|ɔɪ|oʊ|əʊ|ɪə|eə|ʊə|iː|uː|ɑː|ɔː|ɜː|ɐː|æ|ɒ|ɔ|ʌ|ə|ɜ|ɪ|ʊ|i|e|u|o|ɑ|ɚ|ɝ|ɨ|ʉ|ɐ|ɘ|ɵ|ɤ|ø|œ|y|ː)/g;
+function ipaVowelHtml(ipa){
+  if (!ipa) return "";
+  let s = String(ipa);
+  const out = [];
+  let last = 0;
+  const re = new RegExp(IPA_VOWEL_RE.source, "g");
+  let m;
+  while ((m = re.exec(s)) !== null) {
+    out.push(esc(s.slice(last, m.index)), `<span class="ipa-v">${esc(m[0])}</span>`);
+    last = m.index + m[0].length;
+  }
+  out.push(esc(s.slice(last)));
+  return out.join("");
+}
+
+/* ================= 内置课程：外研版（三起点）三年级上册 ================= */
+const TEXTBOOK_TXT = `Unit 0: Welcome to school 开学啦
+welcome 欢迎
+school 学校
+hi 嘿，你好
+I 我
+be 是
+what 什么
+your 你的；你们的
+name 名字
+hello 你好
+my 我的
+goodbye 再见
+have 有，拥有
+a (an) 一（个）
+nice 令人愉快的
+day 一天
+good 好的
+morning 早晨，上午
+Ms 女士
+stand 站立
+stand up 站起来
+sit 坐
+sit down 坐下
+open 打开
+book 书
+close 合上
+point 指
+say 说
+read 阅读
+listen 听
+write 写
+对话：认识新朋友
+Amy: Hello. My name is Amy! 你好！我的名字叫埃米！
+Daming: I'm Daming. 我是大明。
+Sam: I'm Sam. 我是萨姆。
+Lingling: What's your name? 你叫什么名字？
+Bobo: I'm Bobo. 我是博博。
+Daming: Goodbye, Bobo. 再见，博博。
+Bobo: Have a nice day! 祝你今天愉快！
+对话：课堂问候
+Ms Smart: Good morning! I'm Ms Smart. 早上好！我是斯马特老师。
+Kids: Good morning, Ms Smart! 早上好，斯马特老师！
+Ms Smart: Stand up! 起立！
+Ms Smart: Sit down! 坐下！
+Ms Smart: Open your book! 打开你的书！
+Ms Smart: Close your book! 合上你的书！
+Unit 1: Let's be friends! 让我们做朋友吧！
+let's 让我们
+friend 朋友
+meet 认识，结识
+you 你；你们
+play 玩，玩耍
+happy 高兴的，快乐的
+new 新的
+do 做
+they 他们；她们；它们
+everyone 每个人，人人
+nine 九
+she 她
+too 也
+we 我们
+from 从
+the 这（那）些；特指
+twin 双胞胎中的一个
+he 他
+come 来；来到
+and 和；然后
+oh 噢
+no 不，不行
+help 帮助，帮忙
+here 在这里
+here you are 给你
+thank 感谢
+together 一起，一块儿
+OK 行，可以
+great 极棒的，极好的
+song 歌曲
+dear 亲爱的
+sing 唱，歌唱
+now 现在
+know 认识；知道
+our 我们的
+everybody 每个人，人人
+with 和……一起
+me 我
+对话：认识新朋友
+Sam: Hi, everyone! I'm Sam. I'm nine. 大家好！我是萨姆，我九岁。
+Daming: She's Amy. She's nine, too. 她是埃米，她也九岁。
+Sam: We're from the UK. We're twins! 我们来自英国，我们是双胞胎！
+Lingling: Hi, Sam. Hi, Amy. I'm Lingling. He's Daming. 你们好，萨姆、埃米！我是玲玲，他是大明。
+Daming: Come and play! 来玩吧！
+All: We are friends! 我们是朋友！
+对话：友谊之歌
+All: Hello! Hello! Nice to meet you. 你好！你好！很高兴认识你。
+All: Let's be friends! 让我们做朋友吧！
+All: Let's play. 我们一起玩吧。
+All: Let's have a happy day! 让我们度过快乐的一天！
+对话：故事·交朋友
+Ben: Hi, I'm Ben. I'm nine, too. 嗨，我是本，我也九岁。
+Mia: Hi, I'm Mia. He's David. We're nine. 嗨，我是米娅，他是戴维，我们九岁。
+David: Here you are. 给你。
+Ben: Thank you. 谢谢你。
+All: Let's be friends! 让我们做朋友吧！
+All: Let's play together! 让我们一起玩吧！
+Unit 2: My school things 我的文具
+thing 东西
+pack 收拾好
+pen 钢笔
+pencil 铅笔
+pencil case 笔袋；铅笔盒
+bag 袋；包
+for 为了
+ruler 尺子，直尺
+eraser 橡皮
+this 这，这个
+in 在……里
+schoolbag 书包
+it 它
+not 不，不是
+that 那，那个
+yes 是，对
+guess 猜，猜测
+find 发现，找到
+lost and found 失物招领
+bye 再见
+kid 小孩，儿童
+take care of 照看，照料
+there 在那里
+please 请
+back 回到原处
+come back 回来
+look 看，瞧
+look at 看（某人/某物）
+对话：这是什么东西？
+Amy: Amy! What's this? 埃米！这是什么？
+Tom: What's that, Tom? 汤姆，那是什么？
+Amy: It's my schoolbag. 这是我的书包。
+Tom: What's this? 这是什么？
+Amy: It's a pen. 这是一支钢笔。
+Tom: Is it a pen, too? 这也是一支钢笔吗？
+Amy: No, it isn't. It's a pencil. 不，不是，这是一支铅笔。
+Daming: What's this? 这是什么？
+Amy: It's a ruler. 这是一把尺子。
+Amy: It's a book. 这是一本书。
+Tom: What's this? It's you, Amy! 这是什么？是你，埃米！
+对话：失物招领
+Ms Olivia: Bye, kids. 再见，孩子们。
+Kids: Bye, Ms Olivia. 再见，奥利维娅老师。
+Lulu: What's this? 这是什么？
+Yoyo: It's a ruler. 这是一把尺子。
+Lulu: What's that? 那是什么？
+Yoyo: It's an eraser. 这是一块橡皮。
+Yoyo: Is this your pen, Yoyo? 友友，这是你的钢笔吗？
+Lulu: No, it isn't. It's my eraser. 不，不是，这是我的橡皮。
+Yoyo: Yes, it is. Thank you. 是的，谢谢你。
+All: Take care of your school things! 要爱护你的文具！
+Unit 3: It's a colourful world! 多彩的世界！
+colourful 颜色鲜艳的，色彩丰富的
+world 世界
+hooray 好哇
+umbrella 伞；雨伞
+clothes 衣服
+red 红色（的）
+pink 粉红色（的）
+green 绿色（的）
+yellow 黄色（的）
+orange 橙色（的）
+blue 蓝色（的）
+purple 紫色（的）
+rainbow 彩虹
+want 想要
+balloon 气球
+colour 颜色
+can 能，会
+see 看见，看到
+right 正确的，对的
+first 第一的
+magical 神奇的，有魔力的
+fun 有趣的，逗乐的
+black 黑色（的）
+so 这么，如此
+many 许多，大量
+picture 画，图画
+today 今天
+paint 画，作画
+对话：买气球
+Bobo: I want a balloon! I want a balloon! 我想要一个气球！我想要一个气球！
+Seller: What colour is it? Can you guess? 它是什么颜色？你能猜猜吗？
+Bobo: It's blue! 是蓝色的！
+Seller: Yes! Here you are. 对！给你。
+Bobo: I want a balloon, too. It's yellow! 我也想要一个气球，是黄色的！
+Bobo: It's pink! 是粉色的！
+Bobo: It's purple! 是紫色的！
+Bobo: It's red! 是红色的！
+Seller: Yes! You are right! 对！你答对了！
+Bobo: It's orange! 是橙色的！
+Bobo: It's green! 是绿色的！
+对话：多彩的世界之歌
+All: Look at our umbrellas, look at our clothes. 看看我们的伞，看看我们的衣服。
+All: Red, pink, green and yellow, orange, blue and purple! 红、粉、绿、黄，橙、蓝、紫！
+All: Look, look! A rainbow there! And a rainbow here! 看，看！那里有彩虹，这里也有彩虹！
+All: It's a colourful world! 这是一个多彩的世界！
+对话：魔法颜色
+Bobo: Yellow and blue, what colour? 黄色加蓝色，是什么颜色？
+All: It's green! 是绿色！
+Bobo: Yellow and red, what colour? 黄色加红色，是什么颜色？
+All: It's orange! 是橙色！
+Bobo: Red and blue, what colour? 红色加蓝色，是什么颜色？
+All: It's purple! 是紫色！
+Bobo: Red, yellow and blue, what colour? 红、黄、蓝加在一起，是什么颜色？
+All: It's black! 是黑色！
+Bobo: This is fun! 真有趣！
+Unit 4: Fun with numbers 数字真有趣
+number 数，数字
+count 数数
+how 多少；怎样，如何
+bird 鸟
+one 一
+two 二
+three 三
+four 四
+five 五
+six 六
+seven 七
+eight 八
+nine 九
+ten 十
+eleven 十一
+twelve 十二
+rope 绳
+who 谁，什么人
+make 制作
+Chinese knot 中国结
+beautiful 美丽的
+only 仅仅
+show 给……看
+baby 幼崽；雏鸟
+cheep 叽叽（小鸡叫声）
+egg 蛋
+hungry 饥饿的
+around 环绕，在……周围
+all 全部，所有
+all around 处处，到处
+对话：数一数
+All: Count, count, count with me! 数一数，数一数，和我一起数！
+All: How many birds can you see? 你能看到多少只鸟？
+All: One, two, three! 一、二、三！
+All: Four, five, six! 四、五、六！
+All: Seven, eight, nine! 七、八、九！
+All: Ten, eleven, twelve! 十、十一、十二！
+对话：神奇的中国结
+Amy: Wow! What is it? 哇！这是什么？
+Lingling: This is a Chinese knot. 这是中国结。
+Amy: It's beautiful! 真漂亮！
+Amy: How do you make it? 你是怎么做的？
+Lingling: Look! Only one rope! 看！只有一根绳子！
+Daming: Guess! How many ropes? 猜猜！有几根绳子？
+Amy: Twelve? 十二根？
+Lingling: Ha ha, no. Let me show you. 哈哈，不对。让我演示给你看。
+对话：故事·我的十二个蛋
+Mama Hen: One, two, three, four, five, six, seven, eight, nine, ten, eleven, twelve. My twelve eggs! 一、二、三……十二。我的十二个蛋！
+Chicks: Cheep! Cheep! 叽叽！叽叽！
+Mama Hen: Twelve eggs. Twelve babies. 十二个蛋，十二个宝宝。
+Chick: Er, I'm hungry. 呃，我饿了。
+Mama Hen: One, two, three, four, five, six, seven, eight, nine, ten, eleven. Oh, no! Only eleven eggs. 一、二、三……十一。噢，不！只剩十一个蛋了。
+Chicks: Cheep! Cheep! 叽叽！叽叽！
+Mama Hen: My baby! 我的宝宝！
+Unit 5: We're family 我们是一家人
+family 家庭；家人
+dad 爸爸
+father 爸爸；父亲
+mum 妈妈
+mother 妈妈；母亲
+brother 哥哥；弟弟
+sister 姐姐；妹妹
+grandpa 祖父；外祖父
+grandfather 祖父；外祖父
+grandma 祖母；外祖母
+grandmother 祖母；外祖母
+but 但是，然而
+people 人；人们
+story 故事
+cap 帽子
+worry 担心
+on 在……上面
+come on 快点；加油
+photo 照片，相片
+love 爱，关爱
+daddy 爸爸（称呼）
+mummy 妈妈（称呼）
+where 在哪里
+dog 狗
+box 盒；箱
+对话：介绍家人
+Daming: Sam, this is my dad. 萨姆，这是我爸爸。
+Daming: This is my grandpa. 这是我爷爷。
+Daming: That is my grandma! 那是我的奶奶！
+Sam: Oh, this is my grandma. 噢，这是我的奶奶。
+Sam: But who is that? 但是那是谁？
+Daming: Hello. 你好。
+Sam: Hi. 嗨。
+对话：幸福之家之歌
+All: Dad, mum, brother, sister, grandpa, grandma and me. 爸爸、妈妈、哥哥、姐姐、爷爷、奶奶和我。
+All: This is my family. 这是我的家。
+All: We're a happy family! 我们是幸福的一家人！
+对话：故事·全家福
+Jiajia: I'm Jiajia. This is my sister. 我是佳佳，这是我姐姐。
+Jiajia: Oh, no! The cap! Come back, Lucky! 噢，不！帽子！回来，幸运！
+Family: Don't worry! We can help! 别担心！我们能帮忙！
+Jiajia: Great! 太棒了！
+Jiajia: This is my dad. This is my mum. 这是我爸爸，这是我妈妈。
+Jiajia: That's my grandma and that's my grandpa. 那是我奶奶，那是我爷爷。
+Jiajia: This is my family photo. I love my family. 这是我的全家福。我爱我的家人。
+Unit 6: My sweet home 甜蜜的家
+sweet 甜蜜的
+home 家
+game 游戏
+room 房间
+living room 客厅
+bedroom 卧室
+bathroom 浴室，卫生间
+kitchen 厨房
+dining room 餐厅
+door 门
+chair 椅子
+think 想，认为
+under 在……下面
+bed 床
+toy 玩具
+miaow 喵（猫叫声）
+table 桌子
+cat 猫
+ball 球
+their 他们的
+apple 苹果
+share 共用；分享
+put 放
+cooking 做饭
+sun 太阳
+like 喜欢
+run 跑
+lucky 幸运的
+big 大的
+little 小的
+everywhere 在各个地方；处处
+对话：苏苏在哪里？
+Dad: Dad, where's Susu? 爸爸，苏苏在哪儿？
+Mum: Susu is not here. 苏苏不在这儿。
+Mum: Look in the bedroom. 去卧室看看。
+Mum: She's under the bed. 她在床下面。
+Susu: Miaow... 喵……
+Dad: Oh! Susu is in the box with four little babies! 噢！苏苏在箱子里，还有四个小宝宝！
+对话：新家之歌
+All: Welcome to my new home! 欢迎来到我的新家！
+All: Who is in the living room? 谁在客厅？
+All: Who is in the bedroom? 谁在卧室？
+All: Who is in the bathroom? 谁在浴室？
+All: Who is in the kitchen? 谁在厨房？
+All: Who is in the dining room? 谁在餐厅？
+All: Let me open the doors and find you all! 让我打开门，把你们都找到！
+对话：甜蜜的家之歌
+All: Dad's in the kitchen. Cooking is fun. 爸爸在厨房，做饭真有趣。
+All: Mum's in the living room. She loves the sun. 妈妈在客厅，她喜欢阳光。
+All: Brother's in the bedroom. He likes to run. 哥哥在卧室，他喜欢跑步。
+All: This is our home. Lucky, lucky us! 这是我们的家，我们真幸运！`;
+
+/* ================= 解析器 ================= */
+function matchUnitHeader(line){
+  const m = line.match(/^(?:unit|第)(?:\s*([0-9一二三四五六七八九十]+)\s*[课单元篇]?)?\s*[:：\-—]?\s*(.+)$/i);
+  if (m) return { n: m[1] || "", title: line.replace(/^(?:unit|第)(?:\s*[0-9一二三四五六七八九十]+\s*[课单元篇]?)?\s*[:：\-—]?\s*/i, "").trim() };
+  return null;
+}
+function parseDialogueLine(line){
+  const m = line.match(/^([^:：]{1,16}?)[:：]\s*(.+)$/);
+  if (!m) return null;
+  const who = m[1].trim();
+  const rest = m[2].trim();
+  const zm = rest.match(/^(.*?)\s+([\u4e00-\u9fa5].*)$/);
+  const en = zm ? zm[1].trim() : rest;
+  const zh = zm ? zm[2].trim() : "";
+  if (!en) return null;
+  const ipa = autoLineIpa(en);
+  return { who, en, zh, ipa };
+}
+function parseWordLine(line){
+  const m = line.match(/^([A-Za-z][A-Za-z'’ ()-]*?)\s+([\u4e00-\u9fa5].*)$/);
+  if (!m) return null;
+  const en = m[1].trim();
+  const zh = m[2].trim();
+  if (!en || !zh) return null;
+  return { en, zh, ipa: autoIpa(en) };
+}
+function parseCourseText(rawText, title){
+  const lines = String(rawText || "").split(/\r?\n/).map(l => l.trim()).filter(Boolean);
+  const units = [];
+  let cur = null, section = "words";
+  const mkUnit = t => ({ id: "u" + Date.now().toString(36) + Math.random().toString(36).slice(2, 6), title: t, zh: "", words: [], dialogues: [] });
+  for (const line of lines) {
+    const uh = matchUnitHeader(line);
+    if (uh) { cur = mkUnit(uh.title || ("Unit " + uh.n)); units.push(cur); section = "words"; continue; }
+    if (/^(对话|dialogue|conversation|情景对话|角色扮演|let's talk|let’s talk|lets talk|role play|talk)/i.test(line)) {
+      section = "dialogue";
+      if (!cur) { cur = mkUnit(units.length ? "补充单元" : "未命名单元"); units.push(cur); }
+      const t = line.replace(/^(对话|dialogue|conversation|情景对话|角色扮演|let's talk|let’s talk|lets talk|role play|talk)[:：\-—]?\s*/i, "").trim();
+      cur.dialogues.push({ id: "d" + cur.dialogues.length, title: t || "对话", zh: "", lines: [] });
+      continue;
+    }
+    if (!cur) { cur = mkUnit(units.length ? "补充单元" : "未命名单元"); units.push(cur); }
+    if (section === "dialogue") {
+      const dl = parseDialogueLine(line);
+      if (dl) {
+        if (!cur.dialogues.length) cur.dialogues.push({ id: "d" + cur.dialogues.length, title: "对话", zh: "", lines: [] });
+        cur.dialogues[cur.dialogues.length - 1].lines.push(dl);
+        continue;
+      }
+    }
+    const w = parseWordLine(line);
+    if (w) {
+      if (!w.ipa) w.ipa = autoIpa(w.en);
+      w.phrase = w.en.includes(" ") ? true : undefined;
+      cur.words.push(w);
+    }
+  }
+  units.forEach(u => u.dialogues.forEach(d => { if (!d.lines) d.lines = []; }));
+  return units.filter(u => u.words.length || u.dialogues.length);
+}
+
+/* ================= 状态与掌握度 ================= */
+const LS_KEY = "ryan-state-v1";
+const defaultState = () => ({ course: null, mastery: {}, stars: 0, exams: 0, totalQ: 0, correctQ: 0, extras: [], speakLog: [] });
+let S = defaultState();
+function saveState(){ try { localStorage.setItem(LS_KEY, JSON.stringify(S)); } catch(e){} }
+function loadState(){
+  try {
+    const raw = localStorage.getItem(LS_KEY);
+    if (raw) S = Object.assign(defaultState(), JSON.parse(raw));
+  } catch(e) {}
+}
+function resetAll(){
+  S = defaultState(); saveState();
+  render(); go("#/home"); toast("已重置全部数据");
+}
+function getMastery(id){ return S.mastery[id] || { consecutive: 0, wrongCount: 0, status: "new", lastWrongAt: 0, lastOkAt: 0, history: [] }; }
+function recordResult(item, ok){
+  const m = getMastery(item._id);
+  m.history = (m.history || []).slice(-60);
+  m.history.push({ ok, t: Date.now() });
+  if (ok) {
+    m.consecutive = (m.consecutive || 0) + 1;
+    m.lastOkAt = Date.now();
+    if (m.consecutive >= 3) m.status = "mastered";
+    else if (m.status === "new") m.status = "learning";
+  } else {
+    m.consecutive = 0;
+    m.wrongCount = (m.wrongCount || 0) + 1;
+    m.status = "learning";
+    m.lastWrongAt = Date.now();
+  }
+  S.mastery[item._id] = m;
+  if (ok) S.stars += 1;
+  S.totalQ += 1; S.correctQ += ok ? 1 : 0;
+  saveState();
+  return m;
+}
+function collectItems(unit){
+  const items = [];
+  unit.words.forEach((w, i) => items.push(Object.assign({}, w, { _id: unit.id + "::w" + i, _unitId: unit.id, _unitTitle: unit.title, _kind: w.phrase ? "phrase" : "word" })));
+  unit.dialogues.forEach(d => d.lines.forEach((l, i) => {
+    items.push({ en: l.en, zh: l.zh, ipa: l.ipa || "", _id: unit.id + "::d" + d.id + "::" + i, _unitId: unit.id, _unitTitle: unit.title, _kind: "dialogue", _who: l.who, _dlgTitle: d.title });
+  }));
+  return items;
+}
+function allItems(){
+  if (!S.course) return [];
+  const base = S.course.units.flatMap(collectItems);
+  const ex = (S.extras || []).map(e => Object.assign({}, e, { _kind: e.phrase ? "phrase" : "word", _unitId: null, _unitTitle: "拍照/手记错题" }));
+  return base.concat(ex);
+}
+function wrongItems(){
+  return allItems().filter(it => getMastery(it._id).wrongCount > 0)
+    .sort((a, b) => getMastery(b._id).lastWrongAt - getMastery(a._id).lastWrongAt);
+}
+function unitProgress(unit){
+  const items = collectItems(unit);
+  return { total: items.length, mastered: items.filter(it => getMastery(it._id).status === "mastered").length };
+}
+function courseStats(){
+  const items = allItems();
+  return {
+    total: items.length,
+    mastered: items.filter(it => getMastery(it._id).status === "mastered").length,
+    learning: items.filter(it => getMastery(it._id).status === "learning").length,
+    wrong: wrongItems().filter(it => getMastery(it._id).status !== "mastered").length
+  };
+}
+function wrongGroups(){
+  const ws = wrongItems();
+  return {
+    active: ws.filter(it => getMastery(it._id).status !== "mastered"),
+    near: ws.filter(it => getMastery(it._id).status !== "mastered" && getMastery(it._id).consecutive >= 2),
+    mastered: ws.filter(it => getMastery(it._id).status === "mastered")
+  };
+}
+
+/* ================= 语音：朗读 + 口说识别 ================= */
+function speak(text, lang){
+  if (!("speechSynthesis" in window)) { toast("当前浏览器不支持语音朗读"); return; }
+  try {
+    window.speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = lang || "en-US";
+    u.rate = 0.82; u.pitch = 1.05; u.volume = 1;
+    const vs = window.speechSynthesis.getVoices();
+    const v = vs.find(x => x.lang && x.lang.toLowerCase().startsWith((lang || "en-US").slice(0, 2).toLowerCase()));
+    if (v) u.voice = v;
+    window.speechSynthesis.speak(u);
+  } catch(e) { toast("朗读失败，请重试"); }
+}
+function speakEn(t){ speak(t, "en-US"); }
+function speakZh(t){ speak(t, "zh-CN"); }
+let asr = null;
+function asrSupported(){ return !!(window.SpeechRecognition || window.webkitSpeechRecognition); }
+function stopAsr(){ if (asr) { try { asr.onresult = null; asr.onerror = null; asr.onend = null; asr.stop(); } catch(e){} asr = null; } }
+function startAsr(onResult, onEnd){
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SR) return false;
+  stopAsr();
+  const r = new SR();
+  r.lang = "en-US"; r.interimResults = true; r.maxAlternatives = 3; r.continuous = true;
+  let final = "", confs = [];
+  r.onresult = e => {
+    for (let i = e.resultIndex; i < e.results.length; i++) {
+      const t = e.results[i][0].transcript;
+      const c = e.results[i][0].confidence || 0;
+      if (e.results[i].isFinal) { final += t + " "; confs.push(c); } 
+    }
+    const cur = Array.from(e.results).slice(-1)[0];
+    const interim = !cur[0].isFinal ? cur[0].transcript : "";
+    onResult({ final: final.trim(), interim: interim.trim(), conf: confs.length ? confs.reduce((a, b) => a + b, 0) / confs.length : (cur[0].confidence || 0) });
+  };
+  r.onerror = e => { onEnd && onEnd(false, e.error || "error"); };
+  r.onend = () => { if (onEnd) onEnd(true); };
+  asr = r;
+  try { r.start(); return true; } catch(e) { return false; }
+}
+
+/* ================= 跟读发音评分 ================= */
+function levenshtein(a, b){
+  a = String(a || ""); b = String(b || "");
+  if (!a.length) return b.length;
+  if (!b.length) return a.length;
+  const dp = Array.from({ length: a.length + 1 }, (_, i) => [i, ...Array(b.length).fill(0)]);
+  for (let j = 0; j <= b.length; j++) dp[0][j] = j;
+  for (let i = 1; i <= a.length; i++)
+    for (let j = 1; j <= b.length; j++)
+      dp[i][j] = Math.min(dp[i - 1][j] + 1, dp[i][j - 1] + 1, dp[i - 1][j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1));
+  return dp[a.length][b.length];
+}
+function similarity(target, hyp){
+  const expand = s => normWord(s)
+    .replace(/'m\b/g, " am").replace(/'re\b/g, " are").replace(/'s\b/g, " is")
+    .replace(/n't\b/g, " not").replace(/'ve\b/g, " have").replace(/'ll\b/g, " will");
+  const t = expand(target), h = expand(hyp);
+  if (!t || !h) return 0;
+  const tw = t.split(" "), hw = h.split(" ");
+  if (tw.length > 1) {
+    let hit = 0;
+    for (const w of hw) if (tw.includes(w)) hit++;
+    const order = hit > 1 ? 1 : 0;
+    return (hit / tw.length) * 0.85 + order * 0.1 + (h === t ? 0.05 : 0);
+  }
+  return 1 - levenshtein(t, h) / Math.max(t.length, h.length, 1);
+}
+function rateSpeak(target, hyp, conf){
+  const sim = similarity(target, hyp);
+  const confScore = Math.max(0, Math.min(1, conf || 0));
+  const score = Math.max(0, Math.min(100, Math.round(sim * 76 + confScore * 24)));
+  let stars = 1, msg;
+  if (score >= 90) { stars = 3; msg = "太棒了！发音非常标准！"; }
+  else if (score >= 80) { stars = 3; msg = "非常好！继续加油！"; }
+  else if (score >= 70) { stars = 2; msg = "很好！再读一遍会更棒！"; }
+  else if (score >= 55) { stars = 2; msg = "不错哦，放慢一点再试试！"; }
+  else if (score >= 40) { stars = 1; msg = "继续加油，先听一遍示范！"; }
+  else { stars = 1; msg = "再听一遍，跟着大声读出来！"; }
+  return { score, stars, msg, sim, conf: confScore };
+}
+let practiceCtx = null;
+function speakPractice(item, onBack){
+  stopAsr();
+  practiceCtx = { item, onBack, listening: false, hyp: "", conf: 0, done: false };
+  const isSentence = item._kind === "dialogue" || (item.en || "").split(" ").length > 1;
+  $("#view").innerHTML = `
+  <div class="quiz-shell">
+    <div class="quiz-head">
+      <button class="icon-btn" id="ppClose">${IC.close}</button>
+      <div style="font-weight:900;font-size:1.2rem;color:var(--green-d)">跟读发音练习</div>
+      <div class="q-stars" id="ppStars"></div>
+    </div>
+    <div class="q-card" style="text-align:center">
+      <div class="q-tag green" style="display:inline-block;margin-bottom:12px">${isSentence ? "句子跟读" : "单词跟读"} · 大声读出来</div>
+      <div class="speak-target en">${esc(item.en)}</div>
+      ${item.ipa ? `<div class="ipa" style="margin-top:10px">${ipaVowelHtml(item.ipa)}</div>` : ""}
+      <div style="font-size:1.15rem;color:var(--ink-2);margin-top:6px;font-weight:700">${esc(item.zh || "")}</div>
+      <div class="type-row" style="justify-content:center;margin-top:18px">
+        <button class="btn green sm" id="ppPlay">${IC.sound} 听示范</button>
+      </div>
+      <div id="ppBody"></div>
+    </div>
+  </div>`;
+  $("#ppClose").onclick = () => { stopAsr(); practiceCtx = null; if (onBack) onBack(); else go("#/course"); };
+  $("#ppPlay").onclick = () => speakEn(item.en);
+  const body = $("#ppBody");
+  if (!asrSupported()) {
+    body.innerHTML = `
+      <div class="blank-card" style="margin-top:18px">当前浏览器不支持语音识别，可以让孩子先听示范、大声跟读，然后自己判断：</div>
+      <div class="type-row" style="margin-top:16px">
+        <button class="btn green" onclick="selfJudgePractice(true)">${IC.check} 我读得不错</button>
+        <button class="btn ghost" onclick="selfJudgePractice(false)">${IC.refresh} 再练一次</button>
+      </div>`;
+    return;
+  }
+  body.innerHTML = `
+    <button class="mic-btn" id="ppMic">${IC.mic}</button>
+    <div class="mic-status" id="ppStatus">点击麦克风开始跟读</div>
+    <div class="speak-hint en" id="ppLive"></div>`;
+  const mic = $("#ppMic"), status = $("#ppStatus"), live = $("#ppLive");
+  mic.onclick = () => {
+    if (practiceCtx.listening) { stopAsr(); practiceCtx.listening = false; mic.classList.remove("listening"); mic.classList.add("green"); status.textContent = "识别完成，正在评分…"; rateCurrent(); return; }
+    if (!startAsr(res => {
+      practiceCtx.hyp = res.final || res.interim;
+      practiceCtx.conf = res.conf || 0;
+      live.textContent = practiceCtx.hyp ? practiceCtx.hyp : "";
+    }, (ok, err) => {
+      if (ok) { practiceCtx.listening = false; mic.classList.remove("listening"); mic.classList.add("green"); status.textContent = "识别完成，正在评分…"; rateCurrent(); }
+      else { practiceCtx.listening = false; mic.classList.remove("listening"); status.textContent = "没有听清（" + (err || "error") + "），请再试一次"; }
+    })) {
+      status.textContent = "语音识别启动失败，请刷新页面重试";
+      return;
+    }
+    practiceCtx.listening = true; practiceCtx.hyp = ""; practiceCtx.conf = 0; live.textContent = "";
+    mic.classList.add("listening"); mic.classList.remove("green");
+    status.textContent = "正在听…大声读出来！";
+  };
+}
+function rateCurrent(){
+  const ctx = practiceCtx;
+  if (!ctx || ctx.done) return;
+  ctx.done = true;
+  window.__ppItem = ctx.item; window.__ppBack = ctx.onBack || null;
+  const r = rateSpeak(ctx.item.en, ctx.hyp, ctx.conf);
+  S.speakLog = S.speakLog || [];
+  S.speakLog.push({ en: ctx.item.en, score: r.score, t: Date.now() });
+  saveState();
+  const stars = [1, 2, 3].map(i => `<svg viewBox="0 0 24 24" fill="currentColor" class="${i <= r.stars ? "lit" : ""}"><path d="M12 2.6l2.9 5.9 6.5.9-4.7 4.6 1.1 6.5L12 17.4l-5.8 3.1 1.1-6.5L2.6 9.4l6.5-.9z"/></svg>`).join("");
+  $("#ppStars").innerHTML = stars;
+  const body = $("#ppBody");
+  body.innerHTML = `
+    <div class="score-box">
+      <div class="score-num">${r.score}<span style="font-size:1.2rem"> 分</span></div>
+      <div class="score-t">${esc(r.msg)}</div>
+      <div class="stars-row">${stars}</div>
+      ${ctx.hyp ? `<div style="font-size:.95rem;color:var(--ink-2);margin-top:10px">我听到：<span class="en" style="font-weight:900">${esc(ctx.hyp)}</span></div>` : ""}
+    </div>
+    <div class="type-row" style="justify-content:center;margin-top:18px">
+      <button class="btn green" onclick="speakPractice(window.__ppItem, window.__ppBack)">${IC.refresh} 再练一次</button>
+      <button class="btn ghost" id="ppDone">${IC.check} 完成</button>
+    </div>`;
+  $("#ppDone").onclick = () => { stopAsr(); practiceCtx = null; if (ctx.onBack) ctx.onBack(); else go("#/course"); };
+}
+function selfJudgePractice(ok){
+  const ctx = practiceCtx;
+  if (!ctx || ctx.done) return;
+  ctx.done = true;
+  window.__ppItem = ctx.item; window.__ppBack = ctx.onBack || null;
+  const score = ok ? 85 : 55;
+  const stars = ok ? 3 : 2;
+  S.speakLog = S.speakLog || [];
+  S.speakLog.push({ en: ctx.item.en, score, t: Date.now() });
+  saveState();
+  const starsHtml = [1, 2, 3].map(i => `<svg viewBox="0 0 24 24" fill="currentColor" class="${i <= stars ? "lit" : ""}"><path d="M12 2.6l2.9 5.9 6.5.9-4.7 4.6 1.1 6.5L12 17.4l-5.8 3.1 1.1-6.5L2.6 9.4l6.5-.9z"/></svg>`).join("");
+  $("#ppStars").innerHTML = starsHtml;
+  $("#ppBody").innerHTML = `
+    <div class="score-box">
+      <div class="score-num">${score}<span style="font-size:1.2rem"> 分</span></div>
+      <div class="score-t">${ok ? "真棒！发音很标准！" : "继续加油，再听一次示范！"}</div>
+      <div class="stars-row">${starsHtml}</div>
+    </div>
+    <div class="type-row" style="justify-content:center;margin-top:18px">
+      <button class="btn green" onclick="speakPractice(window.__ppItem, window.__ppBack)">${IC.refresh} 再练一次</button>
+      <button class="btn ghost" id="ppDone2">${IC.check} 完成</button>
+    </div>`;
+  $("#ppDone2").onclick = () => { stopAsr(); practiceCtx = null; if (ctx.onBack) ctx.onBack(); else go("#/course"); };
+}
+
+/* ================= 视图：首页 ================= */
+const UNIT_COLORS = ["#2E9E5B", "#3F8FDD", "#FF9A3D", "#F2665E", "#9B7BF5", "#0FA3A3", "#E6A32E"];
+function renderHome(){
+  const st = courseStats();
+  const hasCourse = !!S.course;
+  const wb = st.wrong;
+  const unitCards = hasCourse ? S.course.units.map((u, i) => {
+    const p = unitProgress(u);
+    const c = UNIT_COLORS[i % UNIT_COLORS.length];
+    const label = "U" + (u.title.match(/^unit\s*(\d+)/i) ? u.title.match(/^unit\s*(\d+)/i)[1] : (i + 1));
+    return `<div class="unit-card" onclick="go('#/unit/${u.id}')">
+      <div class="unit-stripe" style="background:${c}"></div>
+      <div class="unit-badge" style="background:${c}">${label}</div>
+      <div class="unit-info"><div class="unit-t">${esc(u.title.replace(/^unit\s*\d+\s*[:：]?\s*/i, ""))}</div>
+      <div class="unit-s">${p.total} 个考点 · 已掌握 ${p.mastered}</div></div>
+      <div class="unit-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></div>
+    </div>`;
+  }).join("") : "";
+  $("#view").innerHTML = `
+    <div class="hero">
+      <div class="badge">${IC.spark} Ryan English 搭子 · 绿色学习乐园</div>
+      <h1 class="en">Learn. Practice. Master!</h1>
+      <p>上传课程 → 拆分单元 → 整理单字与对话（音标 + 中文翻译）→ 三级难度考试（口说 / 打字 / 手写 / 选择）→ 错题拍照记录，连对 3 次才算真正掌握。</p>
+      <div class="steps">
+        <div class="step"><div class="n">1</div><div class="t">上传课程</div><div class="d">内容 + 单字表</div></div>
+        <div class="step"><div class="n">2</div><div class="t">重点整理</div><div class="d">音标 + 翻译</div></div>
+        <div class="step"><div class="n">3</div><div class="t">分级考试</div><div class="d">3 级 × 4 方式</div></div>
+        <div class="step"><div class="n">4</div><div class="t">错题攻克</div><div class="d">连对 3 次=掌握</div></div>
+      </div>
+    </div>
+    <div class="stat-grid">
+      <div class="stat-card"><div class="ic" style="color:var(--green)">${IC.book}</div><div class="num">${st.total}</div><div class="lab">全部考点</div></div>
+      <div class="stat-card"><div class="ic" style="color:var(--green)">${IC.trophy}</div><div class="num">${st.mastered}</div><div class="lab">已掌握</div></div>
+      <div class="stat-card"><div class="ic" style="color:var(--sun-d)">${IC.refresh}</div><div class="num">${st.learning}</div><div class="lab">练习中</div></div>
+      <div class="stat-card"><div class="ic" style="color:var(--sun-d)">${IC.star}</div><div class="num">${S.stars}</div><div class="lab">星星</div></div>
+    </div>
+    <div class="quick-grid">
+      <button class="quick q-green" onclick="go('#/exam')"><div class="q-t">${IC.flag} 去考试</div><div class="q-d">选单元、题型、方式与难度</div><div class="q-ic">${IC.flag}</div></button>
+      <button class="quick q-coral" onclick="go('#/wrong')"><div class="q-t">${IC.heart} 错题本</div><div class="q-d">${wb} 道错题待攻克 · 连对 3 次即掌握</div><div class="q-ic">${IC.heart}</div></button>
+      <button class="quick q-sun" onclick="go('#/course')"><div class="q-t">${IC.book} 课程重点</div><div class="q-d">单字 · 短语 · 对话，跟读打分</div><div class="q-ic">${IC.book}</div></button>
+      <button class="quick q-blue" onclick="openOcrPanel()"><div class="q-t">${IC.camera} 拍照错题</div><div class="q-d">拍下错题，OCR 自动加入错题本</div><div class="q-ic">${IC.camera}</div></button>
+    </div>
+    ${hasCourse ? `<div class="card" style="margin-top:16px"><div class="card-title">${IC.book} 最近单元</div><div class="unit-list">${unitCards}</div></div>` : ""}
+    <div class="card workflow" style="margin-top:16px">
+      <div class="card-title">${IC.bulb} Ryan English 搭子 工作流</div>
+      <div class="flow-item"><div class="f-n">1</div><div><div class="f-t">上传课程内容与单字表</div><div class="f-d">粘贴文本或上传 .txt / .md 文件，按 "Unit 1 / 第一课" 标题自动拆分单元，单词行自动补音标（母音标红）。</div></div></div>
+      <div class="flow-item"><div class="f-n">2</div><div><div class="f-t">生成单元重点整理</div><div class="f-d">每个单元的单字、短语、对话逐句整理，含音标与中文翻译；每个条目都能听发音、跟读并评分。</div></div></div>
+      <div class="flow-item"><div class="f-n">3</div><div><div class="f-t">生成考试板块</div><div class="f-d">考单字 / 短语 / 对话；方式含口说、打字、手写、选择题；类型含英翻中、中翻英、拼写、填空；难度三级。</div></div></div>
+      <div class="flow-item"><div class="f-n">4</div><div><div class="f-t">错题记录与掌握判定</div><div class="f-d">考核错题自动进错题本，也支持拍照 OCR 录入；反复考核，连续 3 次答对才标记为已掌握。</div></div></div>
+    </div>`;
+}
+
+/* ================= 视图：课程 ================= */
+function renderCourse(){
+  if (!S.course) {
+    $("#view").innerHTML = `
+      <div class="view-head"><div class="view-title">课程</div><div class="view-sub">还没有课程，先去导入吧</div></div>
+      <div class="card empty"><div class="e-ic">${IC.book}</div>
+        <div class="e-t">还没有课程内容</div>
+        <div class="e-d">上传课程内容与单字表，自动按目录拆分单元</div>
+        <button class="btn coral" onclick="go('#/import')">${IC.upload} 导入课程</button>
+      </div>`;
+    return;
+  }
+  const units = S.course.units.map((u, i) => {
+    const p = unitProgress(u);
+    const c = UNIT_COLORS[i % UNIT_COLORS.length];
+    const label = "U" + (u.title.match(/^unit\s*(\d+)/i) ? u.title.match(/^unit\s*(\d+)/i)[1] : (i + 1));
+    return `<div class="unit-card" onclick="go('#/unit/${u.id}')">
+      <div class="unit-stripe" style="background:${c}"></div>
+      <div class="unit-badge" style="background:${c}">${label}</div>
+      <div class="unit-info"><div class="unit-t">${esc(u.title.replace(/^unit\s*\d+\s*[:：]?\s*/i, ""))}</div>
+      <div class="unit-s">${p.total} 个考点 · 已掌握 ${p.mastered}</div></div>
+      <div class="unit-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></div>
+    </div>`;
+  }).join("");
+  const total = courseStats().total;
+  $("#view").innerHTML = `
+    <div class="view-head"><div class="view-title">课程</div><div class="view-sub">${esc(S.course.title)} · ${S.course.units.length} 个单元 · ${total} 个考点</div></div>
+    <div class="card">
+      <div class="card-title">${IC.book} 课程来源</div>
+      <div style="font-size:1.05rem;font-weight:700">${esc(S.course.title)}</div>
+      <div style="font-size:.95rem;color:var(--ink-2);margin-top:4px">来源：${esc(S.course.source || "自定义导入")}</div>
+      <div class="type-row" style="margin-top:14px">
+        <button class="btn green sm" onclick="go('#/import')">${IC.upload} 更换课程</button>
+        <button class="btn ghost sm" onclick="exportCourse()">${IC.upload} 导出课程文本</button>
+      </div>
+    </div>
+    <div class="card" style="margin-top:16px"><div class="card-title">${IC.book} 单元列表 <span class="tip">点击进入单元重点</span></div><div class="unit-list">${units}</div></div>`;
+}
+function exportCourse(){
+  const lines = [];
+  S.course.units.forEach(u => {
+    lines.push(u.title);
+    u.words.forEach(w => lines.push(w.en + " " + w.zh));
+    u.dialogues.forEach(d => {
+      lines.push("对话：" + d.title);
+      d.lines.forEach(l => lines.push(l.who + ": " + l.en + " " + l.zh));
+    });
+    lines.push("");
+  });
+  const blob = new Blob([lines.join("\n")], { type: "text/plain;charset=utf-8" });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "RyanEnglish课程.txt";
+  document.body.appendChild(a); a.click(); a.remove();
+  toast("课程文本已导出");
+}
+
+/* ================= 视图：单元详情 ================= */
+function renderUnit(unitId){
+  if (!S.course) { go("#/course"); return; }
+  const u = S.course.units.find(x => x.id === unitId);
+  if (!u) { go("#/course"); return; }
+  const items = collectItems(u);
+  const wordsHtml = u.words.map((w, i) => `
+    <div class="w-row">
+      <div class="w-en en">${esc(w.en)}</div>
+      ${w.ipa ? `<div class="w-ipa">${ipaVowelHtml(w.ipa)}</div>` : `<div class="w-ipa" style="color:#C9A227">音标待补充</div>`}
+      <div class="w-zh">${esc(w.zh)}</div>
+      <div class="w-acts">
+        <button class="mini-btn" title="听发音" data-t="${esc(w.en)}" onclick="speakEn(this.dataset.t)">${IC.sound}</button>
+        <button class="mini-btn coral pp-btn" data-i="${i}" title="跟读打分">${IC.mic}</button>
+      </div>
+    </div>`).join("");
+  const dlgHtml = u.dialogues.map(d => `
+    <div class="dlg-title">${IC.bulb} ${esc(d.title)}</div>
+    ${d.lines.map(l => `
+      <div class="dlg-line">
+        <div class="who">${esc(l.who)}</div>
+        <div>
+          <div class="en-t en">${esc(l.en)} <button class="mini-btn" style="width:34px;height:34px;vertical-align:middle" title="听发音" data-t="${esc(l.en)}" onclick="speakEn(this.dataset.t)">${IC.sound}</button></div>
+          ${l.ipa ? `<div style="font-size:.95rem;color:var(--ink-2);margin-top:2px">${ipaVowelHtml(l.ipa)}</div>` : ""}
+          <div class="zh-t">${esc(l.zh)}</div>
+          <div class="dlg-acts">
+            <button class="mini-btn coral pp-btn" data-w="1" data-e="${esc(l.en)}" title="跟读打分">${IC.mic} <span style="font-size:.85rem">跟读</span></button>
+          </div>
+        </div>
+      </div>`).join("")}
+  `).join("");
+  $("#view").innerHTML = `
+    <div class="view-head"><div class="view-title">${esc(u.title.replace(/^unit\s*\d+\s*[:：]?\s*/i, ""))}</div>
+    <div class="view-sub">${items.length} 个考点 · 点击喇叭听发音，点击麦克风跟读打分</div></div>
+    <button class="btn coral block" style="margin-bottom:16px" onclick="go('#/exam')">${IC.flag} 去考这个单元</button>
+    <div class="card">
+      <div class="card-title">${IC.book} 单字 · 短语（母音标红 · 点击跟读）</div>
+      ${wordsHtml || `<div class="empty" style="padding:20px"><div class="e-d">本单元暂无单词</div></div>`}
+    </div>
+    ${dlgHtml ? `<div class="card" style="margin-top:16px"><div class="card-title">${IC.bulb} 对话重点整理（逐句音标 + 中文翻译）</div>${dlgHtml}</div>` : ""}`;
+  // 绑定跟读按钮
+  const wordItems = u.words.map((w, i) => Object.assign({}, w, { _id: items[i]._id, _kind: "word" }));
+  $$(".pp-btn[data-i]", $("#view")).forEach(btn => {
+    const it = items[Number(btn.dataset.i)];
+    btn.onclick = () => speakPractice(it, null);
+  });
+  $$(".pp-btn[data-w]", $("#view")).forEach(btn => {
+    const en = btn.dataset.e;
+    const it = items.find(x => x.en === en && x._kind === "dialogue");
+    btn.onclick = () => speakPractice(it, null);
+  });
+}
+
+/* ================= 视图：导入课程 ================= */
+function renderImport(){
+  $("#view").innerHTML = `
+    <div class="view-head"><div class="view-title">上传课程</div><div class="view-sub">粘贴课程内容与单字表，按目录自动拆分单元</div></div>
+    <div class="card">
+      <div class="card-title">${IC.book} 课程内容格式</div>
+      <div style="background:#F4F9F5;border-radius:16px;padding:16px;font-size:.95rem;line-height:1.9;font-family:monospace;color:var(--ink-2);overflow-x:auto">
+        Unit 1: Let's be friends! 让我们做朋友吧！<br>
+        friend 朋友<br>
+        happy 高兴的，快乐的<br>
+        对话：认识新朋友<br>
+        Amy: Hello! My name is Amy! 你好！我的名字叫埃米！<br>
+        Daming: I'm Daming. 我是大明。
+      </div>
+      <div style="font-size:.9rem;color:var(--ink-2);margin-top:10px">标题以 "Unit / 第一课 / 第 1 单元" 开头即新单元；"对话：标题" 切换对话段落；"英文 中文" 为单词行；"名字: 英文 中文" 为对话行。音标自动生成，母音标红。</div>
+      <div class="type-row" style="margin-top:16px">
+        <label class="btn green" style="flex:1">${IC.upload} 选择文件<input type="file" id="impFile" accept=".txt,.md,.csv,text/plain" style="display:none"></label>
+        <button class="btn sun" onclick="loadBuiltin()">${IC.book} 载入课本示例</button>
+      </div>
+      <textarea id="impText" rows="10" placeholder="或者直接粘贴课程文本到这里…" style="width:100%;margin-top:14px;border:3px solid var(--line);border-radius:16px;padding:14px;font-size:1rem;line-height:1.7;outline:none"></textarea>
+      <button class="btn coral block" style="margin-top:14px" onclick="parseAndLoad()">${IC.check} 解析并载入课程</button>
+      ${S.course ? `<button class="btn ghost block" style="margin-top:10px" onclick="go('#/course')">保留当前课程，返回</button>` : ""}
+    </div>`;
+  $("#impFile").addEventListener("change", e => {
+    const f = e.target.files && e.target.files[0];
+    if (!f) return;
+    const rd = new FileReader();
+    rd.onload = () => { $("#impText").value = String(rd.result || ""); toast("已读取文件，点击下方按钮载入"); };
+    rd.readAsText(f, "utf-8");
+  });
+}
+function loadBuiltin(){
+  $("#impText").value = TEXTBOOK_TXT;
+  toast("已载入示例课本，点击「解析并载入课程」");
+}
+function parseAndLoad(){
+  const raw = $("#impText").value.trim();
+  if (!raw) { toast("请先粘贴课程内容"); return; }
+  const units = parseCourseText(raw, "");
+  if (!units.length) { toast("没有识别到内容，请检查格式"); return; }
+  S.course = { id: "c" + Date.now().toString(36), title: units[0].title.replace(/^unit\s*\d+\s*[:：]?\s*/i, "") ? (units[0].title.replace(/^unit\s*\d+\s*[:：]?\s*/i, "") || "我的课程") : "我的课程", units, source: "自定义导入" };
+  saveState();
+  go("#/course");
+  toast("已载入 " + units.length + " 个单元，共 " + courseStats().total + " 个考点");
+}
+
+/* ================= 考试引擎 ================= */
+const MODE_META = {
+  choice: { label: "选择题", ic: IC.check, cls: "q-green" },
+  speak: { label: "口说", ic: IC.mic, cls: "q-coral" },
+  type: { label: "打字输入", ic: IC.key, cls: "q-blue" },
+  write: { label: "手写", ic: IC.pen, cls: "q-sun" }
+};
+const TYPE_META = {
+  e2c: { label: "英翻中", cls: "q-green" },
+  c2e: { label: "中翻英", cls: "q-blue" },
+  spell: { label: "拼写", cls: "q-sun" },
+  fill: { label: "填空", cls: "q-coral" },
+  read: { label: "朗读", cls: "q-coral" }
+};
+const DIFF_META = [
+  { n: "⭐", label: "初级", desc: "单字 · 简单拼写" },
+  { n: "⭐⭐", label: "中级", desc: "单字 + 短语" },
+  { n: "⭐⭐⭐", label: "高级", desc: "含对话句子" }
+];
+let EXAM = null;
+function defaultExamCfg(){
+  const allIds = S.course ? S.course.units.map(u => u.id) : [];
+  return { unitIds: allIds, kinds: ["word", "phrase", "dialogue"], modes: ["choice", "speak", "type", "write"], types: ["e2c", "c2e", "spell", "fill"], diff: 1, count: 10 };
+}
+function renderExam(){
+  if (!S.course) {
+    $("#view").innerHTML = `
+      <div class="view-head"><div class="view-title">考试</div><div class="view-sub">需要先导入课程</div></div>
+      <div class="card empty"><div class="e-ic">${IC.flag}</div>
+        <div class="e-t">还没有课程，无法出题</div>
+        <div class="e-d">先去上传课程内容与单字表吧</div>
+        <button class="btn coral" onclick="go('#/import')">${IC.upload} 导入课程</button>
+      </div>`;
+    return;
+  }
+  if (!EXAM || EXAM.done) EXAM = { cfg: defaultExamCfg() };
+  const cfg = EXAM.cfg;
+  const unitChips = S.course.units.map((u, i) => {
+    const on = cfg.unitIds.includes(u.id);
+    return `<button class="chip ${on ? "on" : ""}" data-u="${u.id}" onclick="toggleUnitChip(this)"><span class="ck">${on ? IC.check : ""}</span>U${(u.title.match(/^unit\s*(\d+)/i) ? u.title.match(/^unit\s*(\d+)/i)[1] : (i + 1))} ${esc(u.title.replace(/^unit\s*\d+\s*[:：]?\s*/i, ""))}</button>`;
+  }).join("");
+  const kindChips = ["word", "phrase", "dialogue"].map(k => {
+    const meta = { word: "单字", phrase: "短语", dialogue: "对话" }[k];
+    const on = cfg.kinds.includes(k);
+    return `<button class="chip ${on ? "on" : ""}" data-k="${k}" onclick="toggleKindChip(this)"><span class="ck">${on ? IC.check : ""}</span>${IC.book}${meta}</button>`;
+  }).join("");
+  const modeChips = Object.keys(MODE_META).map(m => {
+    const meta = MODE_META[m];
+    const on = cfg.modes.includes(m);
+    return `<button class="chip ${on ? "on" : ""}" data-m="${m}" onclick="toggleModeChip(this)"><span class="ck">${on ? IC.check : ""}</span>${meta.ic}${meta.label}</button>`;
+  }).join("");
+  const typeChips = ["e2c", "c2e", "spell", "fill"].map(t => {
+    const meta = TYPE_META[t];
+    const on = cfg.types.includes(t);
+    return `<button class="chip ${on ? "on" : ""}" data-t="${t}" onclick="toggleTypeChip(this)"><span class="ck">${on ? IC.check : ""}</span>${meta.label}</button>`;
+  }).join("");
+  const diffCards = DIFF_META.map((d, i) => `
+    <div class="diff-card ${cfg.diff === i + 1 ? "on" : ""}" onclick="setDiff(${i + 1})">
+      <div class="d-n">${d.n}</div><div class="d-l">${d.label}</div><div class="d-s">${d.desc}</div>
+    </div>`).join("");
+  const counts = [5, 10, 15, 20];
+  const countChips = counts.map(c => `<button class="chip ${cfg.count === c ? "on" : ""}" onclick="setCount(${c})"><span class="ck">${cfg.count === c ? IC.check : ""}</span>${c} 题</button>`).join("");
+  $("#view").innerHTML = `
+    <div class="view-head"><div class="view-title">考试</div><div class="view-sub">自定义考试内容，生成专属考卷</div></div>
+    <div class="card">
+      <div class="sec-lab">${IC.book} 选择单元 ${cfg.unitIds.length === S.course.units.length ? `<span class="tip">全部单元</span>` : ""}</div>
+      <div class="chip-row">${unitChips}</div>
+      <button class="btn ghost sm" style="margin-top:10px" onclick="selectAllUnits()">${IC.check} 全部单元</button>
+    </div>
+    <div class="card">
+      <div class="sec-lab">${IC.book} 考核内容</div>
+      <div class="chip-row">${kindChips}</div>
+    </div>
+    <div class="card">
+      <div class="sec-lab">${IC.flag} 难度分级</div>
+      <div class="diff-grid">${diffCards}</div>
+    </div>
+    <div class="card">
+      <div class="sec-lab">${IC.mic} 考核方式（可多选）</div>
+      <div class="chip-row">${modeChips}</div>
+    </div>
+    <div class="card">
+      <div class="sec-lab">${IC.pencil} 题型（可多选）</div>
+      <div class="chip-row">${typeChips}</div>
+      <div style="font-size:.88rem;color:var(--ink-2);margin-top:10px">选择题 ↔ 英翻中 / 中翻英；打字、手写 ↔ 拼写 / 填空；口说 = 朗读。</div>
+    </div>
+    <div class="card">
+      <div class="sec-lab">${IC.flag} 题量</div>
+      <div class="chip-row">${countChips}</div>
+    </div>
+    <button class="btn green block" style="margin-top:16px;font-size:1.25rem;min-height:60px" onclick="startQuiz()">${IC.flag} 开始考试</button>`;
+}
+function toggleUnitChip(el){
+  const id = el.dataset.u;
+  const cfg = EXAM.cfg;
+  cfg.unitIds = cfg.unitIds.includes(id) ? cfg.unitIds.filter(x => x !== id) : cfg.unitIds.concat(id);
+  renderExam();
+}
+function selectAllUnits(){
+  EXAM.cfg.unitIds = S.course.units.map(u => u.id);
+  renderExam();
+}
+function toggleKindChip(el){
+  const k = el.dataset.k;
+  const cfg = EXAM.cfg;
+  cfg.kinds = cfg.kinds.includes(k) ? cfg.kinds.filter(x => x !== k) : cfg.kinds.concat(k);
+  renderExam();
+}
+function toggleModeChip(el){
+  const m = el.dataset.m;
+  const cfg = EXAM.cfg;
+  cfg.modes = cfg.modes.includes(m) ? cfg.modes.filter(x => x !== m) : cfg.modes.concat(m);
+  renderExam();
+}
+function toggleTypeChip(el){
+  const t = el.dataset.t;
+  const cfg = EXAM.cfg;
+  cfg.types = cfg.types.includes(t) ? cfg.types.filter(x => x !== t) : cfg.types.concat(t);
+  renderExam();
+}
+function setDiff(d){ EXAM.cfg.diff = d; renderExam(); }
+function setCount(c){ EXAM.cfg.count = c; renderExam(); }
+function diffAllowsKind(diff, kind){
+  if (diff === 1) return kind === "word";
+  if (diff === 2) return kind === "word" || kind === "phrase";
+  return true;
+}
+function buildQuiz(cfg){
+  if (!S.course) return null;
+  let items = allItems().filter(it => !it._unitId || cfg.unitIds.includes(it._unitId))
+    .filter(it => diffAllowsKind(cfg.diff, it._kind))
+    .filter(it => cfg.kinds.includes(it._kind));
+  if (!items.length) return null;
+  const pool = [];
+  const allWords = items.filter(it => it._kind !== "dialogue");
+  const allSent = items.filter(it => it._kind === "dialogue");
+  items.forEach(it => {
+    const isSent = it._kind === "dialogue";
+    const wc = (it.en || "").split(" ").length;
+    if (cfg.modes.includes("choice")) {
+      if (cfg.types.includes("e2c")) pool.push({ it, mode: "choice", type: "e2c" });
+      if (cfg.types.includes("c2e")) pool.push({ it, mode: "choice", type: "c2e" });
+    }
+    if (cfg.modes.includes("speak")) pool.push({ it, mode: "speak", type: "read" });
+    if (cfg.modes.includes("type")) {
+      if (!isSent || wc <= 6) { if (cfg.types.includes("spell") && wc <= 4) pool.push({ it, mode: "type", type: "spell" }); }
+      if (cfg.types.includes("fill")) pool.push({ it, mode: "type", type: "fill" });
+    }
+    if (cfg.modes.includes("write")) {
+      if (!isSent || wc <= 6) { if (cfg.types.includes("spell") && wc <= 4) pool.push({ it, mode: "write", type: "spell" }); }
+      if (cfg.types.includes("fill")) pool.push({ it, mode: "write", type: "fill" });
+    }
+  });
+  if (!pool.length) return null;
+  const picked = shuffle(pool).slice(0, cfg.count);
+  const questions = picked.map((p, i) => makeQuestion(p.it, p.mode, p.type, i, allWords, allSent));
+  return questions;
+}
+function makeQuestion(item, mode, type, idx, allWords, allSent){
+  const q = { item, mode, type, idx, answer: item.en, options: [], gap: null, prompt: "" };
+  if (mode === "choice") {
+    if (type === "e2c") {
+      q.answer = item.zh;
+      q.display = { en: item.en, ipa: item.ipa || "", zh: "" };
+      const src = item._kind === "dialogue" ? allSent : allWords;
+      const seen = new Set([item.zh]);
+      const uniq = [];
+      for (const x of shuffle(src)) {
+        if (!x.zh || x.zh === item.zh || x._id === item._id) continue;
+        if (seen.has(x.zh)) continue;
+        seen.add(x.zh); uniq.push(x.zh);
+        if (uniq.length >= 3) break;
+      }
+      q.options = shuffle(uniq.concat(item.zh).filter(Boolean));
+    } else {
+      q.answer = item.en;
+      q.display = { en: "", ipa: "", zh: item.zh };
+      const src = item._kind === "dialogue" ? allSent : allWords;
+      const seen = new Set([normWord(item.en)]);
+      const uniq = [];
+      for (const x of shuffle(src)) {
+        if (!x.en || x._id === item._id) continue;
+        const k = normWord(x.en);
+        if (!k || seen.has(k)) continue;
+        seen.add(k); uniq.push(x.en);
+        if (uniq.length >= 3) break;
+      }
+      q.options = shuffle(uniq.concat(item.en).filter(Boolean));
+    }
+  } else if (mode === "speak") {
+    q.display = { en: item.en, ipa: item.ipa || "", zh: item.zh };
+  } else if (type === "fill") {
+    q.gap = makeGap(item.en);
+    q.display = { en: "", ipa: item.ipa || "", zh: item.zh, gapText: q.gap.text };
+    q.prompt = "请补全缺失的部分";
+  } else {
+    q.display = { en: "", ipa: item.ipa || "", zh: item.zh };
+    q.prompt = "根据中文，拼出英文";
+  }
+  return q;
+}
+function makeGap(en){
+  const words = en.trim().split(/\s+/);
+  if (words.length === 1) {
+    const w = words[0];
+    const vowelIdx = [];
+    for (let i = 0; i < w.length; i++) if (/[aeiouAEIOU]/.test(w[i])) vowelIdx.push(i);
+    let hide;
+    if (w.length <= 3) hide = [0];
+    else hide = vowelIdx.length >= 2 ? [vowelIdx[0], vowelIdx[1]] : (w.length >= 5 ? [1, 2] : [0]);
+    let out = "";
+    for (let i = 0; i < w.length; i++) out += hide.includes(i) ? "_" : w[i];
+    return { text: out, answer: w };
+  }
+  const idx = Math.floor(Math.random() * words.length);
+  const out = words.map((w, i) => i === idx ? "______" : w).join(" ");
+  return { text: out, answer: en };
+}
+
+/* ================= 考试进行 ================= */
+function startQuiz(){
+  if (!EXAM) EXAM = { cfg: defaultExamCfg() };
+  const qs = buildQuiz(EXAM.cfg);
+  if (!qs) { toast("当前筛选没有可出的题，请放宽条件"); return; }
+  EXAM.questions = qs; EXAM.idx = 0; EXAM.correct = 0; EXAM.results = []; EXAM.answered = false; EXAM.done = false;
+  stopAsr();
+  $("#tabbar").classList.add("hidden");
+  renderQuiz();
+}
+function renderQuiz(){
+  const q = EXAM.questions[EXAM.idx];
+  const stars = [1, 2, 3].map(i => `<svg viewBox="0 0 24 24" fill="currentColor" class="${i <= Math.min(3, Math.floor(EXAM.correct / 3)) ? "lit" : ""}"><path d="M12 2.6l2.9 5.9 6.5.9-4.7 4.6 1.1 6.5L12 17.4l-5.8 3.1 1.1-6.5L2.6 9.4l6.5-.9z"/></svg>`).join("");
+  const kind = { word: "单字", phrase: "短语", dialogue: "对话" }[q.item._kind] || "考点";
+  const modeL = MODE_META[q.mode] ? MODE_META[q.mode].label : q.mode;
+  const typeL = TYPE_META[q.type] ? TYPE_META[q.type].label : "";
+  let body = "";
+  if (q.mode === "choice") {
+    const letters = ["A", "B", "C", "D"];
+    body = `
+      <div class="q-card">
+        ${q.display.en ? `<div class="big-en en">${esc(q.display.en)}</div>` : ""}
+        ${q.display.ipa ? `<div class="ipa">${ipaVowelHtml(q.display.ipa)}</div>` : ""}
+        ${q.display.zh ? `<div class="big-zh">${esc(q.display.zh)}</div>` : ""}
+        <div class="hint">${q.type === "e2c" ? "选出正确的中文意思" : "选出正确的英文"}</div>
+        <div class="opt-list" id="opts">
+          ${q.options.map((o, i) => `<button class="opt-btn" data-o="${esc(o)}" onclick="submitChoice(this, ${i})"><span class="k">${letters[i]}</span><span>${esc(o)}</span></button>`).join("")}
+        </div>
+        <div id="qFb"></div>
+        <div id="qNext"></div>
+      </div>`;
+  } else if (q.mode === "speak") {
+    body = `
+      <div class="q-card" style="text-align:center">
+        <div class="big-en en">${esc(q.display.en)}</div>
+        ${q.display.ipa ? `<div class="ipa">${ipaVowelHtml(q.display.ipa)}</div>` : ""}
+        <div style="font-size:1.2rem;font-weight:800;color:var(--ink-2);margin-top:6px">${esc(q.display.zh)}</div>
+        <div class="type-row" style="justify-content:center;margin-top:16px">
+          <button class="btn blue sm" id="qPlay">${IC.sound} 听示范</button>
+        </div>
+        <button class="mic-btn" id="qMic">${IC.mic}</button>
+        <div class="mic-status" id="qMicStatus">点麦克风，大声读出来</div>
+        <div class="speak-hint en" id="qLive"></div>
+        <div id="qFb"></div>
+        <div id="qNext"></div>
+      </div>`;
+  } else if (q.type === "fill") {
+    body = `
+      <div class="q-card" style="text-align:center">
+        <div class="fill-en en">${fillHtml(q.gap.text)}</div>
+        <div class="big-zh" style="font-size:1.5rem;margin-top:8px">${esc(q.display.zh)}</div>
+        <div class="hint">${esc(q.prompt)}</div>
+        ${q.mode === "write" ? canvasHtml() : ""}
+        <div class="type-box">
+          <input class="type-input" id="qIn" placeholder="${q.mode === "write" ? "把你写的答案打在这里检查" : "输入答案"}" autocomplete="off" autocapitalize="off">
+        </div>
+        <div id="qFb"></div>
+        <div class="type-row" style="margin-top:16px">
+          <button class="btn green" style="flex:1" id="qSubmit">${IC.check} 检查</button>
+        </div>
+        <div id="qNext"></div>
+      </div>`;
+  } else {
+    body = `
+      <div class="q-card" style="text-align:center">
+        <div class="big-zh">${esc(q.display.zh)}</div>
+        <div class="hint">${esc(q.prompt)}</div>
+        ${q.mode === "write" ? canvasHtml() : ""}
+        <div class="type-box">
+          <input class="type-input" id="qIn" placeholder="${q.mode === "write" ? "把你写的单词打在这里检查" : "拼出英文"}" autocomplete="off" autocapitalize="off">
+        </div>
+        <div id="qFb"></div>
+        <div class="type-row" style="margin-top:16px">
+          <button class="btn green" style="flex:1" id="qSubmit">${IC.check} 检查</button>
+        </div>
+        <div id="qNext"></div>
+      </div>`;
+  }
+  $("#view").innerHTML = `
+    <div class="quiz-shell" id="quizShell">
+      <div class="quiz-head">
+        <button class="icon-btn" onclick="quitQuiz()">${IC.close}</button>
+        <div style="font-weight:900;font-size:1.2rem">第 ${EXAM.idx + 1} / ${EXAM.questions.length} 题</div>
+        <div class="q-stars">${stars}</div>
+      </div>
+      <div class="q-tags">
+        <span class="q-tag green">${kind}</span>
+        <span class="q-tag ${MODE_META[q.mode] ? MODE_META[q.mode].cls : ""}">${modeL}</span>
+        ${typeL ? `<span class="q-tag ${TYPE_META[q.type] ? TYPE_META[q.type].cls : ""}">${typeL}</span>` : ""}
+        <span class="q-tag sun">${EXAM.retestOf ? "错题重考" : ((DIFF_META[EXAM.cfg.diff - 1] ? DIFF_META[EXAM.cfg.diff - 1].label : "") + "难度")}</span>
+      </div>
+      ${body}
+    </div>`;
+  // 绑定
+  if (q.mode === "choice") return;
+  if (q.mode === "speak") {
+    $("#qPlay").onclick = () => speakEn(q.item.en);
+    let listening = false;
+    const mic = $("#qMic"), st = $("#qMicStatus"), live = $("#qLive");
+    mic.onclick = () => {
+      if (EXAM.answered) return;
+      if (listening) {
+        stopAsr(); listening = false; mic.classList.remove("listening"); mic.classList.add("green");
+        st.textContent = "识别完成，正在评分…";
+        const hyp = EXAM._hyp || ""; const conf = EXAM._conf || 0;
+        const r = rateSpeak(q.item.en, hyp, conf);
+        submitExamAnswer(r.score >= 70, { hyp, score: r.score, stars: r.stars });
+        return;
+      }
+      if (!startAsr(res => {
+        EXAM._hyp = res.final || res.interim; EXAM._conf = res.conf || 0;
+        live.textContent = EXAM._hyp || "";
+      }, (ok, err) => {
+        if (ok && !EXAM.answered) { listening = false; mic.classList.remove("listening"); mic.classList.add("green"); st.textContent = "识别完成，正在评分…"; const r = rateSpeak(q.item.en, EXAM._hyp || "", EXAM._conf || 0); submitExamAnswer(r.score >= 70, { hyp: EXAM._hyp || "", score: r.score, stars: r.stars }); }
+        else if (!ok) { listening = false; mic.classList.remove("listening"); st.textContent = "没有听清，请再试一次"; }
+      })) {
+        st.textContent = "语音识别启动失败，请刷新重试";
+        return;
+      }
+      listening = true; EXAM._hyp = ""; EXAM._conf = 0; live.textContent = "";
+      mic.classList.add("listening"); mic.classList.remove("green");
+      st.textContent = "正在听…大声读出来！";
+    };
+    return;
+  }
+  // 打字 / 手写
+  if (q.mode === "write") initCanvas();
+  const inp = $("#qIn"), sub = $("#qSubmit");
+  const submit = () => {
+    if (EXAM.answered) return;
+    const v = inp.value.trim();
+    if (!v) { toast("先输入你的答案"); return; }
+    const ok = normCompare(v) === normCompare(q.answer);
+    submitExamAnswer(ok, { given: v });
+  };
+  sub.onclick = submit;
+  inp.addEventListener("keydown", e => { if (e.key === "Enter") submit(); });
+}
+function fillHtml(gapText){
+  return esc(gapText).replace(/_+/g, m => `<span class="gap">${"_".repeat(m.length)}</span>`);
+}
+function canvasHtml(){
+  return `
+    <div style="margin-top:14px">
+      <canvas id="writePad" width="640" height="200" style="width:100%;height:150px;background:#FDFEFB;border:3px dashed var(--green);border-radius:16px;touch-action:none;display:block"></canvas>
+      <button class="btn ghost sm" style="margin-top:8px" id="qClear">${IC.trash} 重写</button>
+    </div>`;
+}
+function initCanvas(){
+  const cv = $("#writePad");
+  if (!cv) return;
+  const ctx = cv.getContext("2d");
+  ctx.lineWidth = 8; ctx.lineCap = "round"; ctx.lineJoin = "round"; ctx.strokeStyle = "#1D3527";
+  let drawing = false;
+  const pos = e => {
+    const r = cv.getBoundingClientRect();
+    return { x: (e.clientX - r.left) * (cv.width / r.width), y: (e.clientY - r.top) * (cv.height / r.height) };
+  };
+  cv.addEventListener("pointerdown", e => { drawing = true; ctx.beginPath(); const p = pos(e); ctx.moveTo(p.x, p.y); cv.setPointerCapture && cv.setPointerCapture(e.pointerId); });
+  cv.addEventListener("pointermove", e => { if (!drawing) return; const p = pos(e); ctx.lineTo(p.x, p.y); ctx.stroke(); });
+  const up = () => { drawing = false; };
+  cv.addEventListener("pointerup", up);
+  cv.addEventListener("pointerleave", up);
+  const cl = $("#qClear");
+  if (cl) cl.onclick = () => { ctx.clearRect(0, 0, cv.width, cv.height); };
+}
+function submitChoice(el, i){
+  if (EXAM.answered) return;
+  const q = EXAM.questions[EXAM.idx];
+  const given = el.dataset.o;
+  const ok = q.type === "e2c" ? (given === q.answer) : (normWord(given) === normWord(q.answer));
+  submitExamAnswer(ok, { given });
+}
+function submitExamAnswer(ok, extra){
+  if (EXAM.answered) return;
+  EXAM.answered = true;
+  const q = EXAM.questions[EXAM.idx];
+  const m = recordResult(q.item, ok);
+  if (ok) EXAM.correct++;
+  EXAM.results.push({ q, ok, extra });
+  const fb = $("#qFb"), next = $("#qNext");
+  if (fb) {
+    if (q.mode === "speak") {
+      const sc = (extra && extra.score) || 0;
+      const stars = [1, 2, 3].map(i => `<svg viewBox="0 0 24 24" fill="currentColor" class="${i <= ((extra && extra.stars) || 1) ? "lit" : ""}"><path d="M12 2.6l2.9 5.9 6.5.9-4.7 4.6 1.1 6.5L12 17.4l-5.8 3.1 1.1-6.5L2.6 9.4l6.5-.9z"/></svg>`).join("");
+      fb.innerHTML = ok ? `
+        <div class="fb-banner ok"><div class="fb-ic">${IC.check}</div><div>发音得分 ${sc} 分，读得很标准！</div></div>
+        <div class="score-box" style="margin-top:12px"><div class="score-num">${sc}<span style="font-size:1.2rem"> 分</span></div><div class="stars-row">${stars}</div></div>` :
+        `<div class="fb-banner bad"><div class="fb-ic">${IC.x}</div><div>再听一次示范，慢一点读：<span class="en">${esc(q.item.en)}</span></div></div>`;
+    } else {
+      fb.innerHTML = ok
+        ? `<div class="fb-banner ok"><div class="fb-ic">${IC.check}</div><div>答对了！</div></div>`
+        : `<div class="fb-banner bad"><div class="fb-ic">${IC.x}</div><div>正确答案是：<span class="en" style="font-weight:900">${esc(q.answer)}</span></div></div>`;
+    }
+  }
+  if (next) next.innerHTML = `
+    <div class="type-row" style="margin-top:16px">
+      ${EXAM.idx + 1 < EXAM.questions.length
+        ? `<button class="btn green" style="flex:1" onclick="quizNext()">${IC.play} 下一题</button>`
+        : `<button class="btn sun" style="flex:1" onclick="finishQuiz()">${IC.trophy} 查看成绩</button>`}
+    </div>`;
+  const opts = $$("#opts .opt-btn");
+  if (opts.length) opts.forEach(b => {
+    const isA = q.type === "e2c" ? (b.dataset.o === q.answer) : (normWord(b.dataset.o) === normWord(q.answer));
+    if (isA) b.classList.add("ok"); else b.classList.add("dim");
+  });
+  const inp = $("#qIn");
+  if (inp) {
+    if (ok) inp.classList.add("correct"); else inp.classList.add("wrong");
+    inp.disabled = true;
+  }
+}
+function quizNext(){
+  if (!EXAM.answered) return;
+  EXAM.idx++; EXAM.answered = false;
+  renderQuiz();
+}
+function quitQuiz(){
+  stopAsr();
+  confirmModal("确定要退出考试吗？", "本次考试成绩不会保留。", "退出考试", () => {
+    EXAM = null;
+    $("#tabbar").classList.remove("hidden");
+    render(); go("#/exam");
+  });
+}
+function finishQuiz(){
+  stopAsr();
+  const total = EXAM.questions.length;
+  const correct = EXAM.correct;
+  const score = Math.round(correct / total * 100);
+  const stars = score >= 90 ? 3 : score >= 70 ? 2 : 1;
+  const wrong = EXAM.results.filter(r => !r.ok);
+  EXAM.done = true;
+  const rows = EXAM.results.map(r => {
+    const q = r.q;
+    const label = (r.q.mode === "speak" ? "口说" : r.q.type === "e2c" ? "英翻中" : r.q.type === "c2e" ? "中翻英" : r.q.type === "fill" ? "填空" : "拼写") + " · " + (q.item._kind === "dialogue" ? "对话" : q.item._kind === "phrase" ? "短语" : "单字");
+    return `<div class="result-row">
+      <div class="ok-ic" style="color:${r.ok ? "var(--green)" : "var(--coral)"}">${r.ok ? IC.check : IC.x}</div>
+      <div style="flex:1;min-width:0"><span class="en" style="font-weight:900">${esc(q.item.en)}</span> <span style="color:var(--ink-2);font-size:.9rem">${esc(q.item.zh || "")}</span></div>
+      <span class="tip">${label}</span>
+    </div>`;
+  }).join("");
+  $("#view").innerHTML = `
+    <div class="quiz-shell">
+      <div class="quiz-head">
+        <button class="icon-btn" onclick="closeResult()">${IC.close}</button>
+        <div style="font-weight:900;font-size:1.2rem">考试完成</div>
+        <div class="q-stars">${[1, 2, 3].map(i => `<svg viewBox="0 0 24 24" fill="currentColor" class="${i <= stars ? "lit" : ""}"><path d="M12 2.6l2.9 5.9 6.5.9-4.7 4.6 1.1 6.5L12 17.4l-5.8 3.1 1.1-6.5L2.6 9.4l6.5-.9z"/></svg>`).join("")}</div>
+      </div>
+      <div class="q-card">
+        <div class="result-score">${score}<span style="font-size:1.8rem"> 分</span></div>
+        <div class="result-sub">${stars === 3 ? "太棒了，你是英语小达人！" : stars === 2 ? "很不错，继续加油！" : "别灰心，多练几遍就厉害了！"}</div>
+        <div class="result-grid">
+          <div class="result-cell"><div class="rc-n">${total}</div><div class="rc-l">总题数</div></div>
+          <div class="result-cell"><div class="rc-n" style="color:var(--green)">${correct}</div><div class="rc-l">答对</div></div>
+          <div class="result-cell"><div class="rc-n" style="color:var(--coral)">${total - correct}</div><div class="rc-l">答错</div></div>
+        </div>
+        ${wrong.length ? `<div class="fb-banner bad" style="margin-bottom:14px"><div class="fb-ic">${IC.heart}</div><div>${wrong.length} 道错题已自动加入错题本，连对 3 次才算掌握</div></div>` : `<div class="fb-banner ok" style="margin-bottom:14px"><div class="fb-ic">${IC.trophy}</div><div>全部答对，没有错题！</div></div>`}
+        <div class="type-row">
+          <button class="btn green" style="flex:1" onclick="retryQuiz()">${IC.refresh} 再考一次</button>
+          ${wrong.length ? `<button class="btn coral" style="flex:1" onclick="closeResult();go('#/wrong')">${IC.heart} 去错题本</button>` : `<button class="btn ghost" style="flex:1" onclick="closeResult();go('#/home')">${IC.home} 回首页</button>`}
+        </div>
+        <div class="card-title" style="margin-top:20px">${IC.book} 逐题回顾</div>
+        ${rows}
+      </div>
+    </div>`;
+}
+function retryQuiz(){
+  EXAM.done = false;
+  if (EXAM.retestOf === "all") return retestAllWrong();
+  if (EXAM.retestOf) { const id = EXAM.retestOf; EXAM.done = false; return quickRetest(id); }
+  EXAM.idx = 0; EXAM.correct = 0; EXAM.results = []; EXAM.answered = false;
+  startQuiz();
+}
+function closeResult(){
+  stopAsr();
+  EXAM = null;
+  $("#tabbar").classList.remove("hidden");
+  render(); go("#/exam");
+}
+
+/* ================= 错题本 ================= */
+function renderWrong(){
+  const ws = wrongItems();
+  const g = wrongGroups();
+  const active = g.active, near = g.near, mastered = g.mastered;
+  const itemRow = it => {
+    const m = getMastery(it._id);
+    const st = m.status === "mastered" ? "已掌握" : (m.consecutive >= 2 ? "连对 " + m.consecutive + " 次" : "待攻克");
+    return `<div class="wb-item">
+      <div class="wb-en en">${esc(it.en)}</div>
+      ${it.ipa ? `<div class="wb-ipa">${ipaVowelHtml(it.ipa)}</div>` : ""}
+      <div class="wb-zh">${esc(it.zh || "（中文待补充）")}</div>
+      <div class="wb-meta">${it._kind === "dialogue" ? "对话" : it._kind === "phrase" ? "短语" : "单字"} · ${st}</div>
+      <div class="w-acts">
+        <button class="mini-btn" title="听发音" data-t="${esc(it.en)}" onclick="speakEn(this.dataset.t)">${IC.sound}</button>
+        <button class="mini-btn coral" title="再练一次" onclick="quickRetest('${it._id}')">${IC.refresh}</button>
+        ${m.status === "mastered" ? `<button class="mini-btn" style="background:var(--coral-bg);color:var(--coral-d)" title="移除记录" onclick="removeWrong('${it._id}')">${IC.trash}</button>` : ""}
+      </div>
+    </div>`;
+  };
+  const grp = (list, title, cls) => list.length ? `
+    <div class="card" style="margin-top:16px">
+      <div class="card-title" style="color:${cls === "green" ? "var(--green-d)" : cls === "coral" ? "var(--coral-d)" : "#8A5B00"}">${IC.heart} ${title}（${list.length}）</div>
+      ${list.map(itemRow).join("")}
+    </div>` : "";
+  $("#view").innerHTML = `
+    <div class="view-head"><div class="view-title">错题记录</div><div class="view-sub">反复考核，连续答对 3 次才算真正掌握</div></div>
+    <div class="wb-groups">
+      <div class="wb-g coral"><div class="wb-n">${active.length}</div><div class="wb-l">待攻克</div></div>
+      <div class="wb-g sun"><div class="wb-n">${near.length}</div><div class="wb-l">接近掌握</div></div>
+      <div class="wb-g green"><div class="wb-n">${mastered.length}</div><div class="wb-l">已攻克</div></div>
+    </div>
+    <div class="type-row" style="gap:10px">
+      <button class="btn coral" style="flex:1" onclick="retestAllWrong()" ${active.length ? "" : "disabled"}>${IC.refresh} 重考错题</button>
+      <button class="btn blue" style="flex:1" onclick="openOcrPanel()">${IC.camera} 拍照错题</button>
+      <button class="btn sun" onclick="openAddWrong()">${IC.pencil} 手动添加</button>
+    </div>
+    ${active.length === 0 && mastered.length === 0 ? `<div class="card empty" style="margin-top:16px"><div class="e-ic">${IC.heart}</div><div class="e-t">没有错题，真棒！</div><div class="e-d">考试中的错题会自动记在这里；也可以拍照或手动添加。</div><button class="btn green" onclick="go('#/exam')">${IC.flag} 去考试</button></div>` : ""}
+    ${grp(near, "接近掌握（再对 1 次就掌握啦）", "sun")}
+    ${grp(active, "待攻克", "coral")}
+    ${grp(mastered, "已攻克（连对 3 次）", "green")}`;
+}
+function removeWrong(id){
+  confirmModal("确定要删除这条错题记录吗？", () => {
+    delete S.mastery[id];
+    S.extras = (S.extras || []).filter(e => e._id !== id);
+    saveState();
+    renderWrong();
+    toast("已移除记录");
+  });
+}
+function quickRetest(id){
+  const item = allItems().find(x => x._id === id);
+  if (!item) { toast("未找到该考点"); return; }
+  const all = allItems();
+  const allWords = all.filter(x => x._kind !== "dialogue");
+  const allSent = all.filter(x => x._kind === "dialogue");
+  const q = makeQuestion(item, "choice", "e2c", 0, allWords, allSent);
+  EXAM = { cfg: defaultExamCfg(), questions: [q], idx: 0, correct: 0, results: [], answered: false, done: false, retestOf: id };
+  $("#tabbar").classList.add("hidden");
+  renderQuiz();
+}
+function retestAllWrong(){
+  const items = wrongGroups().active;
+  if (!items.length) { toast("没有待攻克的错题"); return; }
+  const all = allItems();
+  const allWords = all.filter(x => x._kind !== "dialogue");
+  const allSent = all.filter(x => x._kind === "dialogue");
+  const qs = items.map((it, i) => {
+    const t = (i % 2 === 0) ? "e2c" : (i % 3 === 0 ? "spell" : "c2e");
+    const mode = t === "spell" ? "type" : "choice";
+    return makeQuestion(it, mode, t, i, allWords, allSent);
+  });
+  EXAM = { cfg: defaultExamCfg(), questions: qs, idx: 0, correct: 0, results: [], answered: false, done: false, retestOf: "all" };
+  $("#tabbar").classList.add("hidden");
+  renderQuiz();
+}
+function openAddWrong(){
+  const m = confirmModal("手动添加错题", `
+    <input id="awEn" class="type-input" style="margin-top:8px" placeholder="英文，如：banana" autocomplete="off" autocapitalize="off">
+    <input id="awZh" class="type-input" style="margin-top:10px" placeholder="中文意思，如：香蕉" autocomplete="off">
+  `, "加入错题本", () => {
+    const en = ($("#awEn") ? $("#awEn").value : "").trim();
+    const zh = ($("#awZh") ? $("#awZh").value : "").trim();
+    if (!en) { toast("请输入英文"); return false; }
+    const it = { en, zh, ipa: autoIpa(en), phrase: en.includes(" ") ? true : false, _id: "x" + uid("x"), _unitId: null, _unitTitle: "拍照/手记错题", _kind: en.includes(" ") ? "phrase" : "word" };
+    S.extras = S.extras || [];
+    S.extras.push(it);
+    S.mastery[it._id] = { consecutive: 0, wrongCount: 1, status: "learning", lastWrongAt: Date.now(), history: [{ ok: false, t: Date.now() }] };
+    saveState();
+    renderWrong();
+    toast("已加入错题本");
+  });
+}
+function confirmModal(title, bodyHtml, okText, onOk){
+  const mask = document.createElement("div");
+  mask.className = "modal-mask";
+  mask.innerHTML = `
+    <div class="modal">
+      <h3>${esc(title)}</h3>
+      ${typeof bodyHtml === "string" ? bodyHtml : `<p>${esc(bodyHtml)}</p>`}
+      <div class="m-row">
+        <button class="btn ghost" id="cmCancel">取消</button>
+        <button class="btn green" id="cmOk">${esc(okText || "确定")}</button>
+      </div>
+    </div>`;
+  document.body.appendChild(mask);
+  const close = () => mask.remove();
+  mask.addEventListener("click", e => { if (e.target === mask) close(); });
+  $("#cmCancel").onclick = close;
+  $("#cmOk").onclick = () => {
+    if (onOk) {
+      const r = onOk();
+      if (r === false) return;
+    }
+    close();
+  };
+  return { el: mask, close };
+}
+
+/* ================= 拍照错题 + OCR ================= */
+let ocrState = { worker: null, loaded: false, words: [] };
+function loadTesseract(){
+  return new Promise((res, rej) => {
+    if (window.Tesseract) return res(window.Tesseract);
+    const s = document.createElement("script");
+    s.src = "https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js";
+    s.onload = () => res(window.Tesseract);
+    s.onerror = () => rej(new Error("OCR 引擎加载失败，请检查网络"));
+    document.head.appendChild(s);
+  });
+}
+function openOcrPanel(){
+  stopAsr();
+  const m = confirmModal("拍照错题 · OCR 识别", `
+    <div class="upload-zone" id="ocrZone">${IC.camera}
+      <div class="uz-t">拍照或选择错题图片</div>
+      <div class="uz-d">拍下孩子的错题（单词/短语/句子），自动识别加入错题本</div>
+      <input type="file" id="ocrFile" accept="image/*" capture="environment" style="display:none">
+    </div>
+    <img class="ocr-img hidden" id="ocrImg">
+    <div class="ocr-status" id="ocrStatus"></div>
+    <div id="ocrResult" class="hidden">
+      <textarea id="ocrText" rows="4" style="width:100%;border:3px solid var(--line);border-radius:14px;padding:12px;font-size:1rem;outline:none"></textarea>
+      <div style="font-size:.9rem;font-weight:800;color:var(--ink-2);margin:10px 0 6px">识别出的英文（点选加入错题本）</div>
+      <div class="ocr-words" id="ocrWords"></div>
+      <button class="btn coral block" id="ocrAdd">${IC.heart} 加入错题本</button>
+    </div>
+  `, "完成", () => {});
+  $("#ocrZone").addEventListener("click", () => $("#ocrFile").click());
+  $("#ocrFile").addEventListener("change", e => {
+    const f = e.target.files && e.target.files[0];
+    if (!f) return;
+    const url = URL.createObjectURL(f);
+    const img = $("#ocrImg");
+    img.src = url; img.classList.remove("hidden");
+    $("#ocrStatus").textContent = "图片已选择，点击下方「开始识别」";
+    $("#ocrResult").classList.add("hidden");
+    ocrState.words = [];
+    $("#cmOk").textContent = "开始识别";
+    $("#cmOk").onclick = () => { runOcr(f); };
+  });
+  // 默认状态：没有选图时“完成”直接关闭
+}
+function runOcr(file){
+  const status = $("#ocrStatus");
+  status.textContent = "正在加载识别引擎（首次约需几秒）…";
+  loadTesseract().then(async T => {
+    status.textContent = "正在识别图片文字…";
+    let worker;
+    try {
+      worker = await T.createWorker("eng", 1, {
+        logger: m => { if (m.status === "recognizing text") status.textContent = "识别中… " + Math.round(m.progress * 100) + "%"; }
+      });
+    } catch(e) {
+      worker = await T.createWorker("eng");
+    }
+    const { data } = await worker.recognize(file);
+    await worker.terminate();
+    const text = (data.text || "").trim();
+    $("#ocrText").value = text;
+    const words = (text.match(/[A-Za-z][A-Za-z'’-]{1,22}/g) || [])
+      .map(w => w.replace(/[^A-Za-z'’]/g, ""))
+      .filter(w => w.length > 1 && !["the", "and", "you", "for", "with"].includes(normWord(w)))
+      .reduce((acc, w) => { const k = normWord(w); if (!acc.some(x => normWord(x) === k)) acc.push(w); return acc; }, [])
+      .slice(0, 24);
+    ocrState.words = words;
+    status.textContent = words.length ? "识别到 " + words.length + " 个英文词，点选要加入的" : "没有识别到英文单词，请直接编辑下方文本";
+    $("#ocrResult").classList.remove("hidden");
+    renderOcrWords();
+    $("#cmOk").textContent = "完成";
+    $("#cmOk").onclick = () => m.close();
+  }).catch(err => {
+    status.textContent = err.message || "识别失败，请重试";
+  });
+}
+function renderOcrWords(){
+  const box = $("#ocrWords");
+  if (!box) return;
+  const on = ocrState._sel || [];
+  box.innerHTML = ocrState.words.map((w, i) => `
+    <button class="ocr-word ${on.includes(i) ? "on" : ""}" data-i="${i}"><span class="ck">${on.includes(i) ? IC.check : ""}</span><span class="en">${esc(w)}</span></button>`).join("");
+  $$(".ocr-word", box).forEach(b => b.onclick = () => {
+    const i = Number(b.dataset.i);
+    ocrState._sel = ocrState._sel || [];
+    ocrState._sel = ocrState._sel.includes(i) ? ocrState._sel.filter(x => x !== i) : ocrState._sel.concat(i);
+    renderOcrWords();
+  });
+  const addBtn = $("#ocrAdd");
+  if (addBtn) addBtn.onclick = () => {
+    const sel = (ocrState._sel || []).map(i => ocrState.words[i]);
+    const manual = ($("#ocrText").value || "").match(/[A-Za-z][A-Za-z'’ -]{1,30}/g) || [];
+    const list = sel.length ? sel : manual.slice(0, 10).map(w => w.trim()).filter(Boolean);
+    if (!list.length) { toast("请先点选要加入的单词"); return; }
+    let n = 0;
+    list.forEach(en => {
+      const k = normWord(en);
+      if (!k) return;
+      const dup = allItems().some(x => normWord(x.en) === k);
+      if (dup) return;
+      const it = { en: k, zh: "", ipa: autoIpa(k), phrase: k.includes(" ") ? true : false, _id: "x" + uid("x"), _unitId: null, _unitTitle: "拍照/手记错题", _kind: k.includes(" ") ? "phrase" : "word" };
+      S.extras = S.extras || [];
+      S.extras.push(it);
+      S.mastery[it._id] = { consecutive: 0, wrongCount: 1, status: "learning", lastWrongAt: Date.now(), history: [{ ok: false, t: Date.now() }] };
+      n++;
+    });
+    saveState();
+    m.close();
+    renderWrong();
+    toast("已加入 " + n + " 道错题，可随时再次考核");
+  };
+}
+
+/* ================= 路由与初始化 ================= */
+function go(h){
+  if (location.hash === h) render();
+  else location.hash = h;
+}
+function render(){
+  const h = location.hash || "#/home";
+  const tabs = $$(".tab");
+  tabs.forEach(t => t.classList.toggle("on", t.dataset.route === h || (h.startsWith("#/unit") && t.dataset.route === "#/course")));
+  const wb = wrongItems().filter(it => getMastery(it._id).status !== "mastered").length;
+  const badge = $("#wbBadge");
+  if (badge) { badge.textContent = wb; badge.classList.toggle("hidden", wb === 0); }
+  const ts = $("#topStars");
+  if (ts) ts.textContent = S.stars;
+  if (h === "#/home") return renderHome();
+  if (h === "#/course") return renderCourse();
+  if (h === "#/exam") return renderExam();
+  if (h === "#/wrong") return renderWrong();
+  if (h === "#/import") return renderImport();
+  if (h.startsWith("#/unit/")) return renderUnit(h.slice(7));
+  renderHome();
+}
+function toast(msg){
+  let t = $("#toastEl");
+  if (!t) { t = document.createElement("div"); t.className = "toast"; t.id = "toastEl"; document.body.appendChild(t); }
+  t.textContent = msg;
+  t.style.display = "block";
+  clearTimeout(toast._tm);
+  toast._tm = setTimeout(() => { t.style.display = "none"; }, 2200);
+}
+function init(){
+  loadState();
+  if (!S.course) {
+    const units = parseCourseText(TEXTBOOK_TXT, "");
+    S.course = {
+      id: "c" + Date.now().toString(36),
+      title: "外研版（三起点）三年级上册",
+      units,
+      source: "内置示例课本"
+    };
+    saveState();
+  }
+  $("#btnReset").addEventListener("click", () => {
+    confirmModal("重置全部数据？", "课程、成绩、错题本、星星都会清空。", "重置", () => resetAll());
+  });
+  $$(".tab").forEach(t => t.addEventListener("click", () => go(t.dataset.route)));
+  window.addEventListener("hashchange", render);
+  if (location.hash && location.hash !== "#/home") render();
+  else { location.hash = "#/home"; render(); }
+  toast("欢迎回来，Ryan English 搭子已就位");
+}
+window.addEventListener("DOMContentLoaded", init);
+</script>
+</body>
+</html>
