@@ -49,7 +49,7 @@ img{max-width:100%}
 }
 .logo-mark svg{width:22px; height:22px}
 .logo-t{font-size:1.15rem; font-weight:900; color:var(--green-d); line-height:1.1}
-.logo-t small{display:block; font-size:.62rem; font-weight:700; color:var(--ink-2); letter-spacing:.5px}
+.logo-t small{display:block; font-size:.62rem; font-weight:700; color:var(--ink-2); letter-spacing:.5px; margin-top:3px}
 .top-right{margin-left:auto; display:flex; align-items:center; gap:8px}
 .top-chip{
   display:flex; align-items:center; gap:6px; background:var(--sun-bg);
@@ -206,7 +206,7 @@ main{max-width:1000px; margin:0 auto; padding:10px 18px 130px}
 .tip{font-size:.78rem; font-weight:700; color:var(--ink-2); background:#EEF5F0; padding:2px 10px; border-radius:999px}
 
 /* 难度卡 */
-.diff-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:12px}
+.diff-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:10px}
 .diff-card{
   border-radius:18px; padding:18px 14px; text-align:center; cursor:pointer;
   background:var(--card); border:3px solid var(--line); transition:all .15s;
@@ -216,6 +216,13 @@ main{max-width:1000px; margin:0 auto; padding:10px 18px 130px}
 .diff-card .d-n{font-size:1.5rem; font-weight:900; color:var(--green)}
 .diff-card .d-l{font-size:1.05rem; font-weight:900; margin-top:2px}
 .diff-card .d-s{font-size:.9rem; color:var(--ink-2); margin-top:4px}
+.diff-card.sm{border-radius:14px; padding:8px 6px; border-width:2px}
+.diff-card.sm .d-n{font-size:1rem}
+.diff-card.sm .d-l{font-size:.9rem; margin-top:0}
+.diff-card.sm .d-s{font-size:.78rem; margin-top:2px}
+.chip.sm{min-height:38px; padding:6px 10px; border-radius:11px; font-size:.9rem}
+.chip.sm .ck{width:18px; height:18px}
+.chip.sm .ck svg{width:12px; height:12px}
 
 /* 考核方式卡 */
 .opt-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:12px}
@@ -242,17 +249,24 @@ main{max-width:1000px; margin:0 auto; padding:10px 18px 130px}
 /* ============ 课程详情 ============ */
 .dlg-title{display:flex; align-items:center; gap:8px; font-size:1.15rem; font-weight:900; margin:18px 0 10px; color:var(--green-d)}
 .dlg-title svg{width:24px; height:24px}
-.dlg-line{
-  display:grid; grid-template-columns:56px 1fr; gap:10px; align-items:start;
-  padding:12px 14px; border-radius:16px; background:#F7FBF8; border:1px solid var(--line); margin-bottom:8px;
+.dlg-card{
+  background:#F7FBF8; border:1px solid var(--line); border-radius:16px;
+  padding:10px 14px; margin-bottom:8px;
 }
-.dlg-line .who{
-  font-weight:900; font-size:.85rem; color:var(--green-d); background:var(--green-bg);
-  border-radius:10px; padding:4px 8px; text-align:center;
+.dlg-head{display:flex; align-items:center; gap:8px}
+.dlg-head .who{
+  font-weight:900; font-size:.9rem; color:var(--green-d); background:var(--green-bg);
+  border-radius:10px; padding:3px 10px; text-align:center;
 }
-.dlg-line .en-t{font-size:1.15rem; font-weight:700}
-.dlg-line .zh-t{font-size:.95rem; color:var(--ink-2); margin-top:2px}
-.dlg-acts{display:flex; gap:8px; margin-top:8px}
+.dlg-acts{margin-left:auto; display:flex; gap:6px}
+.dlg-en{font-size:1.15rem; font-weight:700; margin-top:8px}
+.dlg-ipa{font-size:.95rem; color:var(--ink-2); margin-top:3px}
+.dlg-zh{font-size:.95rem; color:var(--ink-2); margin-top:3px}
+.mini-btn{width:40px; height:40px; border-radius:12px; display:flex; align-items:center; justify-content:center;
+  background:var(--green-bg); color:var(--green-d); transition:transform .1s}
+.mini-btn:active{transform:scale(.9)}
+.mini-btn svg{width:22px; height:22px}
+.mini-btn.coral{background:var(--coral-bg); color:var(--coral-d)}
 .mini-btn{
   width:42px; height:42px; border-radius:12px; display:flex; align-items:center; justify-content:center;
   background:var(--green-bg); color:var(--green-d); transition:transform .1s;
@@ -502,8 +516,8 @@ main{max-width:1000px; margin:0 auto; padding:10px 18px 130px}
   </div>
   <div class="top-right">
     <div class="top-chip"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.6l2.9 5.9 6.5.9-4.7 4.6 1.1 6.5L12 17.4l-5.8 3.1 1.1-6.5L2.6 9.4l6.5-.9z"/></svg><span id="topStars">0</span></div>
-    <button class="icon-btn" id="btnReset" title="重置全部数据">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 11a8 8 0 1 0-2.3 6.3"/><path d="M20 4v7h-7"/></svg>
+    <button class="icon-btn" id="btnSettings" title="设置">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33h.09a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51h.09a1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82v.09a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
     </button>
   </div>
 </header>
@@ -542,7 +556,8 @@ const IC = {
   trophy:'<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8M12 17v4M7 4h10v6a5 5 0 0 1-10 0z"/><path d="M7 5H4v2a3 3 0 0 0 3 3M17 5h3v2a3 3 0 0 1-3 3"/></svg>',
   heart:'<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12 21s-7-4.6-9.5-9A5.5 5.5 0 0 1 12 6.5 5.5 5.5 0 0 1 21.5 12c-2.5 4.4-9.5 9-9.5 9z"/></svg>',
   ear:'<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 3-1.5 4-3 6-1 1.3-1 3-1 3"/><path d="M9 9a3 3 0 0 1 6 0"/><circle cx="12" cy="20" r="1.2" fill="currentColor" stroke="none"/></svg>',
-  spark:'<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l1.8 6.2L20 10l-6.2 1.8L12 18l-1.8-6.2L4 10l6.2-1.8z"/><path d="M19 15l.9 3.1L23 19l-3.1.9L19 23l-.9-3.1L15 19l3.1-.9z" opacity=".7"/></svg>'
+  spark:'<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l1.8 6.2L20 10l-6.2 1.8L12 18l-1.8-6.2L4 10l6.2-1.8z"/><path d="M19 15l.9 3.1L23 19l-3.1.9L19 23l-.9-3.1L15 19l3.1-.9z" opacity=".7"/></svg>',
+  gear:'<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33h.09a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51h.09a1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82v.09a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>'
 };
 const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;" }[c]));
 const $ = s => document.querySelector(s);
@@ -1074,7 +1089,7 @@ function parseCourseText(rawText, title){
 
 /* ================= 状态与掌握度 ================= */
 const LS_KEY = "ryan-state-v1";
-const defaultState = () => ({ course: null, mastery: {}, stars: 0, exams: 0, totalQ: 0, correctQ: 0, extras: [], speakLog: [] });
+const defaultState = () => ({ course: null, mastery: {}, stars: 0, exams: 0, totalQ: 0, correctQ: 0, extras: [], speakLog: [], examLog: [] });
 let S = defaultState();
 function saveState(){ try { localStorage.setItem(LS_KEY, JSON.stringify(S)); } catch(e){} }
 function loadState(){
@@ -1234,13 +1249,13 @@ function rateSpeak(target, hyp, conf){
 let practiceCtx = null;
 function speakPractice(item, onBack){
   stopAsr();
-  practiceCtx = { item, onBack, listening: false, hyp: "", conf: 0, done: false };
+  practiceCtx = { item, onBack, done: false };
   const isSentence = item._kind === "dialogue" || (item.en || "").split(" ").length > 1;
   $("#view").innerHTML = `
   <div class="quiz-shell">
     <div class="quiz-head">
       <button class="icon-btn" id="ppClose">${IC.close}</button>
-      <div style="font-weight:900;font-size:1.2rem;color:var(--green-d)">跟读发音练习</div>
+      <div style="font-weight:900;font-size:1.2rem;color:var(--green-d)">发音练习</div>
       <div class="q-stars" id="ppStars"></div>
     </div>
     <div class="q-card" style="text-align:center">
@@ -1257,37 +1272,12 @@ function speakPractice(item, onBack){
   $("#ppClose").onclick = () => { stopAsr(); practiceCtx = null; if (onBack) onBack(); else go("#/course"); };
   $("#ppPlay").onclick = () => speakEn(item.en);
   const body = $("#ppBody");
-  if (!asrSupported()) {
-    body.innerHTML = `
-      <div class="blank-card" style="margin-top:18px">当前浏览器不支持语音识别，可以让孩子先听示范、大声跟读，然后自己判断：</div>
-      <div class="type-row" style="margin-top:16px">
-        <button class="btn green" onclick="selfJudgePractice(true)">${IC.check} 我读得不错</button>
-        <button class="btn ghost" onclick="selfJudgePractice(false)">${IC.refresh} 再练一次</button>
-      </div>`;
-    return;
-  }
   body.innerHTML = `
-    <button class="mic-btn" id="ppMic">${IC.mic}</button>
-    <div class="mic-status" id="ppStatus">点击麦克风开始跟读</div>
-    <div class="speak-hint en" id="ppLive"></div>`;
-  const mic = $("#ppMic"), status = $("#ppStatus"), live = $("#ppLive");
-  mic.onclick = () => {
-    if (practiceCtx.listening) { stopAsr(); practiceCtx.listening = false; mic.classList.remove("listening"); mic.classList.add("green"); status.textContent = "识别完成，正在评分…"; rateCurrent(); return; }
-    if (!startAsr(res => {
-      practiceCtx.hyp = res.final || res.interim;
-      practiceCtx.conf = res.conf || 0;
-      live.textContent = practiceCtx.hyp ? practiceCtx.hyp : "";
-    }, (ok, err) => {
-      if (ok) { practiceCtx.listening = false; mic.classList.remove("listening"); mic.classList.add("green"); status.textContent = "识别完成，正在评分…"; rateCurrent(); }
-      else { practiceCtx.listening = false; mic.classList.remove("listening"); status.textContent = "没有听清（" + (err || "error") + "），请再试一次"; }
-    })) {
-      status.textContent = "语音识别启动失败，请刷新页面重试";
-      return;
-    }
-    practiceCtx.listening = true; practiceCtx.hyp = ""; practiceCtx.conf = 0; live.textContent = "";
-    mic.classList.add("listening"); mic.classList.remove("green");
-    status.textContent = "正在听…大声读出来！";
-  };
+    <div class="blank-card" style="margin-top:18px">口说录音暂不可用（发音判定标准见 设置）。请先听示范、大声跟读，再自评打分：</div>
+    <div class="type-row" style="margin-top:16px">
+      <button class="btn green" style="flex:1" onclick="selfJudgePractice(true)">${IC.check} 我读得不错</button>
+      <button class="btn ghost" style="flex:1" onclick="selfJudgePractice(false)">${IC.refresh} 还需再练</button>
+    </div>`;
 }
 function rateCurrent(){
   const ctx = practiceCtx;
@@ -1343,12 +1333,24 @@ function selfJudgePractice(ok){
 const UNIT_COLORS = ["#2E9E5B", "#3F8FDD", "#FF9A3D", "#F2665E", "#9B7BF5", "#0FA3A3", "#E6A32E"];
 function renderHome(){
   const st = courseStats();
+  $("#view").innerHTML = `
+    <div class="view-head"><div class="view-title">学习乐园</div><div class="view-sub">掌握情况一览 · 点击上方设置可查看说明与课程</div></div>
+    <div class="stat-grid">
+      <div class="stat-card"><div class="ic" style="color:var(--green)">${IC.book}</div><div class="num">${st.total}</div><div class="lab">全部考点</div></div>
+      <div class="stat-card"><div class="ic" style="color:var(--green)">${IC.trophy}</div><div class="num">${st.mastered}</div><div class="lab">已掌握</div></div>
+      <div class="stat-card"><div class="ic" style="color:var(--sun-d)">${IC.refresh}</div><div class="num">${st.learning}</div><div class="lab">练习中</div></div>
+      <div class="stat-card"><div class="ic" style="color:var(--sun-d)">${IC.star}</div><div class="num">${S.stars}</div><div class="lab">星星</div></div>
+    </div>`;
+}
+
+/* ================= 视图：说明 ================= */
+function renderAbout(){
+  const st = courseStats();
   const hasCourse = !!S.course;
-  const wb = st.wrong;
   const unitCards = hasCourse ? S.course.units.map((u, i) => {
     const p = unitProgress(u);
     const c = UNIT_COLORS[i % UNIT_COLORS.length];
-    const label = "U" + (u.title.match(/^unit\s*(\d+)/i) ? u.title.match(/^unit\s*(\d+)/i)[1] : (i + 1));
+    const label = "U" + (u.title.match(/^unit\s*(\d+)/i) ? u.title.match(/^unit\s*(\d+)/i)[1] : i);
     return `<div class="unit-card" onclick="go('#/unit/${u.id}')">
       <div class="unit-stripe" style="background:${c}"></div>
       <div class="unit-badge" style="background:${c}">${label}</div>
@@ -1358,36 +1360,67 @@ function renderHome(){
     </div>`;
   }).join("") : "";
   $("#view").innerHTML = `
+    <div class="view-head"><div class="view-title">说明</div><div class="view-sub">Ryan English 搭子 · 使用说明</div></div>
     <div class="hero">
       <div class="badge">${IC.spark} Ryan English 搭子 · 绿色学习乐园</div>
       <h1 class="en">Learn. Practice. Master!</h1>
-      <p>上传课程 → 拆分单元 → 整理单字与对话（音标 + 中文翻译）→ 三级难度考试（口说 / 打字 / 手写 / 选择）→ 错题拍照记录，连对 3 次才算真正掌握。</p>
+      <p>上传课程 → 拆分单元 → 整理单字与对话（音标 + 中文翻译）→ 三级难度考试（选择题 / 输入）→ 错题记录，连对 3 次才算真正掌握。</p>
       <div class="steps">
         <div class="step"><div class="n">1</div><div class="t">上传课程</div><div class="d">内容 + 单字表</div></div>
         <div class="step"><div class="n">2</div><div class="t">重点整理</div><div class="d">音标 + 翻译</div></div>
-        <div class="step"><div class="n">3</div><div class="t">分级考试</div><div class="d">3 级 × 4 方式</div></div>
+        <div class="step"><div class="n">3</div><div class="t">分级考试</div><div class="d">3 级 × 多方式</div></div>
         <div class="step"><div class="n">4</div><div class="t">错题攻克</div><div class="d">连对 3 次=掌握</div></div>
       </div>
     </div>
-    <div class="stat-grid">
-      <div class="stat-card"><div class="ic" style="color:var(--green)">${IC.book}</div><div class="num">${st.total}</div><div class="lab">全部考点</div></div>
-      <div class="stat-card"><div class="ic" style="color:var(--green)">${IC.trophy}</div><div class="num">${st.mastered}</div><div class="lab">已掌握</div></div>
-      <div class="stat-card"><div class="ic" style="color:var(--sun-d)">${IC.refresh}</div><div class="num">${st.learning}</div><div class="lab">练习中</div></div>
-      <div class="stat-card"><div class="ic" style="color:var(--sun-d)">${IC.star}</div><div class="num">${S.stars}</div><div class="lab">星星</div></div>
+    <div class="card workflow" style="margin-top:16px">
+      <div class="card-title">${IC.bulb} 工作流</div>
+      <div class="flow-item"><div class="f-n">1</div><div><div class="f-t">上传课程内容与单字表</div><div class="f-d">粘贴文本或上传 .txt / .md 文件，按 "Unit / 第一课" 标题自动拆分单元，单词行自动补音标（母音标红）。</div></div></div>
+      <div class="flow-item"><div class="f-n">2</div><div><div class="f-t">生成单元重点整理</div><div class="f-d">每个单元的单字、短语、对话逐句整理，含音标与中文翻译；每个条目都能听发音、练习发音。</div></div></div>
+      <div class="flow-item"><div class="f-n">3</div><div><div class="f-t">生成考试板块</div><div class="f-d">考单字 / 短语 / 对话；方式含选择题、输入；类型含英翻中、中翻英、拼写、填空；难度三级。</div></div></div>
+      <div class="flow-item"><div class="f-n">4</div><div><div class="f-t">错题记录与掌握判定</div><div class="f-d">考核错题自动进错题本，也支持拍照 OCR 录入；反复考核，连续 3 次答对才标记为已掌握。</div></div></div>
     </div>
-    <div class="quick-grid">
+    <div class="quick-grid" style="margin-top:16px">
       <button class="quick q-green" onclick="go('#/exam')"><div class="q-t">${IC.flag} 去考试</div><div class="q-d">选单元、题型、方式与难度</div><div class="q-ic">${IC.flag}</div></button>
-      <button class="quick q-coral" onclick="go('#/wrong')"><div class="q-t">${IC.heart} 错题本</div><div class="q-d">${wb} 道错题待攻克 · 连对 3 次即掌握</div><div class="q-ic">${IC.heart}</div></button>
-      <button class="quick q-sun" onclick="go('#/course')"><div class="q-t">${IC.book} 课程重点</div><div class="q-d">单字 · 短语 · 对话，跟读打分</div><div class="q-ic">${IC.book}</div></button>
+      <button class="quick q-coral" onclick="go('#/wrong')"><div class="q-t">${IC.heart} 错题本</div><div class="q-d">${st.wrong} 道错题待攻克 · 连对 3 次即掌握</div><div class="q-ic">${IC.heart}</div></button>
+      <button class="quick q-sun" onclick="go('#/course')"><div class="q-t">${IC.book} 课程重点</div><div class="q-d">单字 · 短语 · 对话，发音练习</div><div class="q-ic">${IC.book}</div></button>
       <button class="quick q-blue" onclick="openOcrPanel()"><div class="q-t">${IC.camera} 拍照错题</div><div class="q-d">拍下错题，OCR 自动加入错题本</div><div class="q-ic">${IC.camera}</div></button>
     </div>
-    ${hasCourse ? `<div class="card" style="margin-top:16px"><div class="card-title">${IC.book} 最近单元</div><div class="unit-list">${unitCards}</div></div>` : ""}
-    <div class="card workflow" style="margin-top:16px">
-      <div class="card-title">${IC.bulb} Ryan English 搭子 工作流</div>
-      <div class="flow-item"><div class="f-n">1</div><div><div class="f-t">上传课程内容与单字表</div><div class="f-d">粘贴文本或上传 .txt / .md 文件，按 "Unit 1 / 第一课" 标题自动拆分单元，单词行自动补音标（母音标红）。</div></div></div>
-      <div class="flow-item"><div class="f-n">2</div><div><div class="f-t">生成单元重点整理</div><div class="f-d">每个单元的单字、短语、对话逐句整理，含音标与中文翻译；每个条目都能听发音、跟读并评分。</div></div></div>
-      <div class="flow-item"><div class="f-n">3</div><div><div class="f-t">生成考试板块</div><div class="f-d">考单字 / 短语 / 对话；方式含口说、打字、手写、选择题；类型含英翻中、中翻英、拼写、填空；难度三级。</div></div></div>
-      <div class="flow-item"><div class="f-n">4</div><div><div class="f-t">错题记录与掌握判定</div><div class="f-d">考核错题自动进错题本，也支持拍照 OCR 录入；反复考核，连续 3 次答对才标记为已掌握。</div></div></div>
+    ${hasCourse ? `<div class="card" style="margin-top:16px"><div class="card-title">${IC.book} 单元速览</div><div class="unit-list">${unitCards}</div></div>` : ""}`;
+}
+
+/* ================= 视图：设置 ================= */
+function renderSettings(){
+  const hasCourse = !!S.course;
+  $("#view").innerHTML = `
+    <div class="view-head"><div class="view-title">设置</div><div class="view-sub">课程来源 · 说明 · 发音标准 · 数据</div></div>
+    <div class="card">
+      <div class="card-title">${IC.book} 课程来源</div>
+      ${hasCourse ? `
+        <div style="font-size:1.1rem;font-weight:900">${esc(S.course.title)}</div>
+        <div style="font-size:.95rem;color:var(--ink-2);margin-top:4px">来源：${esc(S.course.source || "自定义导入")} · ${S.course.units.length} 个单元</div>
+        <div class="type-row" style="margin-top:14px">
+          <button class="btn green sm" onclick="go('#/import')">${IC.upload} 更换课程</button>
+          <button class="btn ghost sm" onclick="exportCourse()">${IC.upload} 导出课程文本</button>
+        </div>` : `
+        <div style="font-size:.95rem;color:var(--ink-2)">还没有课程内容</div>
+        <button class="btn green sm" style="margin-top:12px" onclick="go('#/import')">${IC.upload} 导入课程</button>`}
+    </div>
+    <div class="card">
+      <div class="card-title">${IC.info} 说明</div>
+      <div style="font-size:1rem;line-height:1.7;color:var(--ink)">Ryan English 搭子 是给小朋友的英语学习工具：上传课程自动拆分单元、整理单字与对话（音标 + 中文翻译）、三级难度考试、错题本连对 3 次才算掌握。</div>
+      <button class="btn ghost sm" style="margin-top:12px" onclick="go('#/about')">${IC.bulb} 查看完整说明</button>
+    </div>
+    <div class="card">
+      <div class="card-title">${IC.mic} 发音判定标准</div>
+      <div style="font-size:.98rem;line-height:1.7;color:var(--ink)">当前版本口说录音暂不可用，发音练习采用「听示范 + 自评」方式：<br>
+        · 点击 <span class="en">听示范</span> 播放标准发音，跟读后自己判断；<br>
+        · 读得不错 = 85 分（3 星）；还需再练 = 55 分（2 星）；<br>
+        · 评分记录保存在本机，可追踪发音进步。</div>
+    </div>
+    <div class="card">
+      <div class="card-title" style="color:var(--coral-d)">${IC.trash} 数据</div>
+      <div style="font-size:.95rem;color:var(--ink-2)">课程、成绩、错题本与星星保存在本机浏览器中。</div>
+      <button class="btn coral sm" style="margin-top:12px" onclick="confirmModal('重置全部数据？','课程、成绩、错题本、星星都会清空。','重置',()=>resetAll())">${IC.refresh} 重置全部数据</button>
     </div>`;
 }
 
@@ -1406,7 +1439,7 @@ function renderCourse(){
   const units = S.course.units.map((u, i) => {
     const p = unitProgress(u);
     const c = UNIT_COLORS[i % UNIT_COLORS.length];
-    const label = "U" + (u.title.match(/^unit\s*(\d+)/i) ? u.title.match(/^unit\s*(\d+)/i)[1] : (i + 1));
+    const label = "U" + (u.title.match(/^unit\s*(\d+)/i) ? u.title.match(/^unit\s*(\d+)/i)[1] : i);
     return `<div class="unit-card" onclick="go('#/unit/${u.id}')">
       <div class="unit-stripe" style="background:${c}"></div>
       <div class="unit-badge" style="background:${c}">${label}</div>
@@ -1418,16 +1451,7 @@ function renderCourse(){
   const total = courseStats().total;
   $("#view").innerHTML = `
     <div class="view-head"><div class="view-title">课程</div><div class="view-sub">${esc(S.course.title)} · ${S.course.units.length} 个单元 · ${total} 个考点</div></div>
-    <div class="card">
-      <div class="card-title">${IC.book} 课程来源</div>
-      <div style="font-size:1.05rem;font-weight:700">${esc(S.course.title)}</div>
-      <div style="font-size:.95rem;color:var(--ink-2);margin-top:4px">来源：${esc(S.course.source || "自定义导入")}</div>
-      <div class="type-row" style="margin-top:14px">
-        <button class="btn green sm" onclick="go('#/import')">${IC.upload} 更换课程</button>
-        <button class="btn ghost sm" onclick="exportCourse()">${IC.upload} 导出课程文本</button>
-      </div>
-    </div>
-    <div class="card" style="margin-top:16px"><div class="card-title">${IC.book} 单元列表 <span class="tip">点击进入单元重点</span></div><div class="unit-list">${units}</div></div>`;
+    <div class="card"><div class="card-title">${IC.book} 单元列表 <span class="tip">点击进入单元重点</span></div><div class="unit-list">${units}</div></div>`;
 }
 function exportCourse(){
   const lines = [];
@@ -1467,27 +1491,28 @@ function renderUnit(unitId){
   const dlgHtml = u.dialogues.map(d => `
     <div class="dlg-title">${IC.bulb} ${esc(d.title)}</div>
     ${d.lines.map(l => `
-      <div class="dlg-line">
-        <div class="who">${esc(l.who)}</div>
-        <div>
-          <div class="en-t en">${esc(l.en)} <button class="mini-btn" style="width:34px;height:34px;vertical-align:middle" title="听发音" data-t="${esc(l.en)}" onclick="speakEn(this.dataset.t)">${IC.sound}</button></div>
-          ${l.ipa ? `<div style="font-size:.95rem;color:var(--ink-2);margin-top:2px">${ipaVowelHtml(l.ipa)}</div>` : ""}
-          <div class="zh-t">${esc(l.zh)}</div>
+      <div class="dlg-card">
+        <div class="dlg-head">
+          <div class="who">${esc(l.who)}</div>
           <div class="dlg-acts">
-            <button class="mini-btn coral pp-btn" data-w="1" data-e="${esc(l.en)}" title="跟读打分">${IC.mic} <span style="font-size:.85rem">跟读</span></button>
+            <button class="mini-btn" title="听发音" data-t="${esc(l.en)}" onclick="speakEn(this.dataset.t)">${IC.sound}</button>
+            <button class="mini-btn coral pp-btn" data-w="1" data-e="${esc(l.en)}" title="发音练习">${IC.mic}</button>
           </div>
         </div>
+        <div class="dlg-en en">${esc(l.en)}</div>
+        ${l.ipa ? `<div class="dlg-ipa">${ipaVowelHtml(l.ipa)}</div>` : ""}
+        <div class="dlg-zh">${esc(l.zh)}</div>
       </div>`).join("")}
   `).join("");
   $("#view").innerHTML = `
     <div class="view-head"><div class="view-title">${esc(u.title.replace(/^unit\s*\d+\s*[:：]?\s*/i, ""))}</div>
-    <div class="view-sub">${items.length} 个考点 · 点击喇叭听发音，点击麦克风跟读打分</div></div>
-    <button class="btn coral block" style="margin-bottom:16px" onclick="go('#/exam')">${IC.flag} 去考这个单元</button>
+    <div class="view-sub">${items.length} 个考点 · 点击喇叭听发音，点击麦克风练习发音</div></div>
     <div class="card">
-      <div class="card-title">${IC.book} 单字 · 短语（母音标红 · 点击跟读）</div>
+      <div class="card-title">${IC.book} 单字 · 短语（母音标红 · 点击发音练习）</div>
       ${wordsHtml || `<div class="empty" style="padding:20px"><div class="e-d">本单元暂无单词</div></div>`}
     </div>
-    ${dlgHtml ? `<div class="card" style="margin-top:16px"><div class="card-title">${IC.bulb} 对话重点整理（逐句音标 + 中文翻译）</div>${dlgHtml}</div>` : ""}`;
+    ${dlgHtml ? `<div class="card" style="margin-top:16px"><div class="card-title">${IC.bulb} 对话重点整理（逐句音标 + 中文翻译）</div>${dlgHtml}</div>` : ""}
+    <button class="btn coral block" style="margin-top:16px" onclick="go('#/exam')">${IC.flag} 去考这个单元</button>`;
   // 绑定跟读按钮
   const wordItems = u.words.map((w, i) => Object.assign({}, w, { _id: items[i]._id, _kind: "word" }));
   $$(".pp-btn[data-i]", $("#view")).forEach(btn => {
@@ -1550,9 +1575,7 @@ function parseAndLoad(){
 /* ================= 考试引擎 ================= */
 const MODE_META = {
   choice: { label: "选择题", ic: IC.check, cls: "q-green" },
-  speak: { label: "口说", ic: IC.mic, cls: "q-coral" },
-  type: { label: "打字输入", ic: IC.key, cls: "q-blue" },
-  write: { label: "手写", ic: IC.pen, cls: "q-sun" }
+  type: { label: "输入", ic: IC.key, cls: "q-blue" }
 };
 const TYPE_META = {
   e2c: { label: "英翻中", cls: "q-green" },
@@ -1569,7 +1592,7 @@ const DIFF_META = [
 let EXAM = null;
 function defaultExamCfg(){
   const allIds = S.course ? S.course.units.map(u => u.id) : [];
-  return { unitIds: allIds, kinds: ["word", "phrase", "dialogue"], modes: ["choice", "speak", "type", "write"], types: ["e2c", "c2e", "spell", "fill"], diff: 1, count: 10 };
+  return { unitIds: allIds, kinds: ["word", "phrase", "dialogue"], modes: ["choice", "type"], types: ["e2c", "c2e", "spell", "fill"], diff: 1, count: 10 };
 }
 function renderExam(){
   if (!S.course) {
@@ -1586,12 +1609,13 @@ function renderExam(){
   const cfg = EXAM.cfg;
   const unitChips = S.course.units.map((u, i) => {
     const on = cfg.unitIds.includes(u.id);
-    return `<button class="chip ${on ? "on" : ""}" data-u="${u.id}" onclick="toggleUnitChip(this)"><span class="ck">${on ? IC.check : ""}</span>U${(u.title.match(/^unit\s*(\d+)/i) ? u.title.match(/^unit\s*(\d+)/i)[1] : (i + 1))} ${esc(u.title.replace(/^unit\s*\d+\s*[:：]?\s*/i, ""))}</button>`;
+    const label = "U" + (u.title.match(/^unit\s*(\d+)/i) ? u.title.match(/^unit\s*(\d+)/i)[1] : i);
+    return `<button class="chip ${on ? "on" : ""}" data-u="${u.id}" onclick="toggleUnitChip(this)"><span class="ck">${on ? IC.check : ""}</span>${label} ${esc(u.title.replace(/^unit\s*\d+\s*[:：]?\s*/i, ""))}</button>`;
   }).join("");
   const kindChips = ["word", "phrase", "dialogue"].map(k => {
     const meta = { word: "单字", phrase: "短语", dialogue: "对话" }[k];
     const on = cfg.kinds.includes(k);
-    return `<button class="chip ${on ? "on" : ""}" data-k="${k}" onclick="toggleKindChip(this)"><span class="ck">${on ? IC.check : ""}</span>${IC.book}${meta}</button>`;
+    return `<button class="chip sm ${on ? "on" : ""}" data-k="${k}" onclick="toggleKindChip(this)"><span class="ck">${on ? IC.check : ""}</span>${meta}</button>`;
   }).join("");
   const modeChips = Object.keys(MODE_META).map(m => {
     const meta = MODE_META[m];
@@ -1604,40 +1628,46 @@ function renderExam(){
     return `<button class="chip ${on ? "on" : ""}" data-t="${t}" onclick="toggleTypeChip(this)"><span class="ck">${on ? IC.check : ""}</span>${meta.label}</button>`;
   }).join("");
   const diffCards = DIFF_META.map((d, i) => `
-    <div class="diff-card ${cfg.diff === i + 1 ? "on" : ""}" onclick="setDiff(${i + 1})">
+    <div class="diff-card sm ${cfg.diff === i + 1 ? "on" : ""}" onclick="setDiff(${i + 1})">
       <div class="d-n">${d.n}</div><div class="d-l">${d.label}</div><div class="d-s">${d.desc}</div>
     </div>`).join("");
-  const counts = [5, 10, 15, 20];
-  const countChips = counts.map(c => `<button class="chip ${cfg.count === c ? "on" : ""}" onclick="setCount(${c})"><span class="ck">${cfg.count === c ? IC.check : ""}</span>${c} 题</button>`).join("");
+  const counts = [10, 20, 30];
+  const countChips = counts.map(c => `<button class="chip sm ${cfg.count === c ? "on" : ""}" onclick="setCount(${c})"><span class="ck">${cfg.count === c ? IC.check : ""}</span>${c} 题</button>`).join("");
+  const allOn = cfg.unitIds.length === S.course.units.length;
   $("#view").innerHTML = `
     <div class="view-head"><div class="view-title">考试</div><div class="view-sub">自定义考试内容，生成专属考卷</div></div>
     <div class="card">
-      <div class="sec-lab">${IC.book} 选择单元 ${cfg.unitIds.length === S.course.units.length ? `<span class="tip">全部单元</span>` : ""}</div>
+      <div class="sec-lab" style="display:flex;align-items:center;gap:8px">${IC.book} 选择单元
+        <span style="margin-left:auto;display:flex;gap:8px">
+          <button class="btn green sm" onclick="selectAllUnits()">${IC.check} 全选</button>
+          <button class="btn ghost sm" onclick="unselectAllUnits()">${IC.close} 取消全选</button>
+        </span>
+      </div>
       <div class="chip-row">${unitChips}</div>
-      <button class="btn ghost sm" style="margin-top:10px" onclick="selectAllUnits()">${IC.check} 全部单元</button>
     </div>
     <div class="card">
       <div class="sec-lab">${IC.book} 考核内容</div>
-      <div class="chip-row">${kindChips}</div>
+      <div class="chip-row" style="flex-wrap:nowrap">${kindChips}</div>
     </div>
     <div class="card">
       <div class="sec-lab">${IC.flag} 难度分级</div>
       <div class="diff-grid">${diffCards}</div>
     </div>
     <div class="card">
-      <div class="sec-lab">${IC.mic} 考核方式（可多选）</div>
+      <div class="sec-lab">${IC.key} 考核方式（可多选）</div>
       <div class="chip-row">${modeChips}</div>
     </div>
     <div class="card">
       <div class="sec-lab">${IC.pencil} 题型（可多选）</div>
       <div class="chip-row">${typeChips}</div>
-      <div style="font-size:.88rem;color:var(--ink-2);margin-top:10px">选择题 ↔ 英翻中 / 中翻英；打字、手写 ↔ 拼写 / 填空；口说 = 朗读。</div>
+      <div style="font-size:.88rem;color:var(--ink-2);margin-top:10px">选择题 ↔ 英翻中 / 中翻英；输入 ↔ 拼写 / 填空。</div>
     </div>
     <div class="card">
       <div class="sec-lab">${IC.flag} 题量</div>
       <div class="chip-row">${countChips}</div>
     </div>
-    <button class="btn green block" style="margin-top:16px;font-size:1.25rem;min-height:60px" onclick="startQuiz()">${IC.flag} 开始考试</button>`;
+    <button class="btn green block" style="margin-top:16px;font-size:1.25rem;min-height:60px" onclick="startQuiz()">${IC.flag} 开始考试</button>
+    <button class="btn ghost block" style="margin-top:10px" onclick="showExamLog()">${IC.trophy} 考试记录</button>`;
 }
 function toggleUnitChip(el){
   const id = el.dataset.u;
@@ -1647,6 +1677,10 @@ function toggleUnitChip(el){
 }
 function selectAllUnits(){
   EXAM.cfg.unitIds = S.course.units.map(u => u.id);
+  renderExam();
+}
+function unselectAllUnits(){
+  EXAM.cfg.unitIds = [];
   renderExam();
 }
 function toggleKindChip(el){
@@ -1690,14 +1724,9 @@ function buildQuiz(cfg){
       if (cfg.types.includes("e2c")) pool.push({ it, mode: "choice", type: "e2c" });
       if (cfg.types.includes("c2e")) pool.push({ it, mode: "choice", type: "c2e" });
     }
-    if (cfg.modes.includes("speak")) pool.push({ it, mode: "speak", type: "read" });
     if (cfg.modes.includes("type")) {
-      if (!isSent || wc <= 6) { if (cfg.types.includes("spell") && wc <= 4) pool.push({ it, mode: "type", type: "spell" }); }
+      if (cfg.types.includes("spell") && (!isSent || wc <= 4)) pool.push({ it, mode: "type", type: "spell" });
       if (cfg.types.includes("fill")) pool.push({ it, mode: "type", type: "fill" });
-    }
-    if (cfg.modes.includes("write")) {
-      if (!isSent || wc <= 6) { if (cfg.types.includes("spell") && wc <= 4) pool.push({ it, mode: "write", type: "spell" }); }
-      if (cfg.types.includes("fill")) pool.push({ it, mode: "write", type: "fill" });
     }
   });
   if (!pool.length) return null;
@@ -1772,6 +1801,7 @@ function startQuiz(){
   const qs = buildQuiz(EXAM.cfg);
   if (!qs) { toast("当前筛选没有可出的题，请放宽条件"); return; }
   EXAM.questions = qs; EXAM.idx = 0; EXAM.correct = 0; EXAM.results = []; EXAM.answered = false; EXAM.done = false;
+  EXAM.startTime = Date.now();
   stopAsr();
   $("#tabbar").classList.add("hidden");
   renderQuiz();
@@ -1795,22 +1825,6 @@ function renderQuiz(){
           ${q.options.map((o, i) => `<button class="opt-btn" data-o="${esc(o)}" onclick="submitChoice(this, ${i})"><span class="k">${letters[i]}</span><span>${esc(o)}</span></button>`).join("")}
         </div>
         <div id="qFb"></div>
-        <div id="qNext"></div>
-      </div>`;
-  } else if (q.mode === "speak") {
-    body = `
-      <div class="q-card" style="text-align:center">
-        <div class="big-en en">${esc(q.display.en)}</div>
-        ${q.display.ipa ? `<div class="ipa">${ipaVowelHtml(q.display.ipa)}</div>` : ""}
-        <div style="font-size:1.2rem;font-weight:800;color:var(--ink-2);margin-top:6px">${esc(q.display.zh)}</div>
-        <div class="type-row" style="justify-content:center;margin-top:16px">
-          <button class="btn blue sm" id="qPlay">${IC.sound} 听示范</button>
-        </div>
-        <button class="mic-btn" id="qMic">${IC.mic}</button>
-        <div class="mic-status" id="qMicStatus">点麦克风，大声读出来</div>
-        <div class="speak-hint en" id="qLive"></div>
-        <div id="qFb"></div>
-        <div id="qNext"></div>
       </div>`;
   } else if (q.type === "fill") {
     body = `
@@ -1818,30 +1832,26 @@ function renderQuiz(){
         <div class="fill-en en">${fillHtml(q.gap.text)}</div>
         <div class="big-zh" style="font-size:1.5rem;margin-top:8px">${esc(q.display.zh)}</div>
         <div class="hint">${esc(q.prompt)}</div>
-        ${q.mode === "write" ? canvasHtml() : ""}
         <div class="type-box">
-          <input class="type-input" id="qIn" placeholder="${q.mode === "write" ? "把你写的答案打在这里检查" : "输入答案"}" autocomplete="off" autocapitalize="off">
+          <input class="type-input" id="qIn" placeholder="输入完整答案" autocomplete="off" autocapitalize="off">
         </div>
         <div id="qFb"></div>
         <div class="type-row" style="margin-top:16px">
-          <button class="btn green" style="flex:1" id="qSubmit">${IC.check} 检查</button>
+          <button class="btn green" style="flex:1" id="qSubmit">${IC.check} 提交</button>
         </div>
-        <div id="qNext"></div>
       </div>`;
   } else {
     body = `
       <div class="q-card" style="text-align:center">
         <div class="big-zh">${esc(q.display.zh)}</div>
         <div class="hint">${esc(q.prompt)}</div>
-        ${q.mode === "write" ? canvasHtml() : ""}
         <div class="type-box">
-          <input class="type-input" id="qIn" placeholder="${q.mode === "write" ? "把你写的单词打在这里检查" : "拼出英文"}" autocomplete="off" autocapitalize="off">
+          <input class="type-input" id="qIn" placeholder="拼出英文" autocomplete="off" autocapitalize="off">
         </div>
         <div id="qFb"></div>
         <div class="type-row" style="margin-top:16px">
-          <button class="btn green" style="flex:1" id="qSubmit">${IC.check} 检查</button>
+          <button class="btn green" style="flex:1" id="qSubmit">${IC.check} 提交</button>
         </div>
-        <div id="qNext"></div>
       </div>`;
   }
   $("#view").innerHTML = `
@@ -1861,38 +1871,6 @@ function renderQuiz(){
     </div>`;
   // 绑定
   if (q.mode === "choice") return;
-  if (q.mode === "speak") {
-    $("#qPlay").onclick = () => speakEn(q.item.en);
-    let listening = false;
-    const mic = $("#qMic"), st = $("#qMicStatus"), live = $("#qLive");
-    mic.onclick = () => {
-      if (EXAM.answered) return;
-      if (listening) {
-        stopAsr(); listening = false; mic.classList.remove("listening"); mic.classList.add("green");
-        st.textContent = "识别完成，正在评分…";
-        const hyp = EXAM._hyp || ""; const conf = EXAM._conf || 0;
-        const r = rateSpeak(q.item.en, hyp, conf);
-        submitExamAnswer(r.score >= 70, { hyp, score: r.score, stars: r.stars });
-        return;
-      }
-      if (!startAsr(res => {
-        EXAM._hyp = res.final || res.interim; EXAM._conf = res.conf || 0;
-        live.textContent = EXAM._hyp || "";
-      }, (ok, err) => {
-        if (ok && !EXAM.answered) { listening = false; mic.classList.remove("listening"); mic.classList.add("green"); st.textContent = "识别完成，正在评分…"; const r = rateSpeak(q.item.en, EXAM._hyp || "", EXAM._conf || 0); submitExamAnswer(r.score >= 70, { hyp: EXAM._hyp || "", score: r.score, stars: r.stars }); }
-        else if (!ok) { listening = false; mic.classList.remove("listening"); st.textContent = "没有听清，请再试一次"; }
-      })) {
-        st.textContent = "语音识别启动失败，请刷新重试";
-        return;
-      }
-      listening = true; EXAM._hyp = ""; EXAM._conf = 0; live.textContent = "";
-      mic.classList.add("listening"); mic.classList.remove("green");
-      st.textContent = "正在听…大声读出来！";
-    };
-    return;
-  }
-  // 打字 / 手写
-  if (q.mode === "write") initCanvas();
   const inp = $("#qIn"), sub = $("#qSubmit");
   const submit = () => {
     if (EXAM.answered) return;
@@ -1907,31 +1885,6 @@ function renderQuiz(){
 function fillHtml(gapText){
   return esc(gapText).replace(/_+/g, m => `<span class="gap">${"_".repeat(m.length)}</span>`);
 }
-function canvasHtml(){
-  return `
-    <div style="margin-top:14px">
-      <canvas id="writePad" width="640" height="200" style="width:100%;height:150px;background:#FDFEFB;border:3px dashed var(--green);border-radius:16px;touch-action:none;display:block"></canvas>
-      <button class="btn ghost sm" style="margin-top:8px" id="qClear">${IC.trash} 重写</button>
-    </div>`;
-}
-function initCanvas(){
-  const cv = $("#writePad");
-  if (!cv) return;
-  const ctx = cv.getContext("2d");
-  ctx.lineWidth = 8; ctx.lineCap = "round"; ctx.lineJoin = "round"; ctx.strokeStyle = "#1D3527";
-  let drawing = false;
-  const pos = e => {
-    const r = cv.getBoundingClientRect();
-    return { x: (e.clientX - r.left) * (cv.width / r.width), y: (e.clientY - r.top) * (cv.height / r.height) };
-  };
-  cv.addEventListener("pointerdown", e => { drawing = true; ctx.beginPath(); const p = pos(e); ctx.moveTo(p.x, p.y); cv.setPointerCapture && cv.setPointerCapture(e.pointerId); });
-  cv.addEventListener("pointermove", e => { if (!drawing) return; const p = pos(e); ctx.lineTo(p.x, p.y); ctx.stroke(); });
-  const up = () => { drawing = false; };
-  cv.addEventListener("pointerup", up);
-  cv.addEventListener("pointerleave", up);
-  const cl = $("#qClear");
-  if (cl) cl.onclick = () => { ctx.clearRect(0, 0, cv.width, cv.height); };
-}
 function submitChoice(el, i){
   if (EXAM.answered) return;
   const q = EXAM.questions[EXAM.idx];
@@ -1943,30 +1896,15 @@ function submitExamAnswer(ok, extra){
   if (EXAM.answered) return;
   EXAM.answered = true;
   const q = EXAM.questions[EXAM.idx];
-  const m = recordResult(q.item, ok);
+  recordResult(q.item, ok);
   if (ok) EXAM.correct++;
   EXAM.results.push({ q, ok, extra });
-  const fb = $("#qFb"), next = $("#qNext");
+  const fb = $("#qFb");
   if (fb) {
-    if (q.mode === "speak") {
-      const sc = (extra && extra.score) || 0;
-      const stars = [1, 2, 3].map(i => `<svg viewBox="0 0 24 24" fill="currentColor" class="${i <= ((extra && extra.stars) || 1) ? "lit" : ""}"><path d="M12 2.6l2.9 5.9 6.5.9-4.7 4.6 1.1 6.5L12 17.4l-5.8 3.1 1.1-6.5L2.6 9.4l6.5-.9z"/></svg>`).join("");
-      fb.innerHTML = ok ? `
-        <div class="fb-banner ok"><div class="fb-ic">${IC.check}</div><div>发音得分 ${sc} 分，读得很标准！</div></div>
-        <div class="score-box" style="margin-top:12px"><div class="score-num">${sc}<span style="font-size:1.2rem"> 分</span></div><div class="stars-row">${stars}</div></div>` :
-        `<div class="fb-banner bad"><div class="fb-ic">${IC.x}</div><div>再听一次示范，慢一点读：<span class="en">${esc(q.item.en)}</span></div></div>`;
-    } else {
-      fb.innerHTML = ok
-        ? `<div class="fb-banner ok"><div class="fb-ic">${IC.check}</div><div>答对了！</div></div>`
-        : `<div class="fb-banner bad"><div class="fb-ic">${IC.x}</div><div>正确答案是：<span class="en" style="font-weight:900">${esc(q.answer)}</span></div></div>`;
-    }
+    fb.innerHTML = ok
+      ? `<div class="fb-banner ok"><div class="fb-ic">${IC.check}</div><div>答对了！</div></div>`
+      : `<div class="fb-banner bad"><div class="fb-ic">${IC.x}</div><div>正确答案是：<span class="en" style="font-weight:900">${esc(q.answer)}</span></div></div>`;
   }
-  if (next) next.innerHTML = `
-    <div class="type-row" style="margin-top:16px">
-      ${EXAM.idx + 1 < EXAM.questions.length
-        ? `<button class="btn green" style="flex:1" onclick="quizNext()">${IC.play} 下一题</button>`
-        : `<button class="btn sun" style="flex:1" onclick="finishQuiz()">${IC.trophy} 查看成绩</button>`}
-    </div>`;
   const opts = $$("#opts .opt-btn");
   if (opts.length) opts.forEach(b => {
     const isA = q.type === "e2c" ? (b.dataset.o === q.answer) : (normWord(b.dataset.o) === normWord(q.answer));
@@ -1977,6 +1915,14 @@ function submitExamAnswer(ok, extra){
     if (ok) inp.classList.add("correct"); else inp.classList.add("wrong");
     inp.disabled = true;
   }
+  const sub = $("#qSubmit");
+  if (sub) sub.disabled = true;
+  // 判定展示后自动进入下一题
+  clearTimeout(EXAM._autoT);
+  EXAM._autoT = setTimeout(() => {
+    if (EXAM.idx + 1 < EXAM.questions.length) quizNext();
+    else finishQuiz();
+  }, 1500);
 }
 function quizNext(){
   if (!EXAM.answered) return;
@@ -1985,6 +1931,7 @@ function quizNext(){
 }
 function quitQuiz(){
   stopAsr();
+  clearTimeout(EXAM._autoT);
   confirmModal("确定要退出考试吗？", "本次考试成绩不会保留。", "退出考试", () => {
     EXAM = null;
     $("#tabbar").classList.remove("hidden");
@@ -1998,6 +1945,12 @@ function finishQuiz(){
   const score = Math.round(correct / total * 100);
   const stars = score >= 90 ? 3 : score >= 70 ? 2 : 1;
   const wrong = EXAM.results.filter(r => !r.ok);
+  // 记录考试记录
+  const durSec = EXAM.startTime ? Math.round((Date.now() - EXAM.startTime) / 1000) : 0;
+  S.examLog = S.examLog || [];
+  S.examLog.unshift({ t: Date.now(), dur: durSec, total, correct, wrong: total - correct, rate: score });
+  if (S.examLog.length > 60) S.examLog.length = 60;
+  saveState();
   EXAM.done = true;
   const rows = EXAM.results.map(r => {
     const q = r.q;
@@ -2034,6 +1987,7 @@ function finishQuiz(){
     </div>`;
 }
 function retryQuiz(){
+  clearTimeout(EXAM._autoT);
   EXAM.done = false;
   if (EXAM.retestOf === "all") return retestAllWrong();
   if (EXAM.retestOf) { const id = EXAM.retestOf; EXAM.done = false; return quickRetest(id); }
@@ -2042,9 +1996,36 @@ function retryQuiz(){
 }
 function closeResult(){
   stopAsr();
+  clearTimeout(EXAM._autoT);
   EXAM = null;
   $("#tabbar").classList.remove("hidden");
   render(); go("#/exam");
+}
+function showExamLog(){
+  const list = S.examLog || [];
+  const fmtT = ts => {
+    const d = new Date(ts);
+    const p = n => String(n).padStart(2, "0");
+    return (d.getMonth() + 1) + "月" + d.getDate() + "日 " + p(d.getHours()) + ":" + p(d.getMinutes());
+  };
+  const fmtDur = s => (s >= 60 ? Math.floor(s / 60) + "分" + (s % 60) + "秒" : s + "秒");
+  const rows = list.length ? list.map((r, i) => `
+    <div class="result-row">
+      <div class="ok-ic" style="color:${r.rate >= 70 ? "var(--green)" : "var(--coral)"}">${r.rate >= 70 ? IC.check : IC.flag}</div>
+      <div style="flex:1;min-width:0">
+        <div style="font-weight:900">第 ${list.length - i} 次 · ${fmtT(r.t)}</div>
+        <div style="font-size:.88rem;color:var(--ink-2)">用时 ${fmtDur(r.dur)} · 共 ${r.total} 题</div>
+      </div>
+      <div style="text-align:right">
+        <div style="font-weight:900;color:var(--green-d)">${r.rate}%</div>
+        <div style="font-size:.85rem;color:var(--ink-2)">对 ${r.correct} / 错 ${r.wrong}</div>
+      </div>
+    </div>`).join("") : "";
+  confirmModal("考试记录", `
+    ${list.length ? `<div style="max-height:46vh;overflow-y:auto">${rows}</div>
+    <div style="margin-top:12px;text-align:center;color:var(--ink-2);font-size:.9rem">共 ${list.length} 次考试 · 记录保存在本机</div>`
+    : `<div class="empty" style="padding:16px"><div class="e-d">还没有考试记录，完成一次考试后会自动记录用时、对错与正确率</div></div>`}
+  `, "好的", () => {});
 }
 
 /* ================= 错题本 ================= */
@@ -2067,17 +2048,17 @@ function renderWrong(){
       </div>
     </div>`;
   };
-  const grp = (list, title, cls) => list.length ? `
-    <div class="card" style="margin-top:16px">
+  const grp = (list, title, cls, key) => list.length ? `
+    <div class="card" id="grp-${key}" style="margin-top:16px">
       <div class="card-title" style="color:${cls === "green" ? "var(--green-d)" : cls === "coral" ? "var(--coral-d)" : "#8A5B00"}">${IC.heart} ${title}（${list.length}）</div>
       ${list.map(itemRow).join("")}
     </div>` : "";
   $("#view").innerHTML = `
     <div class="view-head"><div class="view-title">错题记录</div><div class="view-sub">反复考核，连续答对 3 次才算真正掌握</div></div>
     <div class="wb-groups">
-      <div class="wb-g coral"><div class="wb-n">${active.length}</div><div class="wb-l">待攻克</div></div>
-      <div class="wb-g sun"><div class="wb-n">${near.length}</div><div class="wb-l">接近掌握</div></div>
-      <div class="wb-g green"><div class="wb-n">${mastered.length}</div><div class="wb-l">已攻克</div></div>
+      <div class="wb-g coral" onclick="scrollToGroup('grp-active')"><div class="wb-n">${active.length}</div><div class="wb-l">待攻克</div></div>
+      <div class="wb-g sun" onclick="scrollToGroup('grp-near')"><div class="wb-n">${near.length}</div><div class="wb-l">接近掌握</div></div>
+      <div class="wb-g green" onclick="scrollToGroup('grp-mastered')"><div class="wb-n">${mastered.length}</div><div class="wb-l">已攻克</div></div>
     </div>
     <div class="type-row" style="gap:10px">
       <button class="btn coral" style="flex:1" onclick="retestAllWrong()" ${active.length ? "" : "disabled"}>${IC.refresh} 重考错题</button>
@@ -2085,9 +2066,14 @@ function renderWrong(){
       <button class="btn sun" onclick="openAddWrong()">${IC.pencil} 手动添加</button>
     </div>
     ${active.length === 0 && mastered.length === 0 ? `<div class="card empty" style="margin-top:16px"><div class="e-ic">${IC.heart}</div><div class="e-t">没有错题，真棒！</div><div class="e-d">考试中的错题会自动记在这里；也可以拍照或手动添加。</div><button class="btn green" onclick="go('#/exam')">${IC.flag} 去考试</button></div>` : ""}
-    ${grp(near, "接近掌握（再对 1 次就掌握啦）", "sun")}
-    ${grp(active, "待攻克", "coral")}
-    ${grp(mastered, "已攻克（连对 3 次）", "green")}`;
+    ${grp(near, "接近掌握（再对 1 次就掌握啦）", "sun", "near")}
+    ${grp(active, "待攻克", "coral", "active")}
+    ${grp(mastered, "已攻克（连对 3 次）", "green", "mastered")}`;
+}
+function scrollToGroup(id){
+  const el = document.getElementById(id);
+  if (!el) { toast("这一组暂时还没有错题"); return; }
+  el.scrollIntoView({ behavior: "smooth", block: "start" });
 }
 function removeWrong(id){
   confirmModal("确定要删除这条错题记录吗？", () => {
@@ -2299,6 +2285,8 @@ function render(){
   if (h === "#/exam") return renderExam();
   if (h === "#/wrong") return renderWrong();
   if (h === "#/import") return renderImport();
+  if (h === "#/settings") return renderSettings();
+  if (h === "#/about") return renderAbout();
   if (h.startsWith("#/unit/")) return renderUnit(h.slice(7));
   renderHome();
 }
@@ -2322,9 +2310,7 @@ function init(){
     };
     saveState();
   }
-  $("#btnReset").addEventListener("click", () => {
-    confirmModal("重置全部数据？", "课程、成绩、错题本、星星都会清空。", "重置", () => resetAll());
-  });
+  $("#btnSettings").addEventListener("click", () => go("#/settings"));
   $$(".tab").forEach(t => t.addEventListener("click", () => go(t.dataset.route)));
   window.addEventListener("hashchange", render);
   if (location.hash && location.hash !== "#/home") render();
