@@ -1235,8 +1235,9 @@ function similarity(target, hyp){
 }
 function rateSpeak(target, hyp, conf){
   const sim = similarity(target, hyp);
-  const confScore = Math.max(0, Math.min(1, conf || 0));
-  const score = Math.max(0, Math.min(100, Math.round(sim * 76 + confScore * 24)));
+  let score;
+  if (conf === undefined || conf === null) score = Math.max(0, Math.min(100, Math.round(sim * 100)));
+  else score = Math.max(0, Math.min(100, Math.round(sim * 76 + Math.max(0, Math.min(1, conf)) * 24)));
   let stars = 1, msg;
   if (score >= 90) { stars = 3; msg = "太棒了！发音非常标准！"; }
   else if (score >= 80) { stars = 3; msg = "非常好！继续加油！"; }
@@ -1244,11 +1245,11 @@ function rateSpeak(target, hyp, conf){
   else if (score >= 55) { stars = 2; msg = "不错哦，放慢一点再试试！"; }
   else if (score >= 40) { stars = 1; msg = "继续加油，先听一遍示范！"; }
   else { stars = 1; msg = "再听一遍，跟着大声读出来！"; }
-  return { score, stars, msg, sim, conf: confScore };
+  return { score, stars, msg, sim, conf: conf === undefined || conf === null ? null : Math.max(0, Math.min(1, conf)) };
 }
 let practiceCtx = null;
 function speakPractice(item, onBack){
-  stopAsr();
+  stopAsr(); stopRecord();
   practiceCtx = { item, onBack, done: false };
   const isSentence = item._kind === "dialogue" || (item.en || "").split(" ").length > 1;
   $("#view").innerHTML = `
@@ -1269,64 +1270,240 @@ function speakPractice(item, onBack){
       <div id="ppBody"></div>
     </div>
   </div>`;
-  $("#ppClose").onclick = () => { stopAsr(); practiceCtx = null; if (onBack) onBack(); else go("#/course"); };
+  $("#ppClose").onclick = () => { stopAsr(); stopRecord(); practiceCtx = null; if (onBack) onBack(); else go("#/course"); };
   $("#ppPlay").onclick = () => speakEn(item.en);
-  const body = $("#ppBody");
-  body.innerHTML = `
-    <div class="blank-card" style="margin-top:18px">口说录音暂不可用（发音判定标准见 设置）。请先听示范、大声跟读，再自评打分：</div>
-    <div class="type-row" style="margin-top:16px">
-      <button class="btn green" style="flex:1" onclick="selfJudgePractice(true)">${IC.check} 我读得不错</button>
-      <button class="btn ghost" style="flex:1" onclick="selfJudgePractice(false)">${IC.refresh} 还需再练</button>
-    </div>`;
+  speakRecorderUI($("#ppBody"), item.en, r => {
+    if (practiceCtx.done) return;
+    showPracticeScore(item, r);
+  }, { showSelfJudge: true });
 }
-function rateCurrent(){
+
+/* ================= Whisper 离线识别引擎 ================= */
+let whisperPipe = null, whisperReady = false, whisperLoading = false, whisperErr = null;
+const WHISPER_CDN = "https://cdn.jsdelivr.net/npm/@huggingface/transformers@3.0.2/dist/transformers.min.js";
+const WHISPER_MODEL = "Xenova/whisper-base.en";
+const WHISPER_MIRROR = "https://hf-mirror.com";
+async function loadWhisper(onProgress){
+  if (whisperPipe) return whisperPipe;
+  if (whisperLoading) return null;
+  whisperLoading = true;
+  try {
+    const mod = await import(WHISPER_CDN);
+    if (mod && mod.env) {
+      mod.env.allowLocalModels = false;
+      mod.env.remoteHost = WHISPER_MIRROR;
+    }
+    whisperPipe = await mod.pipeline("automatic-speech-recognition", WHISPER_MODEL, {
+      quantized: true,
+      progress_callback: p => { if (onProgress && p && p.status === "progress" && p.total) onProgress(p.loaded, p.total); }
+    });
+    whisperReady = true;
+    return whisperPipe;
+  } catch(e) {
+    whisperErr = String((e && e.message) || e);
+    return null;
+  } finally { whisperLoading = false; }
+}
+function trimSilence(data, sr){
+  const n = data.length;
+  if (n < sr) return data;
+  const win = Math.floor(sr * 0.02), th = 0.004;
+  let start = 0, end = n - 1;
+  for (let i = 0; i + win < n; i += win) {
+    let e = 0; for (let j = i; j < i + win; j++) e += data[j] * data[j];
+    if (Math.sqrt(e / win) > th) { start = i; break; }
+  }
+  for (let i = n - win; i >= 0; i -= win) {
+    let e = 0; for (let j = i; j < i + win; j++) e += data[j] * data[j];
+    if (Math.sqrt(e / win) > th) { end = i + win; break; }
+  }
+  if (end <= start) return data;
+  start = Math.max(0, start - Math.floor(sr * 0.1));
+  end = Math.min(n, end + Math.floor(sr * 0.1));
+  return data.slice(start, end);
+}
+function normalizeAudio(data){
+  let peak = 0;
+  for (let i = 0; i < data.length; i++) { const a = Math.abs(data[i]); if (a > peak) peak = a; }
+  if (peak < 0.002) return data;
+  const gain = Math.min(5, 0.3 / peak);
+  if (gain > 0.9 && gain < 1.1) return data;
+  const out = new Float32Array(data.length);
+  for (let i = 0; i < data.length; i++) out[i] = data[i] * gain;
+  return out;
+}
+async function whisperToText(pcm){
+  const pipe = whisperPipe;
+  if (!pipe) return "";
+  try {
+    if (!pcm || !pcm.data || !pcm.data.length) return "";
+    const sr = pcm.sampleRate || 48000;
+    let data = pcm.data;
+    if (sr !== 16000) {  // 显式重采样到 16k，避免引擎内部重采样不确定
+      const out = new Float32Array(Math.round(data.length * 16000 / sr));
+      const ratio = sr / 16000;
+      for (let i = 0; i < out.length; i++) {
+        const pos = i * ratio;
+        const i0 = Math.floor(pos), i1 = Math.min(i0 + 1, data.length - 1);
+        const frac = pos - i0;
+        out[i] = data[i0] * (1 - frac) + data[i1] * frac;
+      }
+      data = out;
+    }
+    data = trimSilence(data, 16000);
+    data = normalizeAudio(data);
+    const out = await pipe(data, { max_new_tokens: 80 });  // .en 模型禁止传 language/task
+    return String((out && out.text) || "").trim();
+  } catch(e) { whisperErr = String((e && e.message) || e); try { console.error("[Whisper]", e); } catch(_){} return ""; }
+}
+let recStream = null, pcmCtx = null, pcmSrc = null, pcmProc = null, pcmChunks = [], recordStopCb = null;
+function stopRecord(){
+  if (recordStopCb) { const cb = recordStopCb; recordStopCb = null; cb(); }
+  else if (recStream) { recStream.getTracks().forEach(t => t.stop()); recStream = null; }
+}
+function recordOnce(maxSec){
+  return new Promise((resolve, reject) => {
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) { reject(new Error("no-mic")); return; }
+    navigator.mediaDevices.getUserMedia({ audio: true }).then(async stream => {
+      recStream = stream;
+      try {
+        const Ctx = window.AudioContext || window.webkitAudioContext;
+        const ctx = new Ctx();
+        pcmCtx = ctx;
+        if (ctx.state === "suspended") { try { await ctx.resume(); } catch(e){} }
+        pcmChunks = [];
+        pcmSrc = ctx.createMediaStreamSource(stream);
+        pcmProc = ctx.createScriptProcessor(4096, 1, 1);
+        pcmProc.onaudioprocess = e => {
+          const ch = e.inputBuffer.getChannelData(0);
+          if (ch && ch.length) pcmChunks.push(new Float32Array(ch));
+        };
+        const mute = ctx.createGain(); mute.gain.value = 0;
+        pcmSrc.connect(pcmProc);
+        pcmProc.connect(mute);
+        mute.connect(ctx.destination);
+        let stopped = false;
+        const finish = () => {
+          if (stopped) return; stopped = true;
+          recordStopCb = null;
+          try { if (pcmProc) pcmProc.disconnect(); } catch(e){}
+          try { if (pcmSrc) pcmSrc.disconnect(); } catch(e){}
+          try { ctx.close(); } catch(e){}
+          stream.getTracks().forEach(t => t.stop());
+          recStream = null; pcmCtx = null; pcmSrc = null; pcmProc = null;
+          let len = 0; for (const c of pcmChunks) len += c.length;
+          const data = new Float32Array(len);
+          let off = 0; for (const c of pcmChunks) { data.set(c, off); off += c.length; }
+          pcmChunks = [];
+          resolve({ data, sampleRate: ctx.sampleRate });
+        };
+        recordStopCb = finish;
+        if (maxSec) setTimeout(() => { if (recordStopCb === finish) finish(); }, maxSec * 1000);
+      } catch(e) {
+        stream.getTracks().forEach(t => t.stop());
+        recStream = null;
+        reject(e);
+      }
+    }).catch(e => reject(e));
+  });
+}
+function speakRecorderUI(host, target, onResult, opts){
+  opts = opts || {};
+  host.innerHTML = `
+    <div class="type-row" style="justify-content:center;margin-top:18px">
+      <button class="btn green" id="srBtn">${IC.mic} 开始录音</button>
+    </div>
+    <div class="mic-status" id="srStatus">点击开始，大声读出来</div>
+    <div class="speak-hint en" id="srLive"></div>`;
+  const btn = host.querySelector("#srBtn"), status = host.querySelector("#srStatus");
+  let busy = false, recording = false;
+  const resetBtn = () => { btn.disabled = false; btn.innerHTML = `${IC.mic} 开始录音`; };
+  btn.onclick = async () => {
+    if (recording) { recording = false; stopRecord(); return; }  // 再点一下 = 停止录音
+    if (busy) return;
+    if (typeof opts.preRecord === "function") { try { opts.preRecord(); } catch(e){} }
+    if (!whisperReady) {
+      busy = true;
+      btn.disabled = true;
+      status.textContent = "正在准备离线语音引擎（首次需下载约 80MB 模型，请耐心等待）…";
+      const ok = await loadWhisper((loaded, total) => {
+        status.textContent = "模型下载中 " + Math.round(loaded / 1048576) + " / " + Math.round(total / 1048576) + " MB…";
+      });
+      btn.disabled = false;
+      busy = false;
+      if (!ok) {
+        status.textContent = "离线引擎加载失败：" + (whisperErr || "请检查网络");
+        if (opts.showSelfJudge) showSelfJudgeFallback(host, onResult);
+        return;
+      }
+      status.textContent = "引擎就绪！";
+    }
+    try {
+      busy = true;
+      recording = true;
+      btn.innerHTML = `${IC.mic} 停止（再点一下结束）`;
+      status.textContent = "正在听…大声读出来！";
+      const { data, sampleRate } = await recordOnce(15);
+      recording = false;
+      btn.disabled = true;
+      btn.innerHTML = `${IC.sound} 识别中…`;
+      status.textContent = "识别中…";
+      const hyp = await whisperToText({ data, sampleRate });
+      if (!hyp) {
+        status.textContent = whisperErr ? "识别引擎出错，请刷新页面后重试" : "没有听清，请再大声读一次";
+        resetBtn();
+        busy = false;
+        return;
+      }
+      const r = rateSpeak(target, hyp);
+      if (onResult) onResult({ ok: r.score >= 70, hyp, score: r.score, stars: r.stars, msg: r.msg });
+      resetBtn();
+      busy = false;
+      if (opts.onAfterResult) { try { opts.onAfterResult(btn); } catch(e){} }
+    } catch(e) {
+      status.textContent = "录音失败，请允许麦克风权限后重试";
+      resetBtn();
+      busy = false;
+      recording = false;
+      if (opts.showSelfJudge) showSelfJudgeFallback(host, onResult);
+    }
+  };
+}
+function showSelfJudgeFallback(host, onResult){
+  const wrap = document.createElement("div");
+  wrap.innerHTML = `
+    <div class="blank-card" style="margin-top:16px">录音不可用，可先听示范再自评：</div>
+    <div class="type-row" style="margin-top:12px">
+      <button class="btn green" style="flex:1" id="sjOk">${IC.check} 我读得不错</button>
+      <button class="btn ghost" style="flex:1" id="sjNo">${IC.refresh} 还需再练</button>
+    </div>`;
+  host.appendChild(wrap);
+  const fire = ok => { if (onResult) onResult({ ok, hyp: "", score: ok ? 85 : 55, stars: ok ? 3 : 2, msg: ok ? "真棒！发音很标准！" : "继续加油，再听一次示范！" }); };
+  host.querySelector("#sjOk").onclick = () => fire(true);
+  host.querySelector("#sjNo").onclick = () => fire(false);
+}
+function showPracticeScore(item, r){
   const ctx = practiceCtx;
   if (!ctx || ctx.done) return;
   ctx.done = true;
-  window.__ppItem = ctx.item; window.__ppBack = ctx.onBack || null;
-  const r = rateSpeak(ctx.item.en, ctx.hyp, ctx.conf);
+  window.__ppItem = item; window.__ppBack = ctx.onBack || null;
   S.speakLog = S.speakLog || [];
-  S.speakLog.push({ en: ctx.item.en, score: r.score, t: Date.now() });
+  S.speakLog.push({ en: item.en, score: r.score, t: Date.now() });
   saveState();
   const stars = [1, 2, 3].map(i => `<svg viewBox="0 0 24 24" fill="currentColor" class="${i <= r.stars ? "lit" : ""}"><path d="M12 2.6l2.9 5.9 6.5.9-4.7 4.6 1.1 6.5L12 17.4l-5.8 3.1 1.1-6.5L2.6 9.4l6.5-.9z"/></svg>`).join("");
   $("#ppStars").innerHTML = stars;
-  const body = $("#ppBody");
-  body.innerHTML = `
+  $("#ppBody").innerHTML = `
     <div class="score-box">
       <div class="score-num">${r.score}<span style="font-size:1.2rem"> 分</span></div>
-      <div class="score-t">${esc(r.msg)}</div>
+      <div class="score-t">${esc(r.msg || (r.ok ? "真棒！发音很标准！" : "继续加油，再听一次示范！"))}</div>
       <div class="stars-row">${stars}</div>
-      ${ctx.hyp ? `<div style="font-size:.95rem;color:var(--ink-2);margin-top:10px">我听到：<span class="en" style="font-weight:900">${esc(ctx.hyp)}</span></div>` : ""}
+      ${r.hyp ? `<div style="font-size:.95rem;color:var(--ink-2);margin-top:10px">我听到：<span class="en" style="font-weight:900">${esc(r.hyp)}</span></div>` : ""}
     </div>
     <div class="type-row" style="justify-content:center;margin-top:18px">
       <button class="btn green" onclick="speakPractice(window.__ppItem, window.__ppBack)">${IC.refresh} 再练一次</button>
       <button class="btn ghost" id="ppDone">${IC.check} 完成</button>
     </div>`;
-  $("#ppDone").onclick = () => { stopAsr(); practiceCtx = null; if (ctx.onBack) ctx.onBack(); else go("#/course"); };
-}
-function selfJudgePractice(ok){
-  const ctx = practiceCtx;
-  if (!ctx || ctx.done) return;
-  ctx.done = true;
-  window.__ppItem = ctx.item; window.__ppBack = ctx.onBack || null;
-  const score = ok ? 85 : 55;
-  const stars = ok ? 3 : 2;
-  S.speakLog = S.speakLog || [];
-  S.speakLog.push({ en: ctx.item.en, score, t: Date.now() });
-  saveState();
-  const starsHtml = [1, 2, 3].map(i => `<svg viewBox="0 0 24 24" fill="currentColor" class="${i <= stars ? "lit" : ""}"><path d="M12 2.6l2.9 5.9 6.5.9-4.7 4.6 1.1 6.5L12 17.4l-5.8 3.1 1.1-6.5L2.6 9.4l6.5-.9z"/></svg>`).join("");
-  $("#ppStars").innerHTML = starsHtml;
-  $("#ppBody").innerHTML = `
-    <div class="score-box">
-      <div class="score-num">${score}<span style="font-size:1.2rem"> 分</span></div>
-      <div class="score-t">${ok ? "真棒！发音很标准！" : "继续加油，再听一次示范！"}</div>
-      <div class="stars-row">${starsHtml}</div>
-    </div>
-    <div class="type-row" style="justify-content:center;margin-top:18px">
-      <button class="btn green" onclick="speakPractice(window.__ppItem, window.__ppBack)">${IC.refresh} 再练一次</button>
-      <button class="btn ghost" id="ppDone2">${IC.check} 完成</button>
-    </div>`;
-  $("#ppDone2").onclick = () => { stopAsr(); practiceCtx = null; if (ctx.onBack) ctx.onBack(); else go("#/course"); };
+  $("#ppDone").onclick = () => { stopAsr(); stopRecord(); practiceCtx = null; if (ctx.onBack) ctx.onBack(); else go("#/course"); };
 }
 
 /* ================= 视图：首页 ================= */
@@ -1364,7 +1541,7 @@ function renderAbout(){
     <div class="hero">
       <div class="badge">${IC.spark} Ryan English 搭子 · 绿色学习乐园</div>
       <h1 class="en">Learn. Practice. Master!</h1>
-      <p>上传课程 → 拆分单元 → 整理单字与对话（音标 + 中文翻译）→ 三级难度考试（选择题 / 输入）→ 错题记录，连对 3 次才算真正掌握。</p>
+      <p>上传课程 → 拆分单元 → 整理单字与对话（音标 + 中文翻译）→ 三级难度考试（选择题 / 输入 / 口说）→ 错题记录，连对 3 次才算真正掌握。</p>
       <div class="steps">
         <div class="step"><div class="n">1</div><div class="t">上传课程</div><div class="d">内容 + 单字表</div></div>
         <div class="step"><div class="n">2</div><div class="t">重点整理</div><div class="d">音标 + 翻译</div></div>
@@ -1376,7 +1553,7 @@ function renderAbout(){
       <div class="card-title">${IC.bulb} 工作流</div>
       <div class="flow-item"><div class="f-n">1</div><div><div class="f-t">上传课程内容与单字表</div><div class="f-d">粘贴文本或上传 .txt / .md 文件，按 "Unit / 第一课" 标题自动拆分单元，单词行自动补音标（母音标红）。</div></div></div>
       <div class="flow-item"><div class="f-n">2</div><div><div class="f-t">生成单元重点整理</div><div class="f-d">每个单元的单字、短语、对话逐句整理，含音标与中文翻译；每个条目都能听发音、练习发音。</div></div></div>
-      <div class="flow-item"><div class="f-n">3</div><div><div class="f-t">生成考试板块</div><div class="f-d">考单字 / 短语 / 对话；方式含选择题、输入；类型含英翻中、中翻英、拼写、填空；难度三级。</div></div></div>
+      <div class="flow-item"><div class="f-n">3</div><div><div class="f-t">生成考试板块</div><div class="f-d">考单字 / 短语 / 对话；方式含选择题、输入、口说（离线语音评分）；类型含英翻中、中翻英、拼写、填空、朗读；难度三级。</div></div></div>
       <div class="flow-item"><div class="f-n">4</div><div><div class="f-t">错题记录与掌握判定</div><div class="f-d">考核错题自动进错题本，也支持拍照 OCR 录入；反复考核，连续 3 次答对才标记为已掌握。</div></div></div>
     </div>
     <div class="quick-grid" style="margin-top:16px">
@@ -1412,9 +1589,11 @@ function renderSettings(){
     </div>
     <div class="card">
       <div class="card-title">${IC.mic} 发音判定标准</div>
-      <div style="font-size:.98rem;line-height:1.7;color:var(--ink)">当前版本口说录音暂不可用，发音练习采用「听示范 + 自评」方式：<br>
-        · 点击 <span class="en">听示范</span> 播放标准发音，跟读后自己判断；<br>
-        · 读得不错 = 85 分（3 星）；还需再练 = 55 分（2 星）；<br>
+      <div style="font-size:.98rem;line-height:1.7;color:var(--ink)">口说评分采用「离线语音引擎（Whisper）」：<br>
+        · 点击麦克风录音，识别你的朗读并与目标句子比对（相似度），满分 100 分；<br>
+        · 90 分以上 = 3 星，80 分以上 = 3 星，70 分以上 = 2 星；<br>
+        · 首次使用需联网下载约 80MB 模型（base 版识别更准），之后自动缓存离线可用；<br>
+        · 若麦克风或网络不可用，可改用「自评」：读得不错 = 85 分（3 星），还需再练 = 55 分（2 星）；<br>
         · 评分记录保存在本机，可追踪发音进步。</div>
     </div>
     <div class="card">
@@ -1575,7 +1754,8 @@ function parseAndLoad(){
 /* ================= 考试引擎 ================= */
 const MODE_META = {
   choice: { label: "选择题", ic: IC.check, cls: "q-green" },
-  type: { label: "输入", ic: IC.key, cls: "q-blue" }
+  type: { label: "输入", ic: IC.key, cls: "q-blue" },
+  speak: { label: "口说", ic: IC.mic, cls: "q-coral" }
 };
 const TYPE_META = {
   e2c: { label: "英翻中", cls: "q-green" },
@@ -1592,7 +1772,7 @@ const DIFF_META = [
 let EXAM = null;
 function defaultExamCfg(){
   const allIds = S.course ? S.course.units.map(u => u.id) : [];
-  return { unitIds: allIds, kinds: ["word", "phrase", "dialogue"], modes: ["choice", "type"], types: ["e2c", "c2e", "spell", "fill"], diff: 1, count: 10 };
+  return { unitIds: allIds, kinds: ["word", "phrase", "dialogue"], modes: ["choice", "type", "speak"], types: ["e2c", "c2e", "spell", "fill", "read"], diff: 1, count: 10 };
 }
 function renderExam(){
   if (!S.course) {
@@ -1660,7 +1840,7 @@ function renderExam(){
     <div class="card">
       <div class="sec-lab">${IC.pencil} 题型（可多选）</div>
       <div class="chip-row">${typeChips}</div>
-      <div style="font-size:.88rem;color:var(--ink-2);margin-top:10px">选择题 ↔ 英翻中 / 中翻英；输入 ↔ 拼写 / 填空。</div>
+      <div style="font-size:.88rem;color:var(--ink-2);margin-top:10px">选择题 ↔ 英翻中 / 中翻英；输入 ↔ 拼写 / 填空；口说 = 朗读录音评分。</div>
     </div>
     <div class="card">
       <div class="sec-lab">${IC.flag} 题量</div>
@@ -1724,6 +1904,7 @@ function buildQuiz(cfg){
       if (cfg.types.includes("e2c")) pool.push({ it, mode: "choice", type: "e2c" });
       if (cfg.types.includes("c2e")) pool.push({ it, mode: "choice", type: "c2e" });
     }
+    if (cfg.modes.includes("speak") && cfg.types.includes("read")) pool.push({ it, mode: "speak", type: "read" });
     if (cfg.modes.includes("type")) {
       if (cfg.types.includes("spell") && (!isSent || wc <= 4)) pool.push({ it, mode: "type", type: "spell" });
       if (cfg.types.includes("fill")) pool.push({ it, mode: "type", type: "fill" });
@@ -1826,6 +2007,18 @@ function renderQuiz(){
         </div>
         <div id="qFb"></div>
       </div>`;
+  } else if (q.mode === "speak") {
+    body = `
+      <div class="q-card" style="text-align:center">
+        <div class="big-en en">${esc(q.display.en)}</div>
+        ${q.display.ipa ? `<div class="ipa">${ipaVowelHtml(q.display.ipa)}</div>` : ""}
+        <div style="font-size:1.2rem;font-weight:800;color:var(--ink-2);margin-top:6px">${esc(q.display.zh)}</div>
+        <div class="type-row" style="justify-content:center;margin-top:16px">
+          <button class="btn blue sm" id="qPlay">${IC.sound} 听示范</button>
+        </div>
+        <div id="qSpeakBox"></div>
+        <div id="qFb"></div>
+      </div>`;
   } else if (q.type === "fill") {
     body = `
       <div class="q-card" style="text-align:center">
@@ -1871,6 +2064,14 @@ function renderQuiz(){
     </div>`;
   // 绑定
   if (q.mode === "choice") return;
+  if (q.mode === "speak") {
+    $("#qPlay").onclick = () => speakEn(q.item.en);
+    speakRecorderUI($("#qSpeakBox"), q.item.en, r => {
+      if (EXAM.answered) return;
+      submitExamAnswer(r.ok, { hyp: r.hyp, score: r.score, stars: r.stars, msg: r.msg });
+    }, { showSelfJudge: true, preRecord: () => { if (EXAM && EXAM.answered) retryState(); }, onAfterResult: addRetryBtn });
+    return;
+  }
   const inp = $("#qIn"), sub = $("#qSubmit");
   const submit = () => {
     if (EXAM.answered) return;
@@ -1892,6 +2093,23 @@ function submitChoice(el, i){
   const ok = q.type === "e2c" ? (given === q.answer) : (normWord(given) === normWord(q.answer));
   submitExamAnswer(ok, { given });
 }
+function retryState(){
+  if (!EXAM || !EXAM.questions || EXAM.questions.length === 0) return;
+  clearTimeout(EXAM._autoT);
+  const last = EXAM.results.pop();
+  if (last && last.ok) EXAM.correct = Math.max(0, EXAM.correct - 1);
+  EXAM.answered = false;
+}
+function addRetryBtn(btn){
+  const row = btn.parentNode;
+  if (!row || row.querySelector("#qRetryBtn")) return;
+  const rb = document.createElement("button");
+  rb.id = "qRetryBtn";
+  rb.className = "btn ghost sm";
+  rb.innerHTML = `${IC.refresh} 再试一次`;
+  rb.onclick = () => { stopRecord(); stopAsr(); retryState(); renderQuiz(); };
+  row.appendChild(rb);
+}
 function submitExamAnswer(ok, extra){
   if (EXAM.answered) return;
   EXAM.answered = true;
@@ -1901,9 +2119,22 @@ function submitExamAnswer(ok, extra){
   EXAM.results.push({ q, ok, extra });
   const fb = $("#qFb");
   if (fb) {
-    fb.innerHTML = ok
-      ? `<div class="fb-banner ok"><div class="fb-ic">${IC.check}</div><div>答对了！</div></div>`
-      : `<div class="fb-banner bad"><div class="fb-ic">${IC.x}</div><div>正确答案是：<span class="en" style="font-weight:900">${esc(q.answer)}</span></div></div>`;
+    if (q.mode === "speak") {
+      const sc = (extra && extra.score) || 0;
+      const ss = [1, 2, 3].map(i => `<svg viewBox="0 0 24 24" fill="currentColor" class="${i <= ((extra && extra.stars) || 1) ? "lit" : ""}"><path d="M12 2.6l2.9 5.9 6.5.9-4.7 4.6 1.1 6.5L12 17.4l-5.8 3.1 1.1-6.5L2.6 9.4l6.5-.9z"/></svg>`).join("");
+      const heard = (extra && extra.hyp) ? `<div style="font-size:.95rem;color:var(--ink-2);margin-top:10px">我听到：<span class="en" style="font-weight:900">${esc(extra.hyp)}</span></div>` : "";
+      const nextLbl = (EXAM.idx + 1 < EXAM.questions.length) ? "下一题" : "查看成绩";
+      fb.innerHTML = ok ? `
+        <div class="fb-banner ok"><div class="fb-ic">${IC.check}</div><div>发音得分 ${sc} 分，读得很标准！</div></div>
+        <div class="score-box" style="margin-top:12px"><div class="score-num">${sc}<span style="font-size:1.2rem"> 分</span></div><div class="stars-row">${ss}</div>${heard}
+        <button class="btn green" id="qNextBtn" style="margin-top:16px;width:100%">${nextLbl} ${IC.play}</button></div>` :
+        `<div class="fb-banner bad"><div class="fb-ic">${IC.x}</div><div>再听一次示范，慢一点读：<span class="en">${esc(q.item.en)}</span></div>${heard}
+        <button class="btn green" id="qNextBtn" style="margin-top:16px;width:100%">${nextLbl} ${IC.play}</button></div>`;
+    } else {
+      fb.innerHTML = ok
+        ? `<div class="fb-banner ok"><div class="fb-ic">${IC.check}</div><div>答对了！</div></div>`
+        : `<div class="fb-banner bad"><div class="fb-ic">${IC.x}</div><div>正确答案是：<span class="en" style="font-weight:900">${esc(q.answer)}</span></div></div>`;
+    }
   }
   const opts = $$("#opts .opt-btn");
   if (opts.length) opts.forEach(b => {
@@ -1917,12 +2148,21 @@ function submitExamAnswer(ok, extra){
   }
   const sub = $("#qSubmit");
   if (sub) sub.disabled = true;
-  // 判定展示后自动进入下一题
+  // 口说题：点击"下一题"后进入；其余题型自动进入下一题
   clearTimeout(EXAM._autoT);
-  EXAM._autoT = setTimeout(() => {
-    if (EXAM.idx + 1 < EXAM.questions.length) quizNext();
-    else finishQuiz();
-  }, 1500);
+  if (q.mode === "speak") {
+    const nb = fb ? fb.querySelector("#qNextBtn") : null;
+    if (nb) nb.onclick = () => {
+      clearTimeout(EXAM._autoT);
+      if (EXAM.idx + 1 < EXAM.questions.length) quizNext();
+      else finishQuiz();
+    };
+  } else {
+    EXAM._autoT = setTimeout(() => {
+      if (EXAM.idx + 1 < EXAM.questions.length) quizNext();
+      else finishQuiz();
+    }, 1500);
+  }
 }
 function quizNext(){
   if (!EXAM.answered) return;
