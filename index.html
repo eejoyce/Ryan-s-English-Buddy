@@ -1285,27 +1285,55 @@ function speakPractice(item, onBack){
 
 /* ================= Whisper 离线识别引擎 ================= */
 let whisperPipe = null, whisperReady = false, whisperLoading = false, whisperErr = null;
-const WHISPER_CDN = "https://cdn.jsdelivr.net/npm/@huggingface/transformers@3.0.2/dist/transformers.min.js";
+// 多 CDN 自动回退：国内网络 jsDelivr 主域名可能超时，依次尝试备用节点
+const WHISPER_CDNS = [
+  "https://cdn.jsdelivr.net/npm/@huggingface/transformers@3.0.2/dist/transformers.min.js",
+  "https://testingcf.jsdelivr.net/npm/@huggingface/transformers@3.0.2/dist/transformers.min.js",
+  "https://fastly.jsdelivr.net/npm/@huggingface/transformers@3.0.2/dist/transformers.min.js",
+  "https://gcore.jsdelivr.net/npm/@huggingface/transformers@3.0.2/dist/transformers.min.js"
+];
 const WHISPER_MODEL = "Xenova/whisper-base.en";
 const WHISPER_MIRROR = "https://hf-mirror.com";
+// 模型多源自动降级：hf-mirror 下载会跳转海外 CDN，失败时改用魔搭国内镜像，仍失败再换 12MB 轻量模型
+const WHISPER_SOURCES = [
+  { host: "https://hf-mirror.com/", model: "Xenova/whisper-base.en", revision: "main", label: "标准模型（约80MB）" },
+  { host: "https://modelscope.cn/models/", model: "Xenova/whisper-base.en", revision: "master", label: "标准模型·国内镜像（约80MB）" },
+  { host: "https://hf-mirror.com/", model: "Xenova/whisper-tiny.en", revision: "main", label: "轻量模型（约12MB）" },
+  { host: "https://modelscope.cn/models/", model: "Xenova/whisper-tiny.en", revision: "master", label: "轻量模型·国内镜像（约12MB）" }
+];
+let whisperModelLabel = "标准模型（约80MB）";
 async function loadWhisper(onProgress){
   if (whisperPipe) return whisperPipe;
   if (whisperLoading) return null;
   whisperLoading = true;
+  let mod = null, lastErr = null;
+  for (const url of WHISPER_CDNS) {
+    try { mod = await import(url); if (mod && mod.pipeline) break; }
+    catch(e) { lastErr = e; }
+  }
+  if (!mod) {
+    whisperErr = "CDN 加载失败：" + String((lastErr && lastErr.message) || lastErr);
+    return null;
+  }
   try {
-    const mod = await import(WHISPER_CDN);
-    if (mod && mod.env) {
-      mod.env.allowLocalModels = false;
-      mod.env.remoteHost = WHISPER_MIRROR;
+    if (mod.env) mod.env.allowLocalModels = false;
+    for (const src of WHISPER_SOURCES) {
+      if (mod.env) mod.env.remoteHost = src.host;
+      try {
+        whisperPipe = await mod.pipeline("automatic-speech-recognition", src.model, {
+          quantized: true,
+          revision: src.revision,
+          progress_callback: p => { if (onProgress && p && p.status === "progress" && p.total) onProgress(p.loaded, p.total, src.label); }
+        });
+        whisperReady = true;
+        whisperModelLabel = src.label;
+        return whisperPipe;
+      } catch(e) {
+        lastErr = e;
+        whisperPipe = null;
+      }
     }
-    whisperPipe = await mod.pipeline("automatic-speech-recognition", WHISPER_MODEL, {
-      quantized: true,
-      progress_callback: p => { if (onProgress && p && p.status === "progress" && p.total) onProgress(p.loaded, p.total); }
-    });
-    whisperReady = true;
-    return whisperPipe;
-  } catch(e) {
-    whisperErr = String((e && e.message) || e);
+    whisperErr = String((lastErr && lastErr.message) || lastErr);
     return null;
   } finally { whisperLoading = false; }
 }
@@ -1446,9 +1474,9 @@ function speakRecorderUI(host, target, onResult, opts){
     if (!whisperReady) {
       busy = true;
       btn.disabled = true;
-      status.textContent = "正在准备离线语音引擎（首次需下载约 80MB 模型，请耐心等待）…";
-      const ok = await loadWhisper((loaded, total) => {
-        status.textContent = "模型下载中 " + Math.round(loaded / 1048576) + " / " + Math.round(total / 1048576) + " MB…";
+      status.textContent = "正在准备离线语音引擎（首次需下载模型，请耐心等待）…";
+      const ok = await loadWhisper((loaded, total, label) => {
+        status.textContent = "模型下载中（" + (label || "约80MB") + "） " + Math.round(loaded / 1048576) + " / " + Math.round(total / 1048576) + " MB…";
       });
       btn.disabled = false;
       busy = false;
@@ -1614,15 +1642,45 @@ function renderSettings(){
       <div style="font-size:.98rem;line-height:1.7;color:var(--ink)">口说评分采用「离线语音引擎（Whisper）」：<br>
         · 点击麦克风录音，识别你的朗读并与目标句子比对（相似度），满分 100 分；<br>
         · 90 分以上 = 3 星，80 分以上 = 3 星，70 分以上 = 2 星；<br>
-        · 首次使用需联网下载约 80MB 模型（base 版识别更准），之后自动缓存离线可用；<br>
+        · 首次使用需联网下载语音模型（约 80MB 标准模型，网络不佳会自动改用国内镜像或约 12MB 轻量模型），之后自动缓存离线可用；<br>
         · 录音功能需要 HTTPS 站点或本机打开（Chrome/Edge），并允许麦克风权限；若环境不支持，可改用「自评」：读得不错 = 85 分（3 星），还需再练 = 55 分（2 星）；<br>
         · 评分记录保存在本机，可追踪发音进步。</div>
+      <div class="type-row" style="margin-top:14px">
+        <button class="btn ghost sm" id="netCheckBtn">${IC.sound} 网络自检</button>
+      </div>
+      <div id="netCheckBox" style="margin-top:10px;display:none"></div>
     </div>
     <div class="card">
       <div class="card-title" style="color:var(--coral-d)">${IC.trash} 数据</div>
       <div style="font-size:.95rem;color:var(--ink-2)">课程、成绩、错题本与星星保存在本机浏览器中。</div>
       <button class="btn coral sm" style="margin-top:12px" onclick="confirmModal('重置全部数据？','课程、成绩、错题本、星星都会清空。','重置',()=>resetAll())">${IC.refresh} 重置全部数据</button>
     </div>`;
+  $("#netCheckBtn").onclick = async () => {
+    const box = $("#netCheckBox");
+    box.style.display = "block";
+    box.innerHTML = `<div style="font-size:.95rem;color:var(--ink-2)">正在测试引擎与模型地址的连通性…</div>`;
+    const urls = [
+      { name: "引擎库 1（主 CDN）", url: WHISPER_CDNS[0] },
+      { name: "引擎库 2（备用）", url: WHISPER_CDNS[1] },
+      { name: "引擎库 3（备用）", url: WHISPER_CDNS[2] },
+      { name: "引擎库 4（备用）", url: WHISPER_CDNS[3] },
+      { name: "标准模型（80MB）", url: "https://hf-mirror.com/Xenova/whisper-base.en/resolve/main/onnx/encoder_model_quantized.onnx" },
+      { name: "标准模型·国内镜像", url: "https://modelscope.cn/models/Xenova/whisper-base.en/resolve/master/onnx/encoder_model_quantized.onnx" },
+      { name: "轻量模型（12MB）", url: "https://hf-mirror.com/Xenova/whisper-tiny.en/resolve/main/onnx/encoder_model_quantized.onnx" },
+      { name: "轻量模型·国内镜像", url: "https://modelscope.cn/models/Xenova/whisper-tiny.en/resolve/master/onnx/encoder_model_quantized.onnx" }
+    ];
+    const rows = [];
+    for (const it of urls) {
+      const t0 = Date.now();
+      let st = "…";
+      try {
+        const r = await fetch(it.url, { method: "HEAD", mode: "cors" });
+        st = r.ok ? `可访问（${Date.now() - t0}ms）` : `失败 HTTP ${r.status}`;
+      } catch(e) { st = "连接失败（" + String((e && e.message) || e).slice(0, 30) + "）"; }
+      rows.push(`<div style="display:flex;justify-content:space-between;gap:8px;padding:5px 0;border-bottom:1px solid var(--line,#E3EFE7);font-size:.9rem"><span>${it.name}</span><b style="color:${st.indexOf("可访问") === 0 ? "var(--green-d)" : "var(--coral-d)"}">${esc(st)}</b></div>`);
+    }
+    box.innerHTML = `<div style="font-size:.95rem;font-weight:900;margin-bottom:4px">网络自检结果</div>${rows.join("")}<div style="font-size:.85rem;color:var(--ink-2);margin-top:8px">引擎库至少一个可访问即能启动；模型 4 个源任一可访问即可下载。全部失败需检查网络或部署环境。</div>`;
+  };
 }
 
 /* ================= 视图：课程 ================= */
