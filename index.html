@@ -369,6 +369,11 @@ main{max-width:1000px; margin:0 auto; padding:10px 18px 130px}
   background:#F7FBF8; border:2px dashed var(--green); border-radius:18px;
   padding:14px 18px; margin-top:14px; font-size:1.35rem; font-weight:800; text-align:center;
 }
+.mic-why{
+  font-size:.9rem; font-weight:400; color:var(--ink-2); text-align:left;
+  line-height:1.6; margin-top:8px; padding:8px 10px; background:#fff;
+  border-radius:10px; border:1px solid var(--line, #E3EFE7);
+}
 .mic-btn{
   width:120px; height:120px; border-radius:50%; margin:22px auto 8px;
   background:linear-gradient(135deg,#FF7A59,#FF9A70); color:#fff;
@@ -1407,6 +1412,16 @@ function recordOnce(maxSec){
     }).catch(e => reject(e));
   });
 }
+function micFailReason(e){
+  const msg = String((e && e.message) || e);
+  const name = String((e && e.name) || "");
+  const all = msg + " " + name;
+  if (window.isSecureContext === false) return { short: "当前页面非 HTTPS 环境", long: "当前页面不是 HTTPS 安全环境，浏览器禁止使用麦克风。请把本页部署到支持 HTTPS 的站点（如 GitHub Pages），或在本机直接用 Chrome/Edge 打开文件后重试。" };
+  if (all.indexOf("no-mic") > -1) return { short: "浏览器不支持录音", long: "当前浏览器不支持麦克风录音，请换用最新版 Chrome 或 Edge（需 HTTPS 访问）。" };
+  if (/NotAllowedError|PermissionDenied|denied|permission/i.test(all)) return { short: "麦克风权限被拒绝", long: "浏览器拒绝了麦克风权限：请点击地址栏左侧的锁形或麦克风图标，把麦克风设为「允许」，然后刷新页面再试。" };
+  if (/NotFoundError|no microphone|NoDevice|no device/i.test(all)) return { short: "未检测到麦克风", long: "未检测到可用的麦克风设备，请确认耳机/麦克风已连接，并在系统设置里设为默认录音设备。" };
+  return { short: "录音启动失败", long: "录音启动失败（" + msg + "）。请允许麦克风权限后重试；若仍不行，请用最新版 Chrome/Edge 并以 HTTPS 打开本页。" };
+}
 function speakRecorderUI(host, target, onResult, opts){
   opts = opts || {};
   host.innerHTML = `
@@ -1418,10 +1433,16 @@ function speakRecorderUI(host, target, onResult, opts){
   const btn = host.querySelector("#srBtn"), status = host.querySelector("#srStatus");
   let busy = false, recording = false;
   const resetBtn = () => { btn.disabled = false; btn.innerHTML = `${IC.mic} 开始录音`; };
+  const fallback = reason => { if (opts.showSelfJudge) showSelfJudgeFallback(host, onResult, reason); };
   btn.onclick = async () => {
     if (recording) { recording = false; stopRecord(); return; }  // 再点一下 = 停止录音
     if (busy) return;
     if (typeof opts.preRecord === "function") { try { opts.preRecord(); } catch(e){} }
+    if (window.isSecureContext === false) {
+      status.textContent = "录音不可用：当前页面非 HTTPS 环境";
+      fallback("当前页面不是 HTTPS 安全环境，浏览器禁止使用麦克风。请部署到支持 HTTPS 的站点（如 GitHub Pages）后使用录音功能。");
+      return;
+    }
     if (!whisperReady) {
       busy = true;
       btn.disabled = true;
@@ -1433,7 +1454,7 @@ function speakRecorderUI(host, target, onResult, opts){
       busy = false;
       if (!ok) {
         status.textContent = "离线引擎加载失败：" + (whisperErr || "请检查网络");
-        if (opts.showSelfJudge) showSelfJudgeFallback(host, onResult);
+        fallback("离线语音引擎加载失败：" + (whisperErr || "请检查网络（需联网下载模型，CDN 不可达时无法评分）") + "。可刷新页面重试，或改用自评。");
         return;
       }
       status.textContent = "引擎就绪！";
@@ -1461,18 +1482,19 @@ function speakRecorderUI(host, target, onResult, opts){
       busy = false;
       if (opts.onAfterResult) { try { opts.onAfterResult(btn); } catch(e){} }
     } catch(e) {
-      status.textContent = "录音失败，请允许麦克风权限后重试";
+      const why = micFailReason(e);
+      status.textContent = "录音不可用：" + why.short;
       resetBtn();
       busy = false;
       recording = false;
-      if (opts.showSelfJudge) showSelfJudgeFallback(host, onResult);
+      fallback(why.long);
     }
   };
 }
-function showSelfJudgeFallback(host, onResult){
+function showSelfJudgeFallback(host, onResult, reason){
   const wrap = document.createElement("div");
   wrap.innerHTML = `
-    <div class="blank-card" style="margin-top:16px">录音不可用，可先听示范再自评：</div>
+    <div class="blank-card" style="margin-top:16px">录音不可用，可先听示范再自评：${reason ? `<div class="mic-why">${esc(reason)}</div>` : ""}</div>
     <div class="type-row" style="margin-top:12px">
       <button class="btn green" style="flex:1" id="sjOk">${IC.check} 我读得不错</button>
       <button class="btn ghost" style="flex:1" id="sjNo">${IC.refresh} 还需再练</button>
@@ -1593,7 +1615,7 @@ function renderSettings(){
         · 点击麦克风录音，识别你的朗读并与目标句子比对（相似度），满分 100 分；<br>
         · 90 分以上 = 3 星，80 分以上 = 3 星，70 分以上 = 2 星；<br>
         · 首次使用需联网下载约 80MB 模型（base 版识别更准），之后自动缓存离线可用；<br>
-        · 若麦克风或网络不可用，可改用「自评」：读得不错 = 85 分（3 星），还需再练 = 55 分（2 星）；<br>
+        · 录音功能需要 HTTPS 站点或本机打开（Chrome/Edge），并允许麦克风权限；若环境不支持，可改用「自评」：读得不错 = 85 分（3 星），还需再练 = 55 分（2 星）；<br>
         · 评分记录保存在本机，可追踪发音进步。</div>
     </div>
     <div class="card">
