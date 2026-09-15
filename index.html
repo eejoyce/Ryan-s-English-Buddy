@@ -1285,29 +1285,15 @@ function speakPractice(item, onBack){
 
 /* ================= Whisper 离线识别引擎 ================= */
 let whisperPipe = null, whisperReady = false, whisperLoading = false, whisperErr = null;
-// 多 CDN 自动回退：国内网络 jsDelivr 主域名可能超时，依次尝试备用节点
-const WHISPER_CDNS = [
-  "https://cdn.jsdelivr.net/npm/@huggingface/transformers@3.0.2/dist/transformers.min.js",
-  "https://testingcf.jsdelivr.net/npm/@huggingface/transformers@3.0.2/dist/transformers.min.js",
-  "https://fastly.jsdelivr.net/npm/@huggingface/transformers@3.0.2/dist/transformers.min.js",
-  "https://gcore.jsdelivr.net/npm/@huggingface/transformers@3.0.2/dist/transformers.min.js"
-];
+const WHISPER_CDN = "https://cdn.jsdelivr.net/npm/@huggingface/transformers@3.0.2/dist/transformers.min.js";
 const WHISPER_MODEL = "Xenova/whisper-base.en";
 const WHISPER_MIRROR = "https://hf-mirror.com";
 async function loadWhisper(onProgress){
   if (whisperPipe) return whisperPipe;
   if (whisperLoading) return null;
   whisperLoading = true;
-  let mod = null, lastErr = null;
-  for (const url of WHISPER_CDNS) {
-    try { mod = await import(url); if (mod && mod.pipeline) break; }
-    catch(e) { lastErr = e; }
-  }
-  if (!mod) {
-    whisperErr = "CDN 加载失败：" + String((lastErr && lastErr.message) || lastErr);
-    return null;
-  }
   try {
+    const mod = await import(WHISPER_CDN);
     if (mod && mod.env) {
       mod.env.allowLocalModels = false;
       mod.env.remoteHost = WHISPER_MIRROR;
